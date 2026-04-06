@@ -1,0 +1,47 @@
+# UBDS Minimal Template — start here for most boards
+# Docs: https://github.com/ne0-asref/ubds-database/blob/main/CONTRIBUTING.md
+# Validate: dbf validate boards/your-board.ubds.yaml
+
+ubds_version: "1.0"
+
+# ── REQUIRED FIELDS ──────────────────────────────────────────────────────────
+name: "Your Board Name"
+slug: "your-board-name"              # lowercase, hyphens only
+manufacturer: "Manufacturer"
+board_type:
+  - MCU                              # MCU | SBC | SoM | Carrier | FPGA | ...
+difficulty_level: beginner           # beginner | intermediate | advanced
+status: active                       # active | discontinued | upcoming
+
+# ── PROCESSING (at least one element) ────────────────────────────────────────
+processing:
+  - name: "Main Chip"
+    role: primary
+    type: mcu
+    cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        bit_width: 32
+        count: 1
+        clock_mhz: 120
+    memory:
+      ram_kb: 256
+      flash_kb: 1024
+
+# ── SOFTWARE ─────────────────────────────────────────────────────────────────
+software:
+  languages:
+    - name: C
+      support_level: board
+  frameworks:
+    - name: "Arduino"
+      support_level: board
+
+# ── META (required — tells reviewers where your data came from) ──────────────
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  last_verified: "2026-04-06"
+  data_completeness: partial          # partial | full | stub
+  confidence:
+    processing: high
+    software: medium

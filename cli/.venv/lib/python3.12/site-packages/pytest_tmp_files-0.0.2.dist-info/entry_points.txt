@@ -1,0 +1,3 @@
+[pytest11]
+tmp_files=pytest_tmp_files.plugin
+

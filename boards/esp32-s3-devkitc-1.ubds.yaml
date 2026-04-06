@@ -1,0 +1,398 @@
+ubds_version: "1.0"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: "ESP32-S3-DevKitC-1"
+slug: "esp32-s3-devkitc-1"
+manufacturer: "Espressif"
+series: "ESP32-S3"
+parent_board: null
+hardware_version: null
+status: active
+release_date: "2021-11-01"
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: beginner
+ecosystem_size: large
+use_cases:
+  - IoT
+  - Wireless
+  - Prototyping
+  - Edge AI
+  - Audio
+tags:
+  - WiFi
+  - Bluetooth
+  - BLE
+  - USB-OTG
+  - AI
+  - ESP-IDF
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+processing:
+
+  - name: "ESP32-S3"
+    part_number: "ESP32-S3"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+
+    cpu_cores:
+      - architecture: "Xtensa LX7"
+        bit_width: 32
+        count: 2
+        clock_mhz: 240
+        features: [FPU, SIMD, AI]
+
+    memory:
+      ram_kb: 512
+      flash_kb: 384
+      eeprom_kb: null
+
+    security:
+      secure_boot: true
+      secure_element: null
+      trustzone: null
+      hardware_crypto: true
+      crypto_algorithms: [AES, RSA, SHA, ECC]
+      tamper_detection: false
+      secure_storage: true
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL WIRED INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+interfaces:
+
+  - connector: USB-C
+    label: null
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: USB 2.0
+        speed: "480 Mbps"
+        features: [OTG]
+    power:
+      voltage_v: 5
+      current_a: 0.5
+      direction: input
+      supports_pd: false
+    notes: "USB 2.0 OTG; also used for flashing and serial monitor"
+
+  - connector: USB-C
+    label: null
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: USB-to-UART
+        speed: null
+    power:
+      voltage_v: 5
+      current_a: 0.5
+      direction: input
+      supports_pd: false
+    notes: "UART bridge via CP2102N or CH343P for programming and debug"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PIN HEADERS
+# ──────────────────────────────────────────────────────────────────────────────
+
+pin_headers:
+
+  - name: "GPIO Pin Headers"
+    label: null
+    standard: "Custom"
+    pin_count: 44
+    pitch_mm: 2.54
+    rows: 2
+
+    peripherals:
+      gpio: 44
+      i2c: 2
+      spi: 2
+      uart: 3
+      pwm: null
+      i2s: 2
+      adc: 20
+      dac: null
+      can: null
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 700
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 2000
+        direction: output
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+wireless:
+
+  - protocol: WiFi
+    version: "6"
+    standard: "802.11ax"
+    frequency_bands: ["2.4 GHz"]
+    antenna:
+      type: onboard
+
+  - protocol: Bluetooth
+    version: "5.0"
+    features: [BLE]
+    antenna:
+      type: onboard
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INPUTS & OUTPUTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "BOOT"
+    count: 1
+    function: boot_mode
+  - type: button
+    label: "RST"
+    count: 1
+    function: reset
+
+outputs:
+  - type: led
+    label: "RGB"
+    count: 1
+    function: user_indicator
+    programmable: true
+    technology: WS2812
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ON-BOARD COMPONENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+onboard_components:
+
+  sensors:
+    - type: temperature
+      part_number: null
+      notes: "Internal temperature sensor on ESP32-S3 die"
+
+  memory:
+    - type: PSRAM
+      part_number: null
+      capacity_mb: 8
+      notes: "Octal PSRAM on N8R8 variant"
+    - type: Flash
+      part_number: null
+      capacity_mb: 8
+      notes: "Octal SPI flash on N8R8 variant"
+
+  power_management: []
+  actuators: []
+  display_controllers: []
+  audio: []
+  networking: []
+  crypto: []
+  other: []
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 4.75
+  input_voltage_max_v: 5.25
+  recommended_voltage_v: 5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 3.3
+      max_current_ma: 700
+
+  battery:
+    connector: null
+    chemistry: []
+    charging_circuit: false
+    solar_input: false
+
+  consumption:
+    - mode: active_wifi
+      current_ma: 240
+      notes: "WiFi transmit peak"
+    - mode: deep_sleep
+      current_ua: 7
+      notes: "Deep sleep with RTC enabled"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL / FORM FACTOR
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 68.3
+    width: 28.4
+  weight_g: 27
+  form_factor: ["Custom"]
+  breadboard_friendly: false
+  mounting_holes:
+    count: 2
+    diameter_mm: 2.7
+  enclosure_available: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+
+software:
+
+  languages:
+    - name: C
+      support_level: board
+    - name: C++
+      support_level: board
+    - name: Python
+      support_level: board
+      notes: "MicroPython"
+    - name: Rust
+      support_level: community
+      notes: "esp-rs community crates"
+
+  frameworks:
+    - name: ESP-IDF
+      support_level: board
+      version: "5.x"
+      url: "https://docs.espressif.com/projects/esp-idf/"
+    - name: Arduino
+      support_level: board
+      board_manager_url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
+    - name: PlatformIO
+      support_level: board
+      platform_id: "espressif32"
+    - name: MicroPython
+      support_level: board
+      url: "https://micropython.org/download/esp32s3/"
+
+  os:
+    - name: FreeRTOS
+      support_level: board
+      notes: "Bundled within ESP-IDF"
+    - name: Zephyr RTOS
+      support_level: community
+      version: "3.x"
+
+  ides:
+    - name: VS Code
+    - name: Arduino IDE
+    - name: PlatformIO IDE
+
+  debugger_support:
+    - name: OpenOCD
+      interface: JTAG
+    - name: ESP-Prog
+      interface: JTAG
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMMUNITY & ECOSYSTEM METRICS
+# ──────────────────────────────────────────────────────────────────────────────
+
+community:
+  github_repos: null
+  forum_url: "https://www.esp32.com/"
+  stackoverflow_tag: "esp32"
+  stackoverflow_questions: null
+  discord_url: null
+  subreddit: "esp32"
+  avg_rating: null
+  review_count: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# METADATA & LINKS
+# ──────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/"
+  image_url: null
+  pinout_image_url: "https://docs.espressif.com/projects/esp-dev-kits/en/latest/_images/esp32-s3-devkitc-1-pin-layout.png"
+  pinout_table_url: null
+  schematic_url: "https://dl.espressif.com/dl/schematics/SCH_ESP32-S3-DevKitC-1_V1.1_20221130.pdf"
+  repo_url: null
+  datasheet_url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+  getting_started_urls:
+    - "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide.html"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "ESP32-S3 Datasheet"
+      url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+    - name: "ESP32-S3 Technical Reference Manual"
+      url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PRICING & AVAILABILITY
+# ──────────────────────────────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 10
+  vendors:
+    - name: "Espressif Store"
+      url: "https://www.espressif.com/en/products/devkits/esp32-s3-devkitc-1"
+      price_usd: 10
+      in_stock: true
+      affiliate_url: null
+    - name: "Mouser"
+      url: "https://www.mouser.com/c/?q=ESP32-S3-DevKitC-1"
+      price_usd: 10
+      in_stock: true
+      affiliate_url: null
+    - name: "Digi-Key"
+      url: "https://www.digikey.com/en/products/filter/embedded-systems-development-boards-kits-programmers/787?s=N4IgjCBcoGwJxVAYygMwIYBsDOBTANCAPZQDaIALGGABxwDsIAuoQA"
+      price_usd: 10
+      in_stock: true
+      affiliate_url: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META
+# ──────────────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide.html"
+    - "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: medium

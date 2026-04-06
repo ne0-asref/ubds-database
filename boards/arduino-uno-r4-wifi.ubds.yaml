@@ -1,0 +1,424 @@
+ubds_version: "1.0"
+
+# ── IDENTITY & CLASSIFICATION ─────────────────────────────────────────────────
+
+name: "Arduino UNO R4 WiFi"
+slug: "arduino-uno-r4-wifi"
+manufacturer: "Arduino"
+series: "UNO R4"
+parent_board: null
+hardware_version: null
+status: active
+release_date: "2023-06-27"
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: beginner
+ecosystem_size: large
+use_cases:
+  - Education
+  - IoT Prototyping
+  - Home Automation
+  - Robotics
+  - Maker Projects
+tags:
+  - arduino
+  - cortex-m4
+  - wifi
+  - led-matrix
+  - uno-r3-compatible
+
+
+# ── PROCESSING ELEMENTS ───────────────────────────────────────────────────────
+
+processing:
+  - name: "Renesas RA4M1"
+    part_number: "R7FA4M1AB3CFM"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://www.renesas.com/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra4m1-entry-level-48mhz-arm-cortex-m4-general-purpose-microcontroller"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M4F"
+        bit_width: 32
+        count: 1
+        clock_mhz: 48
+        features: [FPU, DSP, MPU]
+
+    memory:
+      ram_kb: 32
+      flash_kb: 256
+      eeprom_kb: 8
+
+    security:
+      secure_boot: false
+      secure_element: null
+      trustzone: false
+      hardware_crypto: true
+      crypto_algorithms: [AES-128, SHA-256, RNG]
+      tamper_detection: false
+      secure_storage: false
+
+  - name: "ESP32-S3"
+    part_number: "ESP32-S3-MINI-1-N8"
+    role: co-processor
+    integrated: false
+    type: mcu
+    datasheet_url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+    notes: "Handles WiFi and acts as serial bridge to RA4M1; Bluetooth not officially exposed to user"
+
+    cpu_cores:
+      - architecture: "Xtensa LX7"
+        bit_width: 32
+        count: 2
+        clock_mhz: 240
+        features: [FPU, WiFi, BLE]
+
+    memory:
+      ram_kb: 512
+      flash_kb: 8192
+      eeprom_kb: null
+
+
+# ── PHYSICAL WIRED INTERFACES ─────────────────────────────────────────────────
+
+interfaces:
+  - connector: "USB-C"
+    label: "J1"
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: USB 2.0
+        speed: "12 Mbps"
+        features: [CDC, HID, DFU]
+    power:
+      voltage_v: 5
+      current_a: 2
+      direction: input
+    notes: "Programming and power; communicates via ESP32-S3 bridge"
+
+  - connector: "DC Barrel Jack"
+    label: "J2"
+    classification: power
+    count: 1
+    power:
+      voltage_v: 6
+      direction: input
+    notes: "6–24V DC input via onboard regulator"
+
+
+# ── PIN HEADERS ───────────────────────────────────────────────────────────────
+
+pin_headers:
+  - name: "Arduino UNO R3 Header"
+    label: "Arduino"
+    standard: "Arduino Uno R3"
+    pin_count: 54
+    pitch_mm: 2.54
+    rows: 1
+    peripherals:
+      gpio: 14
+      i2c: 1
+      spi: 1
+      uart: 1
+      pwm: 6
+      adc: 6
+      dac: 1
+      can: 1
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 800
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 1500
+        direction: output
+
+
+# ── WIRELESS INTERFACES ───────────────────────────────────────────────────────
+
+wireless:
+  - protocol: WiFi
+    version: null
+    standard: "802.11b/g/n"
+    frequency_bands: ["2.4 GHz"]
+    features: [WPA2, WPA3]
+    module: "ESP32-S3-MINI-1"
+    antenna:
+      type: onboard
+
+  - protocol: Bluetooth
+    version: "5.0"
+    features: [BLE]
+    module: "ESP32-S3-MINI-1"
+    antenna:
+      type: onboard
+    notes: "Bluetooth not officially exposed via Arduino APIs in stock firmware"
+
+
+# ── INPUTS & OUTPUTS ──────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "RESET"
+    count: 1
+    function: reset
+
+outputs:
+  - type: led
+    label: "L"
+    color: yellow
+    count: 1
+    function: user
+    programmable: true
+  - type: led
+    label: "Power"
+    color: green
+    count: 1
+    function: power_indicator
+    programmable: false
+  - type: led
+    label: "RX"
+    color: yellow
+    count: 1
+    function: rx_indicator
+    programmable: false
+  - type: led
+    label: "TX"
+    color: yellow
+    count: 1
+    function: tx_indicator
+    programmable: false
+  - type: led_array
+    label: "LED Matrix"
+    count: 1
+    function: user
+    programmable: true
+    technology: LED
+    resolution: "12x8"
+
+
+# ── ON-BOARD COMPONENTS ───────────────────────────────────────────────────────
+
+onboard_components:
+  sensors: []
+  actuators: []
+  display_controllers: []
+  memory: []
+
+  power_management:
+    - type: voltage_regulator
+      notes: "Onboard 5V and 3.3V regulators; supports 6–24V barrel jack input"
+
+  audio: []
+  networking: []
+  crypto: []
+
+  other:
+    - type: "LED Matrix Driver"
+      notes: "IS31FL3743A 12x8 LED matrix controller"
+      interface: SPI
+
+
+# ── POWER ─────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 5
+  input_voltage_max_v: 24
+  recommended_voltage_v: 5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 5
+      max_current_ma: 1500
+    - voltage_v: 3.3
+      max_current_ma: 800
+
+  battery:
+    connector: null
+    chemistry: []
+    charging_circuit: false
+    solar_input: false
+
+  consumption:
+    - mode: active
+      current_ma: 120
+      notes: "Typical with WiFi idle"
+    - mode: active
+      current_ma: 300
+      notes: "Peak during WiFi transmit"
+
+
+# ── THERMAL ───────────────────────────────────────────────────────────────────
+
+thermal:
+  operating_temp_min_c: -40
+  operating_temp_max_c: 85
+  heatsink:
+    included: false
+    type: none
+
+
+# ── PHYSICAL / FORM FACTOR ────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 68.85
+    width: 53.34
+  form_factor: ["Arduino Uno"]
+  breadboard_friendly: false
+  mounting_holes:
+    count: 4
+    pattern: "Arduino Uno standard"
+    diameter_mm: 3.2
+  enclosure_available: true
+
+
+# ── BOOT & STARTUP ────────────────────────────────────────────────────────────
+
+boot:
+  boot_media:
+    - "Internal Flash"
+    - USB DFU
+  default_boot: "Internal Flash"
+  bootloader: ["Arduino Bootloader (UNO R4)"]
+  boot_time_seconds: null
+
+
+# ── SOFTWARE SUPPORT ──────────────────────────────────────────────────────────
+
+software:
+  languages:
+    - name: C++
+      support_level: board
+      notes: "Arduino-style C++ (setup/loop)"
+    - name: C
+      support_level: board
+    - name: MicroPython
+      support_level: community
+      notes: "Community port; not officially supported"
+
+  frameworks:
+    - name: Arduino
+      support_level: board
+      version: "2.x"
+      board_manager_url: "https://downloads.arduino.cc/packages/package_index.json"
+      board_id: "arduino:renesas_uno:unor4wifi"
+    - name: PlatformIO
+      support_level: community
+      platform_id: "renesas-ra"
+
+  os:
+    - name: "Bare Metal (no OS)"
+      support_level: board
+
+  ides:
+    - name: "Arduino IDE"
+    - name: "Arduino Cloud Editor"
+    - name: VS Code
+    - name: PlatformIO
+
+  debugger_support:
+    - name: SWD
+      interface: SWD
+      notes: "Via test pads; no onboard debug probe"
+
+
+# ── COMMUNITY & ECOSYSTEM METRICS ─────────────────────────────────────────────
+
+community:
+  github_repos: null
+  forum_url: "https://forum.arduino.cc/"
+  stackoverflow_tag: "arduino"
+  stackoverflow_questions: null
+  discord_url: null
+  subreddit: "arduino"
+  avg_rating: null
+  review_count: null
+
+
+# ── RESOURCES ─────────────────────────────────────────────────────────────────
+
+resources:
+  board:
+    - title: "Arduino UNO R4 WiFi Documentation"
+      url: "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+      format: documentation
+      cost: free
+      author: "Arduino"
+
+  core:
+    - title: "Arduino Language Reference"
+      url: "https://www.arduino.cc/reference/en/"
+      format: documentation
+      cost: free
+      author: "Arduino"
+
+
+# ── METADATA & LINKS ──────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://store.arduino.cc/products/uno-r4-wifi"
+  image_url: null
+  pinout_image_url: "https://docs.arduino.cc/static/2b43571a55b8b4e3d4b2cc1a1fcb4f8b/ABX00087-full-pinout.pdf"
+  pinout_table_url: "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+  schematic_url: "https://docs.arduino.cc/resources/schematics/ABX00087-schematics.pdf"
+  repo_url: "https://github.com/arduino/ArduinoCore-renesas"
+  datasheet_url: null
+  getting_started_urls:
+    - "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "Renesas RA4M1 Group Datasheet"
+      url: "https://www.renesas.com/en/document/dst/ra4m1-group-datasheet"
+    - name: "ESP32-S3 Datasheet"
+      url: "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf"
+
+
+# ── PRICING & AVAILABILITY ────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 27.50
+  vendors:
+    - name: "Arduino Store"
+      url: "https://store.arduino.cc/products/uno-r4-wifi"
+      price_usd: 27.50
+      in_stock: true
+      affiliate_url: null
+    - name: "Adafruit"
+      url: "https://www.adafruit.com/product/5870"
+      price_usd: 27.50
+      in_stock: true
+      affiliate_url: null
+    - name: "SparkFun"
+      url: "https://www.sparkfun.com/products/21443"
+      price_usd: 27.50
+      in_stock: true
+      affiliate_url: null
+
+
+# ── META ──────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://store.arduino.cc/products/uno-r4-wifi"
+    - "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+    - "https://docs.arduino.cc/resources/schematics/ABX00087-schematics.pdf"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: high

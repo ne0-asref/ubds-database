@@ -1,0 +1,368 @@
+ubds_version: "1.0"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: "Seeed Studio XIAO ESP32C3"
+slug: "esp32-c3-xiao"
+manufacturer: "Seeed Studio"
+series: "XIAO"
+parent_board: null
+hardware_version: null
+status: active
+release_date: "2022-04-01"
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: beginner
+ecosystem_size: large
+use_cases:
+  - IoT
+  - Wearables
+  - Wireless
+  - Prototyping
+  - Low-power
+tags:
+  - WiFi
+  - Bluetooth
+  - BLE
+  - XIAO
+  - tiny
+  - breadboard-friendly
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+processing:
+
+  - name: "ESP32-C3"
+    part_number: "ESP32-C3FN4"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
+
+    cpu_cores:
+      - architecture: "RISC-V"
+        bit_width: 32
+        count: 1
+        clock_mhz: 160
+        features: [FPU]
+
+    memory:
+      ram_kb: 400
+      flash_kb: 4096
+      eeprom_kb: null
+
+    security:
+      secure_boot: true
+      secure_element: null
+      trustzone: null
+      hardware_crypto: true
+      crypto_algorithms: [AES, RSA, SHA, ECC]
+      tamper_detection: false
+      secure_storage: true
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL WIRED INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+interfaces:
+
+  - connector: USB-C
+    label: null
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: USB 2.0
+        speed: "12 Mbps"
+    power:
+      voltage_v: 5
+      current_a: 0.5
+      direction: input
+      supports_pd: false
+    notes: "Used for power, programming, and serial communication"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PIN HEADERS
+# ──────────────────────────────────────────────────────────────────────────────
+
+pin_headers:
+
+  - name: "XIAO GPIO Pin Headers"
+    label: null
+    standard: "Custom"
+    pin_count: 14
+    pitch_mm: 2.54
+    rows: 2
+
+    peripherals:
+      gpio: 11
+      i2c: 1
+      spi: 1
+      uart: 1
+      pwm: null
+      i2s: null
+      adc: 4
+      dac: null
+      can: null
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 700
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 500
+        direction: output
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+wireless:
+
+  - protocol: WiFi
+    version: "4"
+    standard: "802.11b/g/n"
+    frequency_bands: ["2.4 GHz"]
+    antenna:
+      type: onboard
+
+  - protocol: Bluetooth
+    version: "5.0"
+    features: [BLE]
+    antenna:
+      type: onboard
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INPUTS & OUTPUTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "BOOT"
+    count: 1
+    function: boot_mode
+  - type: button
+    label: "RST"
+    count: 1
+    function: reset
+
+outputs:
+  - type: led
+    label: "Power"
+    color: red
+    count: 1
+    function: power_indicator
+    programmable: false
+  - type: led
+    label: "User"
+    color: orange
+    count: 1
+    function: user_indicator
+    programmable: true
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ON-BOARD COMPONENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+onboard_components:
+  sensors: []
+  actuators: []
+  display_controllers: []
+  memory: []
+  power_management: []
+  audio: []
+  networking: []
+  crypto: []
+  other: []
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 4.5
+  input_voltage_max_v: 5.5
+  recommended_voltage_v: 5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 3.3
+      max_current_ma: 700
+
+  battery:
+    connector: null
+    chemistry: []
+    charging_circuit: false
+    solar_input: false
+
+  consumption:
+    - mode: active_wifi
+      current_ma: 350
+      notes: "WiFi transmit peak"
+    - mode: deep_sleep
+      current_ua: 44
+      notes: "Deep sleep mode"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL / FORM FACTOR
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 21
+    width: 17.5
+    height: 3.5
+  weight_g: 3.7
+  form_factor: ["Custom"]
+  breadboard_friendly: true
+  mounting_holes:
+    count: 0
+  enclosure_available: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+
+software:
+
+  languages:
+    - name: C
+      support_level: board
+    - name: C++
+      support_level: board
+    - name: Python
+      support_level: board
+      notes: "MicroPython and CircuitPython (community)"
+    - name: Rust
+      support_level: community
+      notes: "esp-rs community crates"
+
+  frameworks:
+    - name: Arduino
+      support_level: board
+      board_manager_url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
+    - name: ESP-IDF
+      support_level: board
+      version: "5.x"
+      url: "https://docs.espressif.com/projects/esp-idf/"
+    - name: PlatformIO
+      support_level: board
+      platform_id: "espressif32"
+    - name: MicroPython
+      support_level: board
+      url: "https://micropython.org/download/esp32c3/"
+    - name: CircuitPython
+      support_level: community
+      url: "https://circuitpython.org/board/seeed_xiao_esp32c3/"
+
+  os:
+    - name: FreeRTOS
+      support_level: board
+      notes: "Bundled within ESP-IDF"
+
+  ides:
+    - name: VS Code
+    - name: Arduino IDE
+    - name: PlatformIO IDE
+
+  debugger_support:
+    - name: OpenOCD
+      interface: JTAG
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMMUNITY & ECOSYSTEM METRICS
+# ──────────────────────────────────────────────────────────────────────────────
+
+community:
+  github_repos: null
+  forum_url: "https://forum.seeedstudio.com/"
+  stackoverflow_tag: "esp32"
+  stackoverflow_questions: null
+  discord_url: null
+  subreddit: "esp32"
+  avg_rating: null
+  review_count: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# METADATA & LINKS
+# ──────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"
+  image_url: null
+  pinout_image_url: "https://files.seeedstudio.com/wiki/XIAO_WiFi/pin_map-2.png"
+  pinout_table_url: null
+  schematic_url: null
+  repo_url: null
+  datasheet_url: "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
+  getting_started_urls:
+    - "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "ESP32-C3 Datasheet"
+      url: "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
+    - name: "ESP32-C3 Technical Reference Manual"
+      url: "https://www.espressif.com/sites/default/files/documentation/esp32-c3_technical_reference_manual_en.pdf"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PRICING & AVAILABILITY
+# ──────────────────────────────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 4.99
+  vendors:
+    - name: "Seeed Studio"
+      url: "https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html"
+      price_usd: 4.99
+      in_stock: true
+      affiliate_url: null
+    - name: "Mouser"
+      url: "https://www.mouser.com/c/?q=XIAO+ESP32C3"
+      price_usd: 5.50
+      in_stock: true
+      affiliate_url: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META
+# ──────────────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"
+    - "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: medium

@@ -1,0 +1,344 @@
+ubds_version: "1.0"
+
+# ── IDENTITY & CLASSIFICATION ──────────────────────────────────────────────────
+
+name: "Adafruit Feather M0 Basic Proto"
+slug: "adafruit-feather-m0"
+manufacturer: "Adafruit"
+series: "Feather"
+parent_board: null
+hardware_version: null
+status: active
+release_date: "2016-03-01"
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: beginner
+ecosystem_size: large
+use_cases:
+  - Wearables
+  - IoT
+  - Prototyping
+  - Battery-powered devices
+tags:
+  - CircuitPython
+  - Arduino
+  - SAMD21
+  - Feather
+  - LiPo
+
+
+# ── PROCESSING ELEMENTS ────────────────────────────────────────────────────────
+
+processing:
+  - name: "ATSAMD21G18A"
+    part_number: "ATSAMD21G18A"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://ww1.microchip.com/downloads/en/DeviceDoc/SAM_D21_DA1_Family_DataSheet_DS40001882F.pdf"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M0+"
+        bit_width: 32
+        count: 1
+        clock_mhz: 48
+        features: [FPU-none, SysTick, MPU]
+
+    memory:
+      ram_kb: 32
+      flash_kb: 256
+      eeprom_kb: null
+
+
+# ── PHYSICAL WIRED INTERFACES ──────────────────────────────────────────────────
+
+interfaces:
+  - connector: "Micro-USB"
+    label: null
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: "USB 2.0 Full Speed"
+        speed: "12 Mbps"
+        features: [USB-native, CDC-ACM, HID, MIDI, MSC]
+    power:
+      voltage_v: 5
+      current_a: 0.5
+      direction: input
+    notes: "USB native via ATSAMD21 — no FTDI chip required"
+
+  - connector: "JST-PH 2-pin"
+    label: "BATTERY"
+    classification: power
+    count: 1
+    power:
+      voltage_v: 3.7
+      direction: input
+    notes: "LiPo battery connector; onboard MCP73831 charger at 100 mA"
+
+  - connector: "Pin Header (pads)"
+    label: "SWD"
+    classification: debug
+    count: 1
+    protocols:
+      - name: "SWD"
+        voltage_v: 3.3
+    notes: "Bare pads on PCB — no onboard debugger; requires external probe (e.g. J-Link, CMSIS-DAP)"
+
+
+# ── PIN HEADERS ────────────────────────────────────────────────────────────────
+
+pin_headers:
+  - name: "Feather Header"
+    label: null
+    standard: "Feather"
+    pin_count: 28
+    pitch_mm: 2.54
+    rows: 2
+
+    peripherals:
+      gpio: 20
+      i2c: 1
+      spi: 1
+      uart: 1
+      pwm: 8
+      i2s: null
+      adc: 6
+      dac: 1
+      can: null
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 500
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 500
+        direction: output
+
+
+# ── WIRELESS INTERFACES ────────────────────────────────────────────────────────
+
+wireless: []
+
+
+# ── INPUTS ────────────────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "RESET"
+    count: 1
+    function: reset
+
+
+# ── OUTPUTS ───────────────────────────────────────────────────────────────────
+
+outputs:
+  - type: led
+    label: "CHG"
+    color: yellow
+    count: 1
+    function: battery_charge_indicator
+    programmable: false
+  - type: led
+    label: "13"
+    color: red
+    count: 1
+    function: user
+    programmable: true
+
+
+# ── ON-BOARD COMPONENTS ────────────────────────────────────────────────────────
+
+onboard_components:
+  power_management:
+    - type: battery_charger
+      part_number: "MCP73831"
+      manufacturer: "Microchip"
+      interface: "analog"
+  other:
+    - type: voltage_regulator
+      part_number: "AP2112K-3.3"
+      manufacturer: "Diodes Inc"
+
+
+# ── POWER ─────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 3.7
+  input_voltage_max_v: 5.5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 3.3
+      max_current_ma: 500
+
+  battery:
+    connector: "JST-PH"
+    chemistry: [Li-Po, Li-Ion]
+    charging_circuit: true
+    solar_input: false
+
+  consumption:
+    - mode: active
+      current_ma: 30
+      notes: "Approximate at 48 MHz, no radio"
+    - mode: deep_sleep
+      current_ua: 6
+      notes: "Approximate standby with USB disconnected"
+
+
+# ── PHYSICAL / FORM FACTOR ─────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 51
+    width: 23
+    height: 8
+  weight_g: 5
+  form_factor: ["Feather"]
+  breadboard_friendly: true
+  mounting_holes:
+    count: 2
+    pattern: "Feather standard"
+    diameter_mm: 2.0
+  enclosure_available: false
+
+
+# ── SOFTWARE SUPPORT ───────────────────────────────────────────────────────────
+
+software:
+  languages:
+    - name: C
+      support_level: board
+    - name: C++
+      support_level: board
+    - name: Python
+      support_level: board
+      variant: "CircuitPython"
+      notes: "Full CircuitPython support; runs directly on device"
+
+  frameworks:
+    - name: Arduino
+      support_level: board
+      board_manager_url: "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json"
+      notes: "Adafruit SAMD Boards package"
+    - name: CircuitPython
+      support_level: board
+      url: "https://circuitpython.org/board/feather_m0_basic_proto/"
+    - name: PlatformIO
+      support_level: board
+      platform_id: "atmelsam"
+      board_id: "adafruit_feather_m0"
+
+  ides:
+    - name: Arduino IDE
+    - name: VS Code
+    - name: Mu Editor
+
+  debugger_support:
+    - name: OpenOCD
+      interface: SWD
+    - name: J-Link
+      interface: SWD
+    - name: CMSIS-DAP
+      interface: SWD
+
+
+# ── COMMUNITY & ECOSYSTEM ─────────────────────────────────────────────────────
+
+community:
+  forum_url: "https://forums.adafruit.com/"
+  stackoverflow_tag: "adafruit"
+  discord_url: "https://adafru.it/discord"
+  subreddit: "adafruit"
+  avg_rating: null
+  review_count: null
+
+
+# ── LEARNING RESOURCES ────────────────────────────────────────────────────────
+
+resources:
+  board:
+    - title: "Adafruit Feather M0 Basic Proto Overview"
+      url: "https://learn.adafruit.com/adafruit-feather-m0-basic-proto"
+      format: documentation
+      cost: free
+      author: "Adafruit"
+  controller:
+    - title: "ATSAMD21 ARM Cortex M0+ Getting Started"
+      url: "https://learn.adafruit.com/adafruit-feather-m0-basic-proto/using-with-arduino-ide"
+      format: tutorial
+      cost: free
+      language: C++
+      framework: Arduino
+      author: "Adafruit"
+  core:
+    - title: "CircuitPython Documentation"
+      url: "https://docs.circuitpython.org/"
+      format: documentation
+      cost: free
+      language: Python
+      framework: CircuitPython
+
+
+# ── METADATA & LINKS ──────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://www.adafruit.com/product/2772"
+  image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/adafruit-feather-m0/top-view.png"
+  image_tags: [top-view]
+  pinout_image_url: "https://cdn-learn.adafruit.com/assets/assets/000/046/243/original/adafruit_products_Feather_M0_Basic_Proto_v2.2-1.png"
+  schematic_url: "https://learn.adafruit.com/adafruit-feather-m0-basic-proto/downloads"
+  datasheet_url: "https://ww1.microchip.com/downloads/en/DeviceDoc/SAM_D21_DA1_Family_DataSheet_DS40001882F.pdf"
+  getting_started_urls:
+    - "https://learn.adafruit.com/adafruit-feather-m0-basic-proto"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "ATSAMD21G18A Datasheet"
+      url: "https://ww1.microchip.com/downloads/en/DeviceDoc/SAM_D21_DA1_Family_DataSheet_DS40001882F.pdf"
+
+
+# ── PRICING & AVAILABILITY ────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 19.95
+  vendors:
+    - name: "Adafruit"
+      url: "https://www.adafruit.com/product/2772"
+      price_usd: 19.95
+      in_stock: true
+      affiliate_url: null
+    - name: "Digi-Key"
+      url: "https://www.digikey.com/en/products/detail/adafruit-industries-llc/2772/6005357"
+      price_usd: 19.95
+      in_stock: true
+      affiliate_url: null
+
+
+# ── META ──────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://learn.adafruit.com/adafruit-feather-m0-basic-proto"
+    - "https://www.adafruit.com/product/2772"
+    - "https://ww1.microchip.com/downloads/en/DeviceDoc/SAM_D21_DA1_Family_DataSheet_DS40001882F.pdf"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: high

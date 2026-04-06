@@ -1,0 +1,439 @@
+ubds_version: "1.0"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: "nRF5340 DK"
+slug: "nrf5340-dk"
+manufacturer: "Nordic Semiconductor"
+series: "nRF53"
+parent_board: null
+hardware_version: null
+status: "active"
+release_date: null
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: advanced
+ecosystem_size: medium
+use_cases:
+  - Bluetooth Low Energy
+  - Bluetooth Direction Finding
+  - IoT
+  - Wireless Sensor Networks
+  - Mesh Networking
+  - Thread / Matter
+  - Zigbee
+  - Dual-core embedded systems
+tags:
+  - BLE
+  - Bluetooth 5.4
+  - Thread
+  - Zigbee
+  - 802.15.4
+  - NFC
+  - Dual-core
+  - TrustZone
+  - Zephyr
+  - nRF Connect SDK
+  - J-Link
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+processing:
+
+  - name: "nRF5340 Application Core"
+    part_number: "nRF5340-QKAA"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://infocenter.nordicsemi.com/pdf/nRF5340_PS_v1.3.pdf"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M33"
+        bit_width: 32
+        count: 1
+        clock_mhz: 128
+        features:
+          - FPU
+          - DSP
+          - TrustZone-M
+          - MPU
+
+    memory:
+      ram_kb: 512
+      flash_kb: 1024
+      eeprom_kb: null
+
+    security:
+      secure_boot: true
+      secure_element: null
+      trustzone: true
+      hardware_crypto: true
+      crypto_algorithms:
+        - AES-128
+        - AES-256
+        - ECC
+        - SHA-256
+        - RSA
+        - CHACHA-POLY
+        - CCM*
+        - ECDSA
+        - ECDH
+      tamper_detection: false
+      secure_storage: true
+
+  - name: "nRF5340 Network Core"
+    part_number: "nRF5340-QKAA"
+    role: co-processor
+    integrated: true
+    type: mcu
+    datasheet_url: "https://infocenter.nordicsemi.com/pdf/nRF5340_PS_v1.3.pdf"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M33"
+        bit_width: 32
+        count: 1
+        clock_mhz: 64
+        features:
+          - MPU
+          - Dedicated radio controller
+
+    memory:
+      ram_kb: 64
+      flash_kb: 256
+      eeprom_kb: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL WIRED INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+interfaces:
+
+  - connector: "USB-C"
+    label: null
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: "USB 2.0"
+        speed: "12 Mbps"
+        features:
+          - Device mode
+    power:
+      voltage_v: 5
+      current_a: 0.5
+      direction: input
+      supports_pd: false
+
+  - connector: "Micro-USB"
+    label: null
+    classification: debug
+    count: 1
+    protocols:
+      - name: "USB 2.0"
+        speed: "12 Mbps"
+    notes: "J-Link OB debug interface; virtual COM port"
+
+  - connector: "Pin Header"
+    label: "Debug IN"
+    classification: debug
+    count: 1
+    protocols:
+      - name: "SWD"
+        voltage_v: 3.3
+    notes: "Onboard J-Link OB for both application and network cores"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PIN HEADERS
+# ──────────────────────────────────────────────────────────────────────────────
+
+pin_headers:
+
+  - name: "Arduino Uno R3 compatible header"
+    label: null
+    standard: "Arduino Uno R3"
+    pin_count: 56
+    pitch_mm: 2.54
+    rows: 2
+
+    peripherals:
+      gpio: 48
+      i2c: 2
+      spi: 4
+      uart: 4
+      pwm: null
+      i2s: 1
+      adc: 8
+      dac: null
+      can: null
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+    power_pins:
+      - voltage_v: 5
+        max_current_ma: 300
+        direction: output
+      - voltage_v: 3.3
+        max_current_ma: 300
+        direction: output
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+wireless:
+
+  - protocol: Bluetooth
+    version: "5.4"
+    standard: null
+    frequency_bands:
+      - "2.4 GHz"
+    features:
+      - BLE
+      - Bluetooth Mesh
+      - Long Range (Coded PHY)
+      - Direction Finding (AoA/AoD)
+      - LE Audio
+    antenna:
+      type: onboard
+
+  - protocol: Thread
+    version: null
+    standard: "IEEE 802.15.4"
+    frequency_bands:
+      - "2.4 GHz"
+    features:
+      - Matter-compatible
+    antenna:
+      type: onboard
+
+  - protocol: Zigbee
+    version: "3.0"
+    standard: "IEEE 802.15.4"
+    frequency_bands:
+      - "2.4 GHz"
+    antenna:
+      type: onboard
+
+  - protocol: "IEEE 802.15.4"
+    version: null
+    standard: "IEEE 802.15.4"
+    frequency_bands:
+      - "2.4 GHz"
+    notes: "Raw 802.15.4 radio access via network core"
+    antenna:
+      type: onboard
+
+  - protocol: NFC
+    version: null
+    standard: "ISO 14443A"
+    frequency_bands:
+      - "13.56 MHz"
+    features:
+      - NFC-A
+      - Tag emulation
+    notes: "NFC-A tag emulation via on-chip NFC controller; external antenna required"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INPUTS & OUTPUTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "RESET"
+    count: 1
+    function: reset
+  - type: button
+    label: "SW1-SW4"
+    count: 4
+    function: user_programmable
+
+outputs:
+  - type: led
+    label: "LED1-LED4"
+    count: 4
+    function: user_programmable
+    programmable: true
+  - type: led
+    label: "Power LED"
+    count: 1
+    function: power_indicator
+    programmable: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 1.7
+  input_voltage_max_v: 5.5
+  recommended_voltage_v: 5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 3.3
+      max_current_ma: 300
+    - voltage_v: 5
+      max_current_ma: 300
+
+  battery:
+    connector: null
+    chemistry: []
+    charging_circuit: false
+    solar_input: false
+
+  consumption:
+    - mode: active_radio_tx
+      current_ma: 4.0
+      notes: "Bluetooth TX at 0 dBm (network core)"
+    - mode: active_radio_rx
+      current_ma: 4.6
+      notes: "Bluetooth RX (network core)"
+    - mode: app_core_run
+      current_ma: 3.2
+      notes: "Application core at 128 MHz"
+    - mode: deep_sleep
+      current_ua: 1.6
+      notes: "Both cores in System OFF"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL / FORM FACTOR
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 102
+    width: 64
+  form_factor:
+    - Custom
+  breadboard_friendly: false
+  mounting_holes:
+    count: 4
+  enclosure_available: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+
+software:
+
+  languages:
+    - name: C
+      support_level: board
+      notes: "Primary language for nRF Connect SDK and Zephyr"
+    - name: C++
+      support_level: board
+      notes: "Supported in Zephyr and nRF Connect SDK"
+    - name: Rust
+      support_level: community
+      notes: "embassy-rs supports nRF5340 application core"
+
+  frameworks:
+    - name: "nRF Connect SDK"
+      support_level: board
+      version: "2.x"
+      url: "https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/index.html"
+      notes: "Official SDK; required for dual-core IPC and radio stack"
+    - name: "Zephyr RTOS"
+      support_level: board
+      version: "3.x"
+      url: "https://docs.zephyrproject.org/"
+      board_id: "nrf5340dk"
+
+  os:
+    - name: "Zephyr RTOS"
+      support_level: board
+      version: "3.x"
+
+  ides:
+    - name: "VS Code"
+    - name: "nRF Connect for VS Code"
+    - name: "Segger Embedded Studio"
+
+  debugger_support:
+    - name: "J-Link"
+      interface: SWD
+    - name: "GDB"
+      interface: SWD
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# METADATA & LINKS
+# ──────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://www.nordicsemi.com/Products/Development-hardware/nRF5340-DK"
+  image_url: null
+  pinout_image_url: null
+  pinout_table_url: null
+  schematic_url: null
+  repo_url: null
+  datasheet_url: "https://infocenter.nordicsemi.com/pdf/nRF5340_PS_v1.3.pdf"
+  getting_started_urls:
+    - "https://docs.nordicsemi.com/bundle/ug_nrf5340_dk/page/UG/dk/intro.html"
+    - "https://docs.zephyrproject.org/latest/boards/nordic/nrf5340dk/doc/index.html"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "nRF5340 Product Specification"
+      url: "https://infocenter.nordicsemi.com/pdf/nRF5340_PS_v1.3.pdf"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PRICING & AVAILABILITY
+# ──────────────────────────────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 50
+  vendors:
+    - name: "Nordic Semiconductor"
+      url: "https://www.nordicsemi.com/Products/Development-hardware/nRF5340-DK"
+      price_usd: 50
+      in_stock: true
+      affiliate_url: null
+    - name: "Digikey"
+      url: "https://www.digikey.com/en/products/detail/nordic-semiconductor-asa/NRF5340-DK/13545786"
+      price_usd: 50
+      in_stock: true
+      affiliate_url: null
+    - name: "Mouser"
+      url: "https://www.mouser.com/ProductDetail/Nordic-Semiconductor/nRF5340-DK"
+      price_usd: 50
+      in_stock: true
+      affiliate_url: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META
+# ──────────────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://www.nordicsemi.com/Products/Development-hardware/nRF5340-DK"
+    - "https://infocenter.nordicsemi.com/pdf/nRF5340_PS_v1.3.pdf"
+    - "https://docs.nordicsemi.com/bundle/ug_nrf5340_dk/page/UG/dk/intro.html"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: medium

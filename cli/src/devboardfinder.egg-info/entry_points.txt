@@ -1,0 +1,2 @@
+[console_scripts]
+dbf = dbf.cli:cli

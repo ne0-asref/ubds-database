@@ -1,0 +1,450 @@
+ubds_version: "1.0"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: "STM32 NUCLEO-H743ZI2"
+slug: "stm32-nucleo-h743zi"
+manufacturer: "STMicroelectronics"
+series: "Nucleo-144"
+parent_board: null
+hardware_version: "Rev B"
+status: active
+release_date: "2017-09-01"
+end_of_life_date: null
+
+board_type:
+  - MCU
+
+difficulty_level: intermediate
+ecosystem_size: large
+use_cases:
+  - High-Performance Embedded Systems
+  - Digital Signal Processing
+  - Motor Control
+  - Industrial Control
+  - Networking Prototyping
+  - Real-Time Control
+tags:
+  - STM32
+  - STM32H7
+  - ARM Cortex-M7
+  - Nucleo
+  - ST-Link
+  - Ethernet
+  - CAN FD
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+processing:
+
+  - name: "STM32H743ZI"
+    part_number: "STM32H743ZIT6"
+    role: primary
+    integrated: true
+    type: mcu
+    datasheet_url: "https://www.st.com/resource/en/datasheet/stm32h743zi.pdf"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M7"
+        bit_width: 32
+        count: 1
+        clock_mhz: 480
+        features: [FPU, DSP, "Double-Precision FP", "L1 Cache", Thumb-2]
+
+    memory:
+      ram_kb: 1024
+      flash_kb: 2048
+      eeprom_kb: null
+
+    security:
+      secure_boot: true
+      secure_element: null
+      trustzone: null
+      hardware_crypto: true
+      crypto_algorithms: [AES, DES, SHA-1, SHA-256]
+      tamper_detection: null
+      secure_storage: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL WIRED INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+interfaces:
+
+  - connector: "USB Type-B"
+    label: "CN15"
+    classification: hybrid
+    count: 1
+    protocols:
+      - name: "USB 2.0 Full Speed"
+        speed: "12 Mbps"
+        features: ["ST-Link V3 debug", "Virtual COM Port", "Mass Storage"]
+    notes: "ST-Link V3 onboard debugger — programs and debugs the target MCU"
+
+  - connector: "USB Type-A"
+    label: "CN13"
+    classification: data
+    count: 1
+    protocols:
+      - name: "USB 2.0 High Speed"
+        speed: "480 Mbps"
+        features: ["OTG Host", "OTG Device"]
+    notes: "USB OTG Full-Speed; can act as host or device"
+
+  - connector: "RJ-45"
+    label: "CN12"
+    classification: data
+    count: 1
+    protocols:
+      - name: "Ethernet"
+        speed: "10/100 Mbps"
+        features: [RMII]
+    notes: "Via LAN8742A PHY — 10/100 Mbps only despite Gigabit PHY branding; H743 RMII interface"
+
+  - connector: "Pin Header"
+    label: "CN6"
+    classification: debug
+    count: 1
+    protocols:
+      - name: SWD
+        voltage_v: 3.3
+      - name: JTAG
+        voltage_v: 3.3
+    notes: "SWD/JTAG debug header; ST-Link V3 onboard"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PIN HEADERS
+# ──────────────────────────────────────────────────────────────────────────────
+
+pin_headers:
+
+  - name: "Arduino Uno R3 Headers"
+    label: "CN7/CN8/CN9/CN10"
+    standard: "Arduino Uno R3"
+    pin_count: 32
+    pitch_mm: 2.54
+    rows: 1
+
+    peripherals:
+      gpio: 16
+      i2c: 1
+      spi: 1
+      uart: 1
+      pwm: 6
+      adc: 6
+      dac: null
+      can: null
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 300
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 500
+        direction: output
+
+  - name: "ST Zio Extension Headers"
+    label: "CN11/CN12"
+    standard: "Custom"
+    pin_count: 112
+    pitch_mm: 2.54
+    rows: 2
+    notes: "ST Zio connector — superset of Arduino header plus additional MCU peripherals"
+
+    peripherals:
+      gpio: 60
+      i2c: 4
+      spi: 6
+      uart: 8
+      adc: 16
+      dac: 2
+      can: 2
+      pwm: 16
+
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+
+wireless: []
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INPUTS & OUTPUTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+inputs:
+  - type: button
+    label: "B1 USER"
+    count: 1
+    function: user_defined
+  - type: button
+    label: "RESET"
+    count: 1
+    function: reset
+
+outputs:
+  - type: led
+    label: "LD1 (COM)"
+    color: green
+    count: 1
+    function: "ST-Link communication indicator"
+    programmable: false
+  - type: led
+    label: "LD2 (USER)"
+    color: yellow
+    count: 1
+    function: user_defined
+    programmable: true
+  - type: led
+    label: "LD3 (USER)"
+    color: red
+    count: 1
+    function: user_defined
+    programmable: true
+  - type: led
+    label: "LD4 (PWR)"
+    color: green
+    count: 1
+    function: power_indicator
+    programmable: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ON-BOARD COMPONENTS
+# ──────────────────────────────────────────────────────────────────────────────
+
+onboard_components:
+  networking:
+    - type: ethernet_phy
+      part_number: "LAN8742A"
+      manufacturer: "Microchip"
+      interface: RMII
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 3
+  input_voltage_max_v: 5
+  recommended_voltage_v: 5
+  operating_voltage_v: 3.3
+
+  provides:
+    - voltage_v: 3.3
+      max_current_ma: 300
+    - voltage_v: 5
+      max_current_ma: 500
+
+  battery:
+    connector: null
+    chemistry: []
+    charging_circuit: false
+    solar_input: false
+
+  consumption:
+    - mode: active
+      current_ma: 250
+      notes: "Typical at 480 MHz, all peripherals active (approximate)"
+    - mode: run
+      current_ma: 100
+      notes: "Typical CPU-only at 480 MHz from datasheet"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL / FORM FACTOR
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 133
+    width: 70
+    height: 14
+  weight_g: 48
+  form_factor: ["Nucleo-144", "Arduino Uno R3"]
+  breadboard_friendly: false
+  mounting_holes:
+    count: 4
+    pattern: "Nucleo-144 standard"
+    diameter_mm: 3.2
+  enclosure_available: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+
+software:
+
+  languages:
+    - name: C
+      support_level: board
+      notes: "Primary development language with HAL and LL drivers"
+    - name: C++
+      support_level: board
+      notes: "Supported via all major frameworks"
+    - name: Rust
+      support_level: community
+      notes: "stm32h7xx-hal crate; no official BSP"
+
+  frameworks:
+    - name: STM32CubeMX / HAL
+      support_level: board
+      url: "https://www.st.com/en/development-tools/stm32cubemx.html"
+      notes: "Official ST hardware abstraction layer and code generator"
+    - name: Mbed OS
+      support_level: board
+      url: "https://os.mbed.com/platforms/ST-Nucleo-H743ZI2/"
+      notes: "Official Mbed target support"
+    - name: Zephyr RTOS
+      support_level: controller
+      board_id: "nucleo_h743zi"
+      url: "https://docs.zephyrproject.org/latest/boards/st/nucleo_h743zi/"
+    - name: PlatformIO
+      support_level: board
+      platform_id: "ststm32"
+      board_id: "nucleo_h743zi"
+      url: "https://platformio.org/boards/nucleo_h743zi"
+
+  ides:
+    - name: STM32CubeIDE
+    - name: VS Code
+    - name: Keil MDK
+    - name: IAR Embedded Workbench
+
+  debugger_support:
+    - name: ST-Link V3
+      interface: SWD
+    - name: OpenOCD
+      interface: SWD
+    - name: J-Link
+      interface: SWD
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMMUNITY & ECOSYSTEM METRICS
+# ──────────────────────────────────────────────────────────────────────────────
+
+community:
+  github_repos: null
+  forum_url: "https://community.st.com/"
+  stackoverflow_tag: "stm32"
+  stackoverflow_questions: null
+  discord_url: null
+  subreddit: "stm32"
+  avg_rating: null
+  review_count: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# LEARNING RESOURCES
+# ──────────────────────────────────────────────────────────────────────────────
+
+resources:
+  board:
+    - title: "NUCLEO-H743ZI2 Product Page"
+      url: "https://www.st.com/en/evaluation-tools/nucleo-h743zi2.html"
+      format: documentation
+      cost: free
+      author: "STMicroelectronics"
+
+  controller:
+    - title: "STM32H743ZI Datasheet"
+      url: "https://www.st.com/resource/en/datasheet/stm32h743zi.pdf"
+      format: documentation
+      cost: free
+      author: "STMicroelectronics"
+    - title: "STM32H7 Reference Manual (RM0433)"
+      url: "https://www.st.com/resource/en/reference_manual/rm0433-stm32h742-stm32h743-753-and-stm32h750-value-line-advanced-armbased-32bit-mcus-stmicroelectronics.pdf"
+      format: documentation
+      cost: free
+      author: "STMicroelectronics"
+
+  core:
+    - title: "STM32H7 Getting Started"
+      url: "https://wiki.st.com/stm32mcu/wiki/Getting_started_with_STM32H7"
+      format: tutorial
+      cost: free
+      language: C
+      author: "STMicroelectronics"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# METADATA & LINKS
+# ──────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://www.st.com/en/evaluation-tools/nucleo-h743zi2.html"
+  image_url: null
+  pinout_image_url: null
+  pinout_table_url: "https://os.mbed.com/platforms/ST-Nucleo-H743ZI2/"
+  schematic_url: "https://www.st.com/resource/en/schematic_pack/mb1364-h743zi-c03_schematic.pdf"
+  repo_url: null
+  datasheet_url: "https://www.st.com/resource/en/datasheet/stm32h743zi.pdf"
+  getting_started_urls:
+    - "https://www.st.com/en/evaluation-tools/nucleo-h743zi2.html"
+    - "https://os.mbed.com/platforms/ST-Nucleo-H743ZI2/"
+  open_hardware_repo_url: null
+  processing_element_datasheets:
+    - name: "STM32H743ZI Datasheet"
+      url: "https://www.st.com/resource/en/datasheet/stm32h743zi.pdf"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PRICING & AVAILABILITY
+# ──────────────────────────────────────────────────────────────────────────────
+
+pricing:
+  msrp_usd: 24.99
+  vendors:
+    - name: "Mouser Electronics"
+      url: "https://www.mouser.com/ProductDetail/STMicroelectronics/NUCLEO-H743ZI2"
+      price_usd: 24.99
+      in_stock: true
+      affiliate_url: null
+    - name: "DigiKey"
+      url: "https://www.digikey.com/en/products/detail/stmicroelectronics/NUCLEO-H743ZI2/9817165"
+      price_usd: 24.99
+      in_stock: true
+      affiliate_url: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META
+# ──────────────────────────────────────────────────────────────────────────────
+
+meta:
+  sources:
+    - "https://www.st.com/en/evaluation-tools/nucleo-h743zi2.html"
+    - "https://www.st.com/resource/en/datasheet/stm32h743zi.pdf"
+    - "https://os.mbed.com/platforms/ST-Nucleo-H743ZI2/"
+  last_verified: "2026-04-06"
+  data_completeness: partial
+  community_reviewed: false
+  verified: false
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+    power: medium
+    pricing: medium

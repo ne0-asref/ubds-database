@@ -1,8 +1,0 @@
-# Board YAML files — all changes require maintainer review
-boards/ @ne0-asref
-
-# Spec and schema changes require maintainer review
-spec/ @ne0-asref
-
-# Templates require maintainer review
-templates/ @ne0-asref

@@ -51,3 +51,5 @@ meta:
     pricing: medium
     use_cases: low
     tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/rp2040-pico/cover.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/rp2040-pico/pinout.png

@@ -1,0 +1,55 @@
+ubds_version: "1.1"
+name: "Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)"
+slug: esp32-s3-devkitc-1
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - wifi
+  - ble
+  - usb-c
+  - dual-core
+  - devkit
+use_cases:
+  - prototyping
+  - iot
+  - mesh-networking
+processing:
+  - name: ESP32-S3
+    part_number: ESP32-S3-WROOM-1
+    cpu_cores:
+      - architecture: Xtensa LX7
+        count: 2
+        clock_mhz: 240
+    memory:
+      ram_kb: 320
+      flash_kb: 8192
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+    - name: espidf
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - devkit
+meta:
+  sources:
+    - https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
+    - https://www.adafruit.com/product/5312
+  product_url: https://www.espressif.com/en/products/devkits/esp32-s3-devkitc-1/overview
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    pricing: medium
+    use_cases: low
+    tags: low

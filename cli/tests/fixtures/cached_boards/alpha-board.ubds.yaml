@@ -1,0 +1,33 @@
+ubds_version: "1.1"
+slug: alpha-board
+name: Alpha
+manufacturer: Vendor A
+board_type:
+  - MCU
+difficulty_level: beginner
+processing:
+  - cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        count: 1
+        clock_mhz: 120
+    memory:
+      ram_kb: 256
+      flash_kb: 1024
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+tags:
+  - iot
+  - low-power
+use_cases:
+  - prototyping
+meta:
+  sources:
+    - "https://example.com/alpha"
+  product_url: "https://example.com/board"
+  last_verified: "2026-03-01"

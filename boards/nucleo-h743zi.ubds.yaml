@@ -1,0 +1,59 @@
+ubds_version: "1.1"
+name: "ST Nucleo H743ZI"
+slug: nucleo-h743zi
+manufacturer: STMicroelectronics
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - nucleo
+  - ethernet
+  - arduino-uno-shield
+  - st-morpho
+  - high-performance
+use_cases:
+  - prototyping
+  - industrial
+  - motor-control
+processing:
+  - name: STM32H743ZI
+    part_number: STM32H743ZIT6
+    cpu_cores:
+      - architecture: ARM Cortex-M7
+        count: 1
+        clock_mhz: 480
+    memory:
+      ram_kb: 512
+      flash_kb: 2048
+wireless: []
+interfaces:
+  - type: can
+  - type: ethernet
+software:
+  frameworks:
+    - name: arduino
+    - name: cmsis
+    - name: stm32cube
+    - name: mbed
+    - name: zephyr
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - nucleo
+    - arduino-uno
+meta:
+  sources:
+    - https://www.st.com/en/evaluation-tools/nucleo-h743zi.html
+    - https://os.mbed.com/platforms/ST-Nucleo-H743ZI/
+  product_url: https://www.st.com/en/evaluation-tools/nucleo-h743zi.html
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "ST product page timed out during fetch; pricing omitted per spec (no LLM fallback)."
+  confidence:
+    processing: high
+    software: high
+    use_cases: low
+    tags: low

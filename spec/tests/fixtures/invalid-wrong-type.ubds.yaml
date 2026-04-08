@@ -1,0 +1,15 @@
+ubds_version: "1.0"
+name: "Minimal Test Board"
+slug: "minimal-test-board"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+processing:
+  - name: "Test SoC"
+    cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        count: 1
+        clock_mhz: "fast"
+meta:
+  sources:
+    - "https://example.com/datasheet"

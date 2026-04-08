@@ -1,0 +1,31 @@
+ubds_version: "1.1"
+slug: gamma-board
+name: Gamma
+manufacturer: vendor c
+board_type:
+  - SBC
+difficulty_level: advanced
+processing:
+  - cpu_cores:
+      - architecture: "ARM Cortex-M7"
+        count: 2
+        clock_mhz: 480
+    memory:
+      ram_kb: 1024
+      flash_kb: 2048
+wireless:
+  - protocol: lora
+  - protocol: cellular
+software:
+  frameworks:
+    - name: zephyr
+  languages:
+    - name: cpp
+tags:
+  - industrial
+use_cases:
+  - iot-gateway
+meta:
+  sources:
+    - "https://example.com/gamma"
+  product_url: "https://example.com/board"

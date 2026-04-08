@@ -1,0 +1,9 @@
+{
+  "name": "ST Nucleo F446RE",
+  "vendor": "ST",
+  "url": "https://www.st.com/en/evaluation-tools/nucleo-f446re.html",
+  "frameworks": ["Arduino", "Mbed"],
+  "build": {"mcu": "stm32f446ret6", "f_cpu": "180000000L"},
+  "upload": {"maximum_ram_size": 131072, "maximum_size": 524288},
+  "connectivity": ["can"]
+}

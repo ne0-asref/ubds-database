@@ -1,0 +1,10 @@
+ubds_version: "1.1"
+name: "Bad Enum Board"
+slug: "bad-enum-board"
+manufacturer: "Test Co"
+board_type:
+  - FAKE
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/board"

@@ -1,0 +1,9 @@
+ubds_version: "1.0"
+name: "Minimal Test Board"
+slug: "Bad Slug"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+meta:
+  sources:
+    - "https://example.com/datasheet"

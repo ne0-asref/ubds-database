@@ -1,0 +1,28 @@
+ubds_version: "1.1"
+slug: beta-board
+name: Beta
+manufacturer: vendor b
+board_type:
+  - MCU
+difficulty_level: intermediate
+processing:
+  - cpu_cores:
+      - architecture: "RISC-V RV32"
+        count: 1
+        clock_mhz: 80
+    memory:
+      ram_kb: 64
+      flash_kb: 512
+software:
+  frameworks:
+    - name: esp-idf
+  languages:
+    - name: c
+tags:
+  - low-power
+use_cases:
+  - prototyping
+meta:
+  sources:
+    - "https://example.com/beta"
+  product_url: "https://example.com/board"

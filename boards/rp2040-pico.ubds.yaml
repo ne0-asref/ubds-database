@@ -1,0 +1,53 @@
+ubds_version: "1.1"
+name: "Raspberry Pi Pico"
+slug: rp2040-pico
+manufacturer: Raspberry Pi Ltd
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+tags:
+  - dual-core
+  - breadboard-friendly
+  - castellated
+  - micro-usb
+  - pico
+use_cases:
+  - prototyping
+  - education
+  - sensors
+processing:
+  - name: RP2040
+    part_number: RP2040
+    cpu_cores:
+      - architecture: ARM Cortex-M0+
+        count: 2
+        clock_mhz: 133
+    memory:
+      ram_kb: 264
+      flash_kb: 2048
+wireless: []
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+    - name: c
+    - name: python
+physical:
+  form_factor:
+    - pico
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://www.raspberrypi.org/products/raspberry-pi-pico/
+    - https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+  product_url: https://www.raspberrypi.com/products/raspberry-pi-pico/
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    pricing: medium
+    use_cases: low
+    tags: low

@@ -1,0 +1,57 @@
+ubds_version: "1.1"
+name: "Seeed Studio XIAO ESP32C3"
+slug: xiao-esp32-c3
+manufacturer: Seeed Studio
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+tags:
+  - wifi
+  - ble
+  - usb-c
+  - xiao
+  - castellated
+  - thumb-size
+use_cases:
+  - prototyping
+  - iot
+  - wearables
+processing:
+  - name: ESP32-C3
+    part_number: ESP32-C3
+    cpu_cores:
+      - architecture: RISC-V (RV32IMC)
+        count: 1
+        clock_mhz: 160
+    memory:
+      ram_kb: 320
+      flash_kb: 4096
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+    - name: espidf
+  languages:
+    - name: cpp
+    - name: c
+    - name: python
+physical:
+  form_factor:
+    - xiao
+meta:
+  sources:
+    - https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/
+    - https://www.seeedstudio.com/seeed-xiao-esp32c3-p-5431.html
+  product_url: https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "Pricing not extracted from fetched manufacturer/store pages; omitted per spec (no LLM-recall fallback)."
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    use_cases: low
+    tags: low

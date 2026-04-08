@@ -1,0 +1,975 @@
+# ============================================================================
+# UBDS — Universal Board Description Standard v1.0
+# ============================================================================
+# A portable, human-readable standard for describing development boards.
+# Spec:   https://github.com/<tbd>/ubds
+# Schema: ubds-v1.schema.json
+#
+# - Author boards in YAML → validate with JSON Schema → ingest into any backend.
+# - Every field is optional unless marked [REQUIRED].
+# - Arrays [] mean "list of"; use empty [] or omit if not applicable.
+# - Boards with no processing element (carriers, expansion boards) simply
+#   omit the `processing` section entirely.
+# - File extension: .ubds.yaml
+# ============================================================================
+ubds_version: "1.1"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: "NVIDIA Jetson Orin Nano Developer Kit"        # [REQUIRED] Display name
+slug: "jetson-orin-nano-dev-kit"                      # [REQUIRED] URL-safe unique ID
+manufacturer: "NVIDIA"                                # [REQUIRED]
+series: "Jetson"                                      # Board family / product line
+parent_board: null                                    # slug of parent if this is a variant
+hardware_version: "Rev A02"
+status: active                                        # active | discontinued | upcoming | prototype
+release_date: "2023-03-21"
+end_of_life_date: null
+
+# A board can be multiple types simultaneously (e.g. an FPGA board with an MCU)
+board_type:                                           # [REQUIRED] at least one
+  - SBC
+  # ── Valid types ──
+  # MCU            — Microcontroller development board
+  # SBC            — Single Board Computer
+  # SoM            — System on Module
+  # Carrier        — Carrier board for SoMs (no processing element of its own)
+  # Expansion      — Add-on board (shields, HATs, capes, click boards)
+  # FPGA           — FPGA development board
+  # AI             — AI/ML accelerator board
+  # SDR            — Software Defined Radio board
+  # Industrial     — Ruggedized / industrial-grade board
+  # DSP            — Digital Signal Processing board
+  # Other
+
+difficulty_level: intermediate                        # beginner | intermediate | advanced
+ecosystem_size: large                                 # small | medium | large | niche
+use_cases:
+  - AI/ML
+  - Robotics
+  - Edge Computing
+tags:
+  - CUDA
+  - JetPack
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+# Array of all processing elements on the board.
+# Supports heterogeneous compute: MCU + FPGA, multi-core SoCs, co-processors.
+# Omit this entire section for boards with no processing element (carriers, etc.)
+
+processing:
+
+  - name: "Jetson Orin Nano (8GB)"
+    part_number: "NVIDIA Orin Nano"
+    role: primary                                     # primary | co-processor
+    integrated: true                                  # true = on-SoC, false = discrete chip
+    type: hybrid                                      # mcu | fpga | gpu | npu | tpu | dsp | hybrid
+    # For hybrids, list constituent types:
+    hybrid_components: [gpu, npu]
+    datasheet_url: "https://developer.nvidia.com/..."
+
+    # ── CPU Cores ──
+    # Array because cores can be heterogeneous (big.LITTLE, Cortex-A + Cortex-M)
+    cpu_cores:
+      - architecture: ARM Cortex-A78AE
+        bit_width: 64
+        count: 6
+        clock_mhz: 1500
+        features: [FPU, NEON, TrustZone, Virtualization]
+
+    # ── GPU (if applicable) ──
+    gpu:
+      architecture: Ampere
+      cuda_cores: 1024
+      tensor_cores: 32
+      clock_mhz: 625
+      vram_mb: null                                   # null = shared memory
+      memory_bus_width_bit: 128
+      tdp_w: 15
+
+    # ── NPU (if applicable) ──
+    npu:
+      tops: 40
+      precision: [INT8, FP16]                         # supported precisions
+      power_efficiency_tops_per_w: 2.67
+
+    # ── TPU (if applicable) ──
+    # tpu:
+    #   tflops: 4.0
+    #   precision: [INT8, bfloat16]
+    #   memory_mb: 8192
+
+    # ── FPGA (if applicable) ──
+    # fpga:
+    #   family: "Xilinx Artix-7"
+    #   logic_cells: 33280
+    #   luts: 20800
+    #   flip_flops: 41600
+    #   embedded_memory_kb: 2160                      # Block RAM
+    #   dsp_slices: 90
+    #   io_pins: 250
+    #   max_clock_mhz: 450
+
+    # ── Internal Memory ──
+    memory:
+      ram_kb: 8388608                                 # 8 GB unified — in KB for consistency
+      flash_kb: null
+      eeprom_kb: null
+
+    # ── Security Features ──
+    security:
+      secure_boot: true
+      secure_element: null                            # e.g. "ATECC608A" part number
+      trustzone: true
+      hardware_crypto: true
+      crypto_algorithms: [AES-256, SHA-256, RSA, ECC]
+      tamper_detection: false
+      secure_storage: true                            # eFuse, OTP, secure key storage
+
+  # ── Example: co-processor on the same board ──
+  # - name: "STM32H7"
+  #   part_number: "STM32H743ZIT6"
+  #   role: co-processor
+  #   integrated: false
+  #   type: mcu
+  #   datasheet_url: "https://..."
+  #   cpu_cores:
+  #     - architecture: ARM Cortex-M7
+  #       bit_width: 32
+  #       count: 1
+  #       clock_mhz: 480
+  #       features: [FPU, DSP]
+  #   memory:
+  #     ram_kb: 1024
+  #     flash_kb: 2048
+  #     eeprom_kb: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL WIRED INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+# Each entry is a physical connector/access point on the board.
+# Captures the connector → protocol → power/data classification triple.
+
+interfaces:
+
+  # ── Data/Power Hybrid Example ──
+  - connector: USB-C
+    label: "J6"                                       # Silkscreen reference designator
+    classification: hybrid                            # power | data | debug | hybrid
+    count: 1                                          # How many of this exact interface
+    protocols:
+      - name: USB 3.2 Gen 2
+        speed: "10 Gbps"
+    power:
+      voltage_v: 5
+      current_a: 3
+      direction: input                                # input | output | bidirectional
+      supports_pd: true                               # USB Power Delivery
+      pd_profiles: ["5V/3A", "9V/3A", "15V/3A", "20V/2.25A"]
+
+  # ── Data-Only Example ──
+  - connector: RJ-45
+    label: "J10"
+    classification: data
+    count: 1
+    protocols:
+      - name: Gigabit Ethernet
+        speed: "1 Gbps"
+        features: [Wake-on-LAN, PTP]
+
+  - connector: M.2 Key M
+    label: "J3"
+    classification: data
+    count: 1
+    protocols:
+      - name: NVMe
+        speed: "PCIe Gen3 x4"
+
+  - connector: M.2 Key E
+    label: "J5"
+    classification: data
+    count: 1
+    protocols:
+      - name: PCIe
+        speed: "PCIe Gen3 x1"
+    notes: "For WiFi/BT module"
+
+  - connector: HDMI Type-A
+    label: "J9"
+    classification: data
+    count: 1
+    protocols:
+      - name: HDMI 2.1
+        speed: "48 Gbps"
+        features: [4K@60Hz, HDR]
+
+  - connector: DisplayPort
+    label: "J8"
+    classification: data
+    count: 1
+    protocols:
+      - name: DisplayPort 1.4a
+        speed: "32.4 Gbps"
+
+  - connector: MIPI CSI-2
+    label: "J7"
+    classification: data
+    count: 2
+    protocols:
+      - name: MIPI CSI-2
+        lanes: 4
+    notes: "22-pin camera connector"
+
+  # ── Power-Only Example ──
+  - connector: DC Barrel Jack
+    label: "J1"
+    classification: power
+    count: 1
+    power:
+      voltage_v: 19
+      current_a: 2.37
+      direction: input
+      wattage_w: 45
+
+  # ── Debug Interface ──
+  - connector: Pin Header
+    label: "J14"
+    classification: debug
+    count: 1
+    protocols:
+      - name: UART
+        voltage_v: 3.3
+    notes: "Debug UART console"
+
+  # Another debug example for MCU boards:
+  # - connector: Pin Header
+  #   label: "CN4"
+  #   classification: debug
+  #   count: 1
+  #   protocols:
+  #     - name: SWD
+  #       voltage_v: 3.3
+  #     - name: JTAG
+  #       voltage_v: 3.3
+  #   onboard_debugger: "ST-Link V3"                  # null if external probe required
+
+  # ── microSD Slot ──
+  - connector: microSD
+    label: "J4"
+    classification: data
+    count: 1
+    protocols:
+      - name: SDIO
+        speed: "UHS-I"
+    notes: "Boot media"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PIN HEADERS
+# ──────────────────────────────────────────────────────────────────────────────
+# Exposed processing element peripheral pins on standardized or custom headers.
+# Separate from interfaces above because headers represent a structured
+# collection of mixed-function pins, not a single-purpose connector.
+
+pin_headers:
+
+  - name: "40-Pin Jetson Expansion Header"
+    label: "J12"
+    standard: "Jetson"                                # Jetson | Arduino Uno R3 | Arduino Mega |
+                                                      # Raspberry Pi HAT | Feather | mikroBUS |
+                                                      # Grove | Qwiic | PMOD | Custom
+    pin_count: 40
+    pitch_mm: 2.54
+    rows: 2
+
+    # ── Peripheral summary (quick reference) ──
+    peripherals:
+      gpio: 12
+      i2c: 2
+      spi: 2
+      uart: 2
+      pwm: 2
+      i2s: 1
+      adc: null
+      dac: null
+      can: null
+
+    # ── Voltage levels (can be a mix) ──
+    voltage_levels:
+      - voltage_v: 3.3
+        standard: LVCMOS                              # LVCMOS | LVTTL | open-drain | etc.
+      - voltage_v: 1.8
+        standard: LVCMOS
+
+    # ── Power pins on this header ──
+    power_pins:
+      - pin: 1
+        voltage_v: 3.3
+        max_current_ma: 500
+        direction: output
+      - pin: 2
+        voltage_v: 5
+        max_current_ma: 2000
+        direction: output
+
+    # ── Full pinout (optional — can reference image instead) ──
+    # If included, captures every pin with function and alternate functions.
+    # pins:
+    #   - pin: 1
+    #     name: 3V3
+    #     function: power
+    #     voltage_v: 3.3
+    #   - pin: 3
+    #     name: I2C1_SDA
+    #     function: I2C
+    #     protocol: I2C
+    #     voltage_v: 3.3
+    #     alt_functions: [GPIO27]
+    #   - pin: 5
+    #     name: I2C1_SCL
+    #     function: I2C
+    #     protocol: I2C
+    #     voltage_v: 3.3
+    #     alt_functions: [GPIO28]
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+# Protocol + version pairs. Extensible without schema changes.
+# Note: Jetson Orin Nano has no built-in wireless; WiFi/BT added via M.2 Key E.
+
+wireless: []
+
+# ── Example for a board with wireless ──
+# wireless:
+#   - protocol: WiFi
+#     version: "6"                                    # WiFi 6 = 802.11ax
+#     standard: "802.11ax"
+#     frequency_bands: ["2.4 GHz", "5 GHz"]
+#     antenna:
+#       type: onboard                                 # onboard | u.fl | sma | ipex
+#       gain_dbi: 2.0
+#       connectors: 1                                 # number of antenna connectors
+#
+#   - protocol: Bluetooth
+#     version: "5.3"
+#     features: [BLE, Bluetooth Classic, Mesh]
+#     antenna:
+#       type: onboard
+#
+#   - protocol: LoRa
+#     version: null
+#     frequency_bands: ["868 MHz", "915 MHz"]
+#     module: "SX1276"                                # RF module part number
+#     antenna:
+#       type: sma
+#
+#   - protocol: Zigbee
+#     version: "3.0"
+#     standard: "IEEE 802.15.4"
+#
+#   - protocol: Thread
+#     version: "1.3"
+#     standard: "IEEE 802.15.4"
+#     features: [Matter-compatible]
+#
+#   - protocol: NFC
+#     version: null
+#     standard: "ISO 14443A/B"
+#
+#   - protocol: UWB
+#     version: null
+#     module: "DW3000"
+#
+#   - protocol: Cellular
+#     version: "LTE Cat-M1"
+#     module: "SARA-R410M"
+#     bands: ["B1", "B2", "B3", "B4", "B5", "B8", "B12", "B13", "B20", "B28"]
+#
+#   - protocol: Satellite
+#     version: null
+#     network: "Iridium"
+#     module: "Iridium 9603N"
+#
+#   - protocol: WiFi HaLow
+#     version: null
+#     standard: "802.11ah"
+#     frequency_bands: ["900 MHz"]
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INPUTS & OUTPUTS
+# ──────────────────────────────────────────────────────────────────────────────
+# Physical user-facing inputs (buttons, switches) and outputs (LEDs, displays).
+
+inputs:
+  - type: button
+    label: "Power"
+    count: 1
+    function: power_on_off
+  - type: button
+    label: "Reset"
+    count: 1
+    function: reset
+  - type: button
+    label: "Recovery"
+    count: 1
+    function: recovery_mode
+  # Other types: switch, dip_switch, rotary_encoder, slider, joystick, keypad
+
+outputs:
+  - type: led
+    label: "Power LED"
+    color: green
+    count: 1
+    function: power_indicator
+    programmable: false
+  # Other types: rgb_led, led_array, display, buzzer, speaker
+  # - type: display
+  #   label: "OLED"
+  #   technology: OLED
+  #   resolution: "128x64"
+  #   interface: I2C
+  #   size_inches: 0.96
+  #   touchscreen: false
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ON-BOARD COMPONENTS
+# ──────────────────────────────────────────────────────────────────────────────
+# Addressable/controllable components on the board.
+# Part numbers are critical here — they let users find datasheets and drivers.
+
+onboard_components:
+
+  # ── Sensors ──
+  sensors: []
+  # sensors:
+  #   - type: IMU
+  #     part_number: "BMI270"
+  #     manufacturer: "Bosch"
+  #     axes: 6                                       # 6-axis (accel + gyro), 9-axis (+ mag)
+  #     interface: SPI
+  #     datasheet_url: "https://..."
+  #   - type: temperature
+  #     part_number: "TMP117"
+  #     manufacturer: "Texas Instruments"
+  #     accuracy: "±0.1°C"
+  #     interface: I2C
+  #   - type: humidity
+  #     part_number: "SHTC3"
+  #     manufacturer: "Sensirion"
+  #     interface: I2C
+  #   - type: pressure
+  #     part_number: "BMP390"
+  #     manufacturer: "Bosch"
+  #     interface: I2C
+  #   - type: ambient_light
+  #     part_number: "VEML7700"
+  #     manufacturer: "Vishay"
+  #     interface: I2C
+  #   - type: proximity
+  #   - type: gas
+  #   - type: magnetometer
+  #   - type: microphone
+  #   - type: current_sense
+  #   - type: hall_effect
+
+  # ── Actuators ──
+  actuators: []
+  # actuators:
+  #   - type: motor_driver
+  #     part_number: "DRV8833"
+  #     manufacturer: "Texas Instruments"
+  #     channels: 2
+  #     max_voltage_v: 10.8
+  #     max_current_a: 1.5
+  #     interface: GPIO/PWM
+  #     datasheet_url: "https://..."
+
+  # ── Display Controllers ──
+  display_controllers: []
+  # display_controllers:
+  #   - part_number: "SSD1306"
+  #     manufacturer: "Solomon Systech"
+  #     interface: I2C
+  #     max_resolution: "128x64"
+  #     datasheet_url: "https://..."
+
+  # ── External Memory ──
+  memory:
+    - type: eMMC
+      part_number: null
+      capacity_gb: null                               # Jetson uses NVMe, not eMMC
+    # - type: QSPI Flash
+    #   part_number: "W25Q128JV"
+    #   manufacturer: "Winbond"
+    #   capacity_mb: 16
+    #   interface: QSPI
+    # - type: SDRAM
+    #   part_number: "IS42S16320F"
+    #   capacity_mb: 64
+    # - type: PSRAM
+    #   part_number: "ESP-PSRAM64H"
+    #   capacity_mb: 8
+
+  # ── Power Management ──
+  power_management: []
+  # power_management:
+  #   - type: PMIC
+  #     part_number: "AXP2101"
+  #     manufacturer: "X-Powers"
+  #   - type: voltage_regulator
+  #     part_number: "TPS63020"
+  #     manufacturer: "Texas Instruments"
+  #   - type: battery_charger
+  #     part_number: "BQ25895"
+  #     chemistry: [Li-Ion, Li-Po]
+  #     max_charge_current_ma: 3000
+
+  # ── Audio ──
+  audio: []
+  # audio:
+  #   - type: codec
+  #     part_number: "WM8960"
+  #     manufacturer: "Cirrus Logic"
+  #     interface: I2S
+  #   - type: amplifier
+  #     part_number: "MAX98357A"
+  #     output_power_w: 3.2
+
+  # ── Networking ──
+  networking:
+    - type: ethernet_phy
+      part_number: "RTL8211F"
+      manufacturer: "Realtek"
+      speed_mbps: 1000
+  # networking:
+  #   - type: wifi_module
+  #     part_number: "ESP32-C3"
+  #     manufacturer: "Espressif"
+  #   - type: can_transceiver
+  #     part_number: "SN65HVD230"
+
+  # ── Crypto / Secure Elements ──
+  crypto: []
+  # crypto:
+  #   - type: secure_element
+  #     part_number: "ATECC608A"
+  #     manufacturer: "Microchip"
+  #     features: [ECDH, ECDSA, AES-128, SHA-256, secure_key_storage]
+
+  # ── Other ──
+  other: []
+  # other:
+  #   - type: RTC
+  #     part_number: "DS3231"
+  #     manufacturer: "Analog Devices"
+  #     battery_backed: true
+  #   - type: level_shifter
+  #     part_number: "TXB0108"
+  #     channels: 8
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  # ── Input power ──
+  input_voltage_min_v: 9
+  input_voltage_max_v: 19
+  recommended_voltage_v: 19
+  recommended_wattage_w: 45
+  operating_voltage_v: 5                              # Core logic operating voltage
+
+  # ── Power output from the board ──
+  provides:
+    - voltage_v: 5
+      max_current_ma: 2000
+    - voltage_v: 3.3
+      max_current_ma: 500
+    - voltage_v: 1.8
+      max_current_ma: 200
+
+  # ── Battery support ──
+  battery:
+    connector: null                                   # JST-PH | JST-SH | bare pads | null
+    chemistry: []                                     # [Li-Ion, Li-Po, LiFePO4]
+    charging_circuit: false
+    solar_input: false
+
+  # ── Consumption profiles ──
+  # Multiple modes because real boards have varied power states
+  consumption:
+    - mode: active
+      current_ma: 4500
+      notes: "Full GPU + CPU load"
+    - mode: idle
+      current_ma: 1500
+      notes: "Desktop idle, display connected"
+    # - mode: light_sleep
+    #   current_ua: 500
+    # - mode: deep_sleep
+    #   current_ua: 10
+    # - mode: hibernate
+    #   current_ua: 2
+    # - mode: tx
+    #   current_ma: 350
+    #   notes: "WiFi transmit"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# THERMAL
+# ──────────────────────────────────────────────────────────────────────────────
+
+thermal:
+  tdp_w: 15                                          # Thermal Design Power (overall board)
+  operating_temp_min_c: 0
+  operating_temp_max_c: 50
+  storage_temp_min_c: -25
+  storage_temp_max_c: 85
+  heatsink:
+    included: true
+    type: active                                      # active (fan) | passive | none
+  thermal_throttle_temp_c: 97
+  notes: "Fan included with dev kit"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PHYSICAL / FORM FACTOR
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  dimensions_mm:
+    length: 100
+    width: 79
+    height: 30                                        # including heatsink
+  weight_g: 140
+  form_factor: ["Jetson"]                             # Feather | Arduino Uno | Arduino Mega |
+                                                      # Raspberry Pi | Jetson | COM Express |
+                                                      # 96boards | SMARC | Qwiic | mikroBUS |
+                                                      # breadboard | Custom
+  breadboard_friendly: false
+  mounting_holes:
+    count: 4
+    pattern: "Jetson standard"
+    diameter_mm: 2.5
+  enclosure_available: true
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# BOOT & STARTUP
+# ──────────────────────────────────────────────────────────────────────────────
+
+boot:
+  boot_media:
+    - microSD
+    - NVMe SSD
+    - USB
+    - Network (PXE)
+  default_boot: microSD
+  bootloader: ["U-Boot", "UEFI"]
+  boot_time_seconds: null                             # Typical cold boot to user space
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SDR SPECS (for SDR board types)
+# ──────────────────────────────────────────────────────────────────────────────
+# Only relevant if board_type includes SDR. Omit otherwise.
+
+# sdr:
+#   frequency_range_mhz:
+#     min: 70
+#     max: 6000
+#   bandwidth_mhz: 56
+#   sample_rate_msps: 61.44
+#   adc_resolution_bits: 12
+#   dac_resolution_bits: 14
+#   rx_channels: 2
+#   tx_channels: 2
+#   duplex: full                                      # full | half | simplex
+#   supported_frameworks:
+#     - GNU Radio
+#     - SDR#
+#     - MATLAB
+#     - Pothos
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CERTIFICATIONS
+# ──────────────────────────────────────────────────────────────────────────────
+
+certifications:
+  - name: FCC
+    id: "2AZCN-P3767"
+    region: US
+    test_report_url: null
+  - name: CE
+    id: null
+    region: EU
+  - name: RoHS
+  # Other: UL, CSA, IC, TELEC, KC, NCC, BSMI, SRRC, BIS, VCCI
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+# Each entry has a `support_level` to distinguish:
+#   board       — Full BSP / board-specific support exists
+#   controller  — HAL / driver support for the processing element, but no board BSP
+#   community   — Community-maintained, not official
+#   experimental— Work in progress, unstable
+#   not_supported — Explicitly known to not work
+
+software:
+
+  # ── Programming Languages ──
+  languages:
+    - name: Python
+      support_level: board
+      version: "3.8+"
+      notes: "Full JetPack SDK Python bindings"
+    - name: C++
+      support_level: board
+      version: "C++17"
+    - name: C
+      support_level: board
+    - name: CUDA
+      support_level: board
+      version: "11.4"
+    - name: Rust
+      support_level: controller
+      notes: "aarch64 target support, no board BSP"
+
+  # ── Frameworks ──
+  frameworks:
+    - name: JetPack SDK
+      support_level: board
+      version: "6.0"
+      url: "https://developer.nvidia.com/jetpack-sdk"
+    - name: ROS 2
+      support_level: board
+      version: "Humble"
+    - name: DeepStream
+      support_level: board
+      version: "6.4"
+    # - name: Arduino
+    #   support_level: board
+    #   version: null
+    #   board_manager_url: "https://..."
+    # - name: PlatformIO
+    #   support_level: board
+    #   platform_id: "espressif32"
+    # - name: ESP-IDF
+    #   support_level: board
+    #   version: "5.x"
+    # - name: Zephyr
+    #   support_level: controller
+    #   version: "3.6"
+    #   board_id: "nucleo_h743zi"
+
+  # ── Operating Systems ──
+  os:
+    - name: Ubuntu
+      support_level: board
+      version: "20.04"
+      variant: "JetPack 6 / L4T"
+      notes: "Official NVIDIA Linux4Tegra"
+    # - name: FreeRTOS
+    #   support_level: board
+    #   version: "10.5"
+    # - name: Zephyr RTOS
+    #   support_level: controller
+
+  # ── AI / ML Tools ──
+  ai_ml_tools:
+    - name: TensorRT
+      support_level: board
+      version: "8.6"
+    - name: PyTorch
+      support_level: board
+    - name: TensorFlow
+      support_level: board
+    - name: ONNX Runtime
+      support_level: board
+    # - name: Edge Impulse
+    #   support_level: board
+    # - name: NXP eIQ
+    #   support_level: board
+    # - name: TensorFlow Lite
+    #   support_level: controller
+
+  # ── IDEs (optional — less critical but some users filter by this) ──
+  ides:
+    - name: VS Code
+    - name: Jupyter Notebook
+    - name: NVIDIA Nsight
+
+  # ── Debugger Support ──
+  debugger_support:
+    - name: GDB
+      interface: UART
+    - name: NVIDIA Nsight Systems
+    # - name: OpenOCD
+    #   interface: SWD
+    # - name: J-Link
+    #   interface: SWD
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMMUNITY & ECOSYSTEM METRICS
+# ──────────────────────────────────────────────────────────────────────────────
+# Quantitative signals for ecosystem health. Updated periodically.
+
+community:
+  github_repos: null                                  # Count of repos mentioning this board
+  forum_url: "https://forums.developer.nvidia.com/c/agx-autonomous-machines/jetson-embedded-systems/"
+  stackoverflow_tag: "jetson"
+  stackoverflow_questions: null
+  discord_url: null
+  subreddit: "JetsonNano"
+  avg_rating: null                                    # 1-5
+  review_count: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# LEARNING RESOURCES
+# ──────────────────────────────────────────────────────────────────────────────
+# Three-tier hierarchy:
+#   core       — Generic to the language/framework (e.g. "Learning Rust")
+#   controller — Specific to the processing element (e.g. "Rust on ARM Cortex-M")
+#   board      — Specific to this board (e.g. "Getting Started with Jetson Orin Nano")
+
+resources:
+
+  # ── Board-Specific Resources ──
+  board:
+    - title: "Getting Started with Jetson Orin Nano Developer Kit"
+      url: "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
+      format: tutorial                                # tutorial | video | course | book |
+                                                      # blog | documentation | wiki |
+                                                      # example_code | webinar | other
+      cost: free                                      # free | paid | freemium
+      language: null                                  # Programming language (if applicable)
+      framework: "JetPack SDK"                        # Framework (if applicable)
+      author: "NVIDIA"
+      platform: null                                  # Udemy | Coursera | YouTube | etc.
+
+  # ── Controller-Specific Resources ──
+  controller:
+    - title: "Jetson AI Fundamentals"
+      url: "https://developer.nvidia.com/embedded/learn/jetson-ai-certification-programs"
+      format: course
+      cost: free
+      language: Python
+      framework: "JetPack SDK"
+      author: "NVIDIA"
+      platform: "NVIDIA DLI"
+
+  # ── Core / Generic Resources ──
+  # These span many boards; linked here for discoverability but not unique to this board.
+  core:
+    - title: "ROS 2 Documentation"
+      url: "https://docs.ros.org/"
+      format: documentation
+      cost: free
+      framework: "ROS 2"
+    - title: "PyTorch Tutorials"
+      url: "https://pytorch.org/tutorials/"
+      format: tutorial
+      cost: free
+      language: Python
+      framework: "PyTorch"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# LIBRARIES
+# ──────────────────────────────────────────────────────────────────────────────
+# Key software libraries and packages available for this board.
+
+libraries:
+  - name: "jetson-inference"
+    description: "DNN inference library for NVIDIA Jetson"
+    language: "C++ / Python"
+    framework: "JetPack SDK"
+    category: "AI/ML"
+    repo_url: "https://github.com/dusty-nv/jetson-inference"
+    package_url: null
+  - name: "jetson-utils"
+    description: "Utility library for camera, video, OpenGL on Jetson"
+    language: "C++ / Python"
+    category: "Utilities"
+    repo_url: "https://github.com/dusty-nv/jetson-utils"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# COMPATIBLE BOARDS
+# ──────────────────────────────────────────────────────────────────────────────
+# Cross-references to other boards in the database that are compatible
+# (e.g. carrier boards, expansion boards, shields, HATs).
+
+compatible_boards:
+  - slug: "jetson-orin-nano-som"
+    relationship: module                              # module | carrier | shield | hat |
+                                                      # cape | click_board | expansion | other
+    notes: "This dev kit includes the Jetson Orin Nano SoM"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# METADATA & LINKS
+# ──────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  official_page_url: "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
+  image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/jetson-orin-nano-dev-kit/top-view.png"
+  image_tags: [top-view]                                # top-view | angle | sim-ready | pinout | block-diagram
+  pinout_image_url: null
+  pinout_table_url: null                              # If pinout is a web page, not an image
+  schematic_url: null
+  repo_url: null
+  datasheet_url: "https://developer.nvidia.com/embedded/downloads#?search=Jetson%20Orin%20Nano"
+  getting_started_urls:
+    - "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
+  open_hardware_repo_url: null                        # KiCad / Eagle / Altium files
+  processing_element_datasheets:
+    - name: "Jetson Orin Nano Module Datasheet"
+      url: "https://developer.nvidia.com/embedded/downloads"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META (provenance, confidence, verification status)
+# ──────────────────────────────────────────────────────────────────────────────
+# UBDS v1.1 note: pricing/vendor/affiliate data is intentionally NOT part of
+# this standard. UBDS describes the board; commerce data lives separately in
+# the devboardfinder `board_sellers` table. Contributors: do not add a
+# top-level `pricing:` block — it will be rejected by schema validation.
+
+meta:
+  sources:                                                # [REQUIRED] at least one verifiable URL
+    - "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
+    - "https://developer.nvidia.com/embedded/downloads"
+  product_url: "https://developer.nvidia.com/embedded/jetson-orin-nano-developer-kit"  # [REQUIRED] canonical manufacturer product page (not a reseller)
+  last_verified: "2026-04-05"                             # date this board's data was last checked
+  data_completeness: complete                             # stub | partial | complete
+  community_reviewed: false                               # true = maintainer reviewed community PR
+  verified: false                                         # true = manufacturer-confirmed data
+
+  # Per-section confidence — tells reviewers where to focus verification
+  # high = verified against primary source (datasheet, manufacturer page, hands-on testing)
+  # medium = likely correct, secondary source (distributor, community wiki, blog)
+  # low = best guess, unverified (forum post, estimate, inferred from similar board)
+  confidence:
+    processing: high
+    interfaces: high
+    wireless: high                                        # N/A for boards with no wireless
+    software: medium
+    power: medium

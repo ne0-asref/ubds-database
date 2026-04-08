@@ -1,0 +1,52 @@
+ubds_version: "1.1"
+name: "Adafruit Feather M4 Express"
+slug: feather-m4-express
+manufacturer: Adafruit Industries
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+tags:
+  - feather
+  - circuitpython
+  - lipo-charger
+  - usb-direct
+  - breadboard-friendly
+use_cases:
+  - prototyping
+  - wearables
+  - audio
+processing:
+  - name: ATSAMD51J19
+    part_number: ATSAMD51J19A
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 120
+    memory:
+      ram_kb: 192
+      flash_kb: 512
+wireless: []
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+    - name: python
+physical:
+  form_factor:
+    - feather
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://www.adafruit.com/product/3857
+    - https://learn.adafruit.com/adafruit-feather-m4-express-atsamd51
+  product_url: https://www.adafruit.com/product/3857
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    pricing: medium
+    use_cases: low
+    tags: low

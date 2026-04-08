@@ -1,0 +1,245 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/ne0-asref/ubds-database/spec/ubds-v1.schema.json",
+  "title": "UBDS — Universal Board Description Standard v1.1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["ubds_version", "name", "slug", "manufacturer", "board_type", "meta"],
+  "not": { "required": ["pricing"] },
+  "properties": {
+    "ubds_version": {
+      "type": "string",
+      "pattern": "^1\\.\\d+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+    },
+    "manufacturer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "series": {"type": ["string", "null"]},
+    "parent_board": {"type": ["string", "null"]},
+    "hardware_version": {"type": ["string", "null"]},
+    "status": {
+      "type": "string",
+      "enum": ["active", "discontinued", "upcoming", "prototype"]
+    },
+    "release_date": {"type": ["string", "null"], "format": "date"},
+    "end_of_life_date": {"type": ["string", "null"], "format": "date"},
+    "board_type": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["MCU", "SBC", "SoM", "Carrier", "Expansion", "FPGA", "AI", "SDR", "Industrial", "DSP", "Other"]
+      }
+    },
+    "difficulty_level": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"]
+    },
+    "ecosystem_size": {
+      "type": "string",
+      "enum": ["small", "medium", "large", "niche"]
+    },
+    "use_cases": {"type": "array", "items": {"type": "string"}},
+    "tags": {"type": "array", "items": {"type": "string"}},
+
+    "processing": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {"type": ["string", "null"]},
+          "part_number": {"type": ["string", "null"]},
+          "role": {"type": ["string", "null"]},
+          "integrated": {"type": ["boolean", "null"]},
+          "type": {"type": ["string", "null"]},
+          "hybrid_components": {"type": ["array", "null"]},
+          "datasheet_url": {"type": ["string", "null"]},
+          "cpu_cores": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "architecture": {"type": "string"},
+                "bit_width": {"type": ["integer", "null"]},
+                "count": {"type": "integer"},
+                "clock_mhz": {"type": "integer"},
+                "features": {"type": ["array", "null"]}
+              }
+            }
+          },
+          "gpu": {
+            "type": ["object", "null"],
+            "additionalProperties": true,
+            "properties": {
+              "architecture": {"type": ["string", "null"]},
+              "cuda_cores": {"type": ["integer", "null"]},
+              "tensor_cores": {"type": ["integer", "null"]},
+              "clock_mhz": {"type": ["integer", "null"]},
+              "vram_mb": {"type": ["integer", "null"]},
+              "memory_bus_width_bit": {"type": ["integer", "null"]},
+              "tdp_w": {"type": ["number", "null"]}
+            }
+          },
+          "npu": {
+            "type": ["object", "null"],
+            "additionalProperties": true
+          },
+          "tpu": {"type": ["object", "null"], "additionalProperties": true},
+          "fpga": {"type": ["object", "null"], "additionalProperties": true},
+          "memory": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "ram_kb": {"type": "integer"},
+              "flash_kb": {"type": ["integer", "null"]},
+              "eeprom_kb": {"type": ["integer", "null"]}
+            }
+          },
+          "security": {"type": ["object", "null"], "additionalProperties": true}
+        }
+      }
+    },
+
+    "interfaces": {"type": "array"},
+    "pin_headers": {"type": "array"},
+
+    "wireless": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "protocol": {"type": "string"}
+        }
+      }
+    },
+
+    "inputs": {"type": "array"},
+    "outputs": {"type": "array"},
+    "onboard_components": {"type": ["object", "null"], "additionalProperties": true},
+    "power": {"type": ["object", "null"], "additionalProperties": true},
+    "thermal": {"type": ["object", "null"], "additionalProperties": true},
+
+    "physical": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "dimensions_mm": {"type": ["object", "null"], "additionalProperties": true},
+        "weight_g": {"type": ["number", "null"]},
+        "form_factor": {"type": "array", "items": {"type": "string"}},
+        "breadboard_friendly": {"type": ["boolean", "null"]},
+        "mounting_holes": {"type": ["object", "null"], "additionalProperties": true},
+        "enclosure_available": {"type": ["boolean", "null"]}
+      }
+    },
+
+    "boot": {"type": ["object", "null"], "additionalProperties": true},
+    "sdr": {"type": ["object", "null"], "additionalProperties": true},
+    "certifications": {"type": "array"},
+
+    "software": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "name": {"type": "string"}
+            }
+          }
+        },
+        "frameworks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "name": {"type": "string"}
+            }
+          }
+        },
+        "os": {"type": "array"},
+        "ai_ml_tools": {"type": "array"},
+        "ides": {"type": "array"},
+        "debugger_support": {"type": "array"}
+      }
+    },
+
+    "community": {"type": ["object", "null"], "additionalProperties": true},
+    "resources": {"type": ["object", "null"], "additionalProperties": true},
+    "libraries": {"type": "array"},
+    "compatible_boards": {"type": "array"},
+
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "official_page_url": {"type": ["string", "null"]},
+        "image_url": {"type": ["string", "null"]},
+        "image_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["top-view", "angle", "sim-ready", "pinout", "block-diagram"]
+          }
+        },
+        "pinout_image_url": {"type": ["string", "null"]},
+        "pinout_table_url": {"type": ["string", "null"]},
+        "schematic_url": {"type": ["string", "null"]},
+        "repo_url": {"type": ["string", "null"]},
+        "datasheet_url": {"type": ["string", "null"]},
+        "getting_started_urls": {"type": ["array", "null"]},
+        "open_hardware_repo_url": {"type": ["string", "null"]},
+        "processing_element_datasheets": {"type": ["array", "null"]}
+      }
+    },
+
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["sources", "product_url"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "format": "uri"}
+        },
+        "product_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical manufacturer product page. Must point to the manufacturer's own domain (e.g., raspberrypi.com, espressif.com). Not a reseller, distributor, or affiliate landing page."
+        },
+        "last_verified": {"type": ["string", "null"], "format": "date"},
+        "data_completeness": {
+          "type": "string",
+          "enum": ["stub", "partial", "complete"]
+        },
+        "community_reviewed": {"type": "boolean"},
+        "verified": {"type": "boolean"},
+        "confidence": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          }
+        }
+      }
+    },
+
+    "simulation": {"type": ["object", "null"], "additionalProperties": true}
+  }
+}

@@ -1,0 +1,52 @@
+ubds_version: "1.1"
+name: "Adafruit Feather M0"
+slug: feather-m0
+manufacturer: Adafruit Industries
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+tags:
+  - feather
+  - usb-direct
+  - lipo-charger
+  - breadboard-friendly
+use_cases:
+  - prototyping
+  - wearables
+  - sensors
+processing:
+  - name: ATSAMD21G18
+    part_number: ATSAMD21G18A
+    cpu_cores:
+      - architecture: ARM Cortex-M0+
+        count: 1
+        clock_mhz: 48
+    memory:
+      ram_kb: 32
+      flash_kb: 256
+wireless: []
+software:
+  frameworks:
+    - name: arduino
+    - name: zephyr
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - feather
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://www.adafruit.com/product/2772
+    - https://learn.adafruit.com/adafruit-feather-m0-basic-proto/
+  product_url: https://www.adafruit.com/product/2772
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    pricing: medium
+    use_cases: low
+    tags: low

@@ -1,0 +1,69 @@
+ubds_version: "1.1"
+name: "Arduino Uno R4 WiFi"
+slug: arduino-uno-r4-wifi
+manufacturer: Arduino
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+release_date: "2023-06-26"
+tags:
+  - wifi
+  - ble
+  - arduino-uno
+  - co-processor
+  - led-matrix
+use_cases:
+  - prototyping
+  - education
+  - iot
+processing:
+  - name: Renesas RA4M1
+    part_number: R7FA4M1AB3CFM
+    role: main-mcu
+    cpu_cores:
+      - architecture: ARM Cortex-M4
+        count: 1
+        clock_mhz: 48
+    memory:
+      ram_kb: 32
+      flash_kb: 256
+  - name: ESP32-S3 (WiFi co-processor)
+    part_number: ESP32-S3-MINI-1
+    role: wireless-coprocessor
+    cpu_cores:
+      - architecture: Xtensa LX7
+        count: 2
+        clock_mhz: 240
+    memory:
+      ram_kb: 512
+      flash_kb: 8192
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+    - name: fsp
+    - name: cmsis
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - arduino-uno
+meta:
+  sources:
+    - https://docs.arduino.cc/hardware/uno-r4-wifi
+    - https://store-usa.arduino.cc/products/uno-r4-wifi
+  product_url: https://store.arduino.cc/products/uno-r4-wifi
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "Co-processor modeled per spec.md §Step 2a precedent — ESP32-S3 (Xtensa LX7, dual-core @ 240 MHz) acts as the WiFi/BLE radio."
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    pricing: medium
+    use_cases: low
+    tags: low

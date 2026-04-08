@@ -1,0 +1,10 @@
+ubds_version: "1.1"
+name: "Trailing WS Board"
+slug: "trailing-ws-board"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/board"

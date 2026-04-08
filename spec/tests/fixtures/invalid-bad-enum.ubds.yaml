@@ -1,0 +1,9 @@
+ubds_version: "1.0"
+name: "Minimal Test Board"
+slug: "minimal-test-board"
+manufacturer: "Test Co"
+board_type:
+  - FAKE
+meta:
+  sources:
+    - "https://example.com/datasheet"

@@ -1,0 +1,9 @@
+{
+  "name": "Board A",
+  "vendor": "Espressif",
+  "url": "https://example.com/a",
+  "frameworks": ["Arduino"],
+  "build": {"mcu": "esp32", "f_cpu": "240000000L"},
+  "upload": {"maximum_ram_size": 327680, "maximum_size": 4194304},
+  "connectivity": ["wifi"]
+}

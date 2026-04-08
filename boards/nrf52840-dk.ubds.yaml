@@ -1,0 +1,56 @@
+ubds_version: "1.1"
+name: "Nordic nRF52840-DK"
+slug: nrf52840-dk
+manufacturer: Nordic Semiconductor
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - ble
+  - thread
+  - zigbee
+  - arduino-uno-shield
+  - devkit
+use_cases:
+  - prototyping
+  - iot
+  - mesh-networking
+processing:
+  - name: nRF52840
+    part_number: nRF52840
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 64
+    memory:
+      ram_kb: 256
+      flash_kb: 1024
+wireless:
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+    - name: mbed
+    - name: zephyr
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - arduino-uno
+    - devkit
+meta:
+  sources:
+    - https://os.mbed.com/platforms/Nordic-nRF52840-DK/
+    - https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
+  product_url: https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "Pricing not listed on the fetched manufacturer page; omitted per spec."
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    use_cases: low
+    tags: low

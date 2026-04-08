@@ -1,0 +1,17 @@
+{
+  "esp32-s3-devkitc-1": ["docs.espressif.com"],
+  "xiao-esp32-c3": ["wiki.seeedstudio.com"],
+  "rp2040-pico": ["www.raspberrypi.org", "www.raspberrypi.com"],
+  "nrf52840-dk": ["os.mbed.com", "www.nordicsemi.com"],
+  "nucleo-f446re": ["developer.mbed.org", "www.st.com", "os.mbed.com"],
+  "nucleo-h743zi": ["www.st.com"],
+  "feather-m0": ["www.adafruit.com"],
+  "feather-m4-express": ["www.adafruit.com"],
+  "mimxrt1060-evk": ["www.nxp.com"],
+  "arduino-uno-r4-wifi": ["docs.arduino.cc", "store.arduino.cc"],
+  "seeed-wio-terminal": ["www.seeedstudio.com"],
+  "blackpill-f411ce": ["github.com"],
+  "particle-boron": ["docs.particle.io", "store.particle.io"],
+  "adafruit-itsybitsy-m4": ["www.adafruit.com"],
+  "adafruit-feather-nrf52840-sense": ["www.adafruit.com"]
+}

@@ -1,0 +1,51 @@
+ubds_version: "1.1"
+name: "NXP i.MX RT1060 Evaluation Kit"
+slug: mimxrt1060-evk
+manufacturer: NXP Semiconductors
+board_type:
+  - MCU
+difficulty_level: advanced
+ecosystem_size: medium
+tags:
+  - crossover-mcu
+  - high-performance
+  - evk
+  - arduino-uno-shield
+  - ethernet
+use_cases:
+  - industrial
+  - motor-control
+  - audio
+processing:
+  - name: i.MX RT1060
+    part_number: MIMXRT1062DVL6A
+    cpu_cores:
+      - architecture: ARM Cortex-M7
+        count: 1
+        clock_mhz: 600
+    memory:
+      ram_kb: 32768
+      flash_kb: 8192
+wireless: []
+software:
+  frameworks:
+    - name: zephyr
+  languages:
+    - name: c
+physical:
+  form_factor:
+    - evk
+    - arduino-uno
+meta:
+  sources:
+    - https://www.nxp.com/design/development-boards/i.mx-evaluation-and-development-boards/mimxrt1060-evk-i.mx-rt1060-evaluation-kit:MIMXRT1060-EVK
+    - https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1060-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1060
+  product_url: https://www.nxp.com/design/design-center/development-boards-and-designs/i-mx-evaluation-and-development-boards/mimxrt1060-evk-i-mx-rt1060-evaluation-kit:MIMXRT1060-EVK
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "NXP product page returned 404 on direct fetch; pricing omitted per spec (no LLM fallback)."
+  confidence:
+    processing: high
+    software: high
+    use_cases: low
+    tags: low

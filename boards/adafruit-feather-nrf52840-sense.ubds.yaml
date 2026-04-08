@@ -1,0 +1,55 @@
+ubds_version: "1.1"
+name: "Adafruit Feather Bluefruit Sense"
+slug: adafruit-feather-nrf52840-sense
+manufacturer: Adafruit Industries
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+release_date: "2020-02-05"
+tags:
+  - feather
+  - ble
+  - sensor-fusion
+  - imu
+  - circuitpython
+  - lipo-charger
+use_cases:
+  - wearables
+  - sensors
+  - prototyping
+processing:
+  - name: nRF52840
+    part_number: nRF52840
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 64
+    memory:
+      ram_kb: 256
+      flash_kb: 1024
+wireless:
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+    - name: python
+physical:
+  form_factor:
+    - feather
+meta:
+  sources:
+    - https://www.adafruit.com/product/4516
+    - https://learn.adafruit.com/adafruit-feather-sense
+  product_url: https://www.adafruit.com/product/4516
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    pricing: medium
+    use_cases: low
+    tags: low

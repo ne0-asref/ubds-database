@@ -1,0 +1,16 @@
+ubds_version: "1.1"
+name: "Wrong Type Board"
+slug: "wrong-type-board"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+processing:
+  - name: "Some MCU"
+    cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        count: 1
+        clock_mhz: "fast"
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/board"

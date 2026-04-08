@@ -1,0 +1,32 @@
+ubds_version: "1.1"
+name: "Full Test Board"
+slug: "full-test-board"
+manufacturer: "Espressif Systems"
+board_type:
+  - MCU
+status: active
+release_date: "2023-03-21"
+processing:
+  - name: "ESP32-S3"
+    cpu_cores:
+      - architecture: "Xtensa LX7"
+        count: 2
+        clock_mhz: 240
+    memory:
+      ram_kb: 512
+      flash_kb: 8192
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  languages:
+    - name: cpp
+  frameworks:
+    - name: arduino
+meta:
+  sources:
+    - "https://example.com/datasheet"
+    - "https://example.com/schematic"
+  product_url: "https://example.com/board"
+  last_verified: "2026-04-01"
+  data_completeness: complete

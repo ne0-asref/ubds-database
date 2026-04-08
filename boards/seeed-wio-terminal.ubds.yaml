@@ -1,0 +1,56 @@
+ubds_version: "1.1"
+name: "Seeeduino Wio Terminal"
+slug: seeed-wio-terminal
+manufacturer: Seeed Studio
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: medium
+tags:
+  - wifi
+  - ble
+  - lcd-screen
+  - buttons
+  - grove
+  - all-in-one
+use_cases:
+  - prototyping
+  - education
+  - sensors
+processing:
+  - name: ATSAMD51P19
+    part_number: ATSAMD51P19A
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 120
+    memory:
+      ram_kb: 192
+      flash_kb: 512
+wireless:
+  - protocol: wifi
+  - protocol: ble
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+    - name: python
+physical:
+  form_factor:
+    - all-in-one
+    - handheld
+meta:
+  sources:
+    - https://www.seeedstudio.com/Wio-Terminal-p-4509.html
+    - https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/
+  product_url: https://www.seeedstudio.com/Wio-Terminal-p-4509.html
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "Seeed product page CSS-only on fetch; pricing not extractable via single-fetch. Wireless (WiFi + BLE) sourced from RTL8720DN module mentioned on the page (page text lists Realtek RTL8720DN BLE 5.0 & Wi-Fi)."
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    use_cases: low
+    tags: low

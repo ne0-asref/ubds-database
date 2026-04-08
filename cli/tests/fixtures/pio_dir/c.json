@@ -1,0 +1,9 @@
+{
+  "name": "Board C",
+  "vendor": "Adafruit",
+  "url": "https://example.com/c",
+  "frameworks": ["CircuitPython"],
+  "build": {"mcu": "samd51", "f_cpu": "120000000L"},
+  "upload": {"maximum_ram_size": 196608, "maximum_size": 524288},
+  "connectivity": ["bluetooth"]
+}

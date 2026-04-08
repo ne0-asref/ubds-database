@@ -1,0 +1,10 @@
+ubds_version: "2.0"
+name: "Minimal Test Board"
+slug: "minimal-test-board"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/board"

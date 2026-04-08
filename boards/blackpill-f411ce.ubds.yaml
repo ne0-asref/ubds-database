@@ -1,0 +1,57 @@
+ubds_version: "1.1"
+name: "WeAct Studio BlackPill V2.0 (STM32F411CE)"
+slug: blackpill-f411ce
+manufacturer: WeAct Studio
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: medium
+tags:
+  - blackpill
+  - usb-c
+  - breadboard-friendly
+  - dfu
+  - low-cost
+use_cases:
+  - prototyping
+  - education
+  - sensors
+processing:
+  - name: STM32F411CE
+    part_number: STM32F411CEU6
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 100
+    memory:
+      ram_kb: 128
+      flash_kb: 512
+wireless: []
+software:
+  frameworks:
+    - name: arduino
+    - name: cmsis
+    - name: stm32cube
+    - name: libopencm3
+    - name: zephyr
+  languages:
+    - name: cpp
+    - name: c
+    - name: python
+physical:
+  form_factor:
+    - blackpill
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1
+    - https://github.com/WeActStudio/MiniSTM32F4x1
+  product_url: https://stm32-base.org/boards/STM32F411CEU6-WeAct-Black-Pill-V2.0
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "Sold via TaoBao/AliExpress only; no manufacturer USD MSRP. Pricing omitted per spec."
+  confidence:
+    processing: high
+    software: high
+    use_cases: low
+    tags: low

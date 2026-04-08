@@ -1,0 +1,53 @@
+ubds_version: "1.1"
+name: "Particle Boron"
+slug: particle-boron
+manufacturer: Particle Industries
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: medium
+tags:
+  - cellular
+  - ble
+  - feather
+  - lte-m
+  - particle-cloud
+use_cases:
+  - cellular-iot
+  - iot
+  - industrial
+processing:
+  - name: nRF52840
+    part_number: nRF52840
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 64
+    memory:
+      ram_kb: 256
+      flash_kb: 1024
+wireless:
+  - protocol: ble
+  - protocol: cellular
+software:
+  frameworks:
+    - name: zephyr
+  languages:
+    - name: c
+physical:
+  form_factor:
+    - feather
+meta:
+  sources:
+    - https://docs.particle.io/boron
+    - https://docs.particle.io/reference/datasheets/b-series/boron-datasheet/
+  product_url: https://www.particle.io/boron/
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "u-blox SARA-R410M cellular modem modeled as wireless protocol 'cellular' (peripheral modem, not a processing entry per spec.md §Step 2a). Pricing not on docs page; omitted per spec."
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    use_cases: low
+    tags: low

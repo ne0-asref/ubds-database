@@ -1,0 +1,13 @@
+ubds_version: "1.1"
+name: "Upper Proto Board"
+slug: "upper-proto-board"
+manufacturer: "Test Co"
+board_type:
+  - MCU
+wireless:
+  - protocol: WiFi
+  - protocol: BLE
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/board"

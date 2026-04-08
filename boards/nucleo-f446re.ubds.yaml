@@ -1,0 +1,58 @@
+ubds_version: "1.1"
+name: "ST Nucleo F446RE"
+slug: nucleo-f446re
+manufacturer: STMicroelectronics
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - nucleo
+  - arduino-uno-shield
+  - st-morpho
+  - st-link
+use_cases:
+  - prototyping
+  - motor-control
+  - industrial
+processing:
+  - name: STM32F446RE
+    part_number: STM32F446RET6
+    cpu_cores:
+      - architecture: ARM Cortex-M4F
+        count: 1
+        clock_mhz: 180
+    memory:
+      ram_kb: 128
+      flash_kb: 512
+wireless: []
+interfaces:
+  - type: can
+software:
+  frameworks:
+    - name: arduino
+    - name: cmsis
+    - name: mbed
+    - name: stm32cube
+    - name: libopencm3
+    - name: zephyr
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - nucleo
+    - arduino-uno
+meta:
+  sources:
+    - https://os.mbed.com/platforms/ST-Nucleo-F446RE/
+    - https://www.st.com/en/evaluation-tools/nucleo-f446re.html
+  product_url: https://www.st.com/en/evaluation-tools/nucleo-f446re.html
+  last_verified: "2026-04-07"
+  data_completeness: partial
+  notes: "ST product page repeatedly timed out during fetch; pricing omitted per spec (no LLM fallback)."
+  confidence:
+    processing: high
+    software: high
+    use_cases: low
+    tags: low

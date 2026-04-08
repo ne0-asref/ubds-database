@@ -1,0 +1,9 @@
+{
+  "name": "Board B",
+  "vendor": "ST",
+  "url": "https://example.com/b",
+  "frameworks": ["Mbed"],
+  "build": {"mcu": "stm32f4", "f_cpu": "168000000L"},
+  "upload": {"maximum_ram_size": 131072, "maximum_size": 1048576},
+  "connectivity": []
+}

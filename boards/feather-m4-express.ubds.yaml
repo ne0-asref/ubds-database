@@ -50,3 +50,5 @@ meta:
     pricing: medium
     use_cases: low
     tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/feather-m4-express/cover.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/feather-m4-express/pinout.png

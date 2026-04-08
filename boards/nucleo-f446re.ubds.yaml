@@ -56,3 +56,5 @@ meta:
     software: high
     use_cases: low
     tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/nucleo-f446re/cover.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/nucleo-f446re/pinout.png

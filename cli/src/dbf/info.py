@@ -48,11 +48,12 @@ def _join(items, key=None) -> str:
 
 def _render(board: dict) -> str:
     lines: list[str] = []
+    _na = "\u2014"
     name = board.get("name", "?")
     slug = board.get("slug", "?")
     lines.append(f"{name}  ({slug})")
     lines.append("=" * max(len(lines[0]), 8))
-    lines.append(f"manufacturer:   {board.get('manufacturer', '\u2014')}")
+    lines.append(f"manufacturer:   {board.get('manufacturer', _na)}")
 
     # processing → architecture, ram, flash
     arches: list[str] = []
@@ -69,9 +70,9 @@ def _render(board: dict) -> str:
         if flash_kb is None and mem.get("flash_kb") is not None:
             flash_kb = mem.get("flash_kb")
 
-    lines.append(f"architecture:   {', '.join(arches) if arches else '\u2014'}")
-    lines.append(f"ram:            {ram_kb if ram_kb is not None else '\u2014'} KB")
-    lines.append(f"flash:          {flash_kb if flash_kb is not None else '\u2014'} KB")
+    lines.append(f"architecture:   {', '.join(arches) if arches else _na}")
+    lines.append(f"ram:            {ram_kb if ram_kb is not None else _na} KB")
+    lines.append(f"flash:          {flash_kb if flash_kb is not None else _na} KB")
 
     wireless = board.get("wireless", []) or []
     lines.append(f"wireless:       {_join(wireless, 'protocol')}")
@@ -82,7 +83,7 @@ def _render(board: dict) -> str:
 
     meta = board.get("meta") or {}
     last_verified = meta.get("last_verified")
-    lines.append(f"last_verified:  {last_verified if last_verified else '\u2014'}")
+    lines.append(f"last_verified:  {last_verified if last_verified else _na}")
 
     return "\n".join(lines)
 

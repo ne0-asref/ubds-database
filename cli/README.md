@@ -3,7 +3,7 @@
 Pip-installable Python CLI for validating, searching, and importing UBDS
 (Universal Board Description Standard) board descriptions.
 
-`dbf` is the reference implementation of UBDS v1.0. Use it to lint board YAML
+`dbf` is the reference implementation of UBDS v1.1. Use it to lint board YAML
 files, search a local cache of boards by capability, inspect details, and
 import boards from existing ecosystems (e.g. PlatformIO).
 
@@ -33,7 +33,7 @@ TTL so most commands will trigger an auto-refresh on their own.
 
 ```bash
 dbf --version
-# dbf 0.1.0 (UBDS schema v1.0)
+# dbf 0.1.0 (UBDS schema v1.1)
 ```
 
 ### 2. Validate a board YAML against UBDS v1.0
@@ -85,7 +85,7 @@ also `dbf cache info` and `dbf cache clear`.
 
 | Command | Purpose |
 |---|---|
-| `dbf validate` | Lint a UBDS YAML file against schema v1.0 |
+| `dbf validate` | Lint a UBDS YAML file against schema v1.1 |
 | `dbf search` | Filter the local board cache by capability |
 | `dbf info` | Show details for a single board by slug |
 | `dbf import platformio` | Convert PlatformIO board JSON to UBDS YAML |

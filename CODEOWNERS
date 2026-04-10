@@ -1,0 +1,8 @@
+# Board data — all changes require maintainer review
+/boards/ @ne0-asref
+
+# Spec changes — require maintainer review
+/spec/ @ne0-asref
+
+# CLI changes — require maintainer review
+/cli/ @ne0-asref

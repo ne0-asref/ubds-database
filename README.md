@@ -20,6 +20,9 @@ Dual-licensed. Code (`spec/`, `cli/`) under Apache-2.0; board data
 
 ## Contributing
 
-Contributor documentation (how to add a board, PR template, review flow)
-lands in a follow-up component. For now, open an issue if you want to
-propose a board and we'll sort out the mechanics together.
+Want to add a board? See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for the
+full guide. The short version:
+
+1. Fork this repo.
+2. Copy `templates/minimal.ubds.yaml` to `boards/<slug>.ubds.yaml`.
+3. Fill in the fields, run `dbf validate`, and open a PR.

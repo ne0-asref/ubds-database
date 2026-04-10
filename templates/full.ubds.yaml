@@ -1,0 +1,273 @@
+# ============================================================================
+# UBDS Full Board Template
+# ============================================================================
+# This template covers ALL commonly-used sections with explanatory comments.
+# Copy to boards/<your-board-slug>.ubds.yaml, fill in what applies, and
+# delete sections that don't apply to your board.
+#
+# For the minimal (required-fields-only) version: templates/minimal.ubds.yaml
+# For the exhaustive reference: spec/ubds-v1.reference.ubds.yaml
+# ============================================================================
+
+# Schema version — always "1.1" for now.
+ubds_version: "1.1"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# IDENTITY & CLASSIFICATION
+# ──────────────────────────────────────────────────────────────────────────────
+
+# [REQUIRED] Display name exactly as the manufacturer markets it.
+name: "Your Board Name Here"
+
+# [REQUIRED] URL-safe unique identifier. Lowercase, hyphens only.
+slug: "your-board-slug"
+
+# [REQUIRED] Company or organisation that makes this board.
+manufacturer: "Manufacturer Name"
+
+# Board family or product line (e.g. "Nucleo", "Feather", "Pico").
+series: null
+
+# If this board is a variant of another, put the parent's slug here.
+parent_board: null
+
+# PCB / hardware revision string.
+hardware_version: null
+
+# active | discontinued | upcoming | prototype
+status: active
+
+# When was this board first publicly available? (YYYY-MM-DD)
+release_date: "2024-01-01"
+
+# End-of-life date, if known. (YYYY-MM-DD or null)
+end_of_life_date: null
+
+# [REQUIRED] What kind of board? Pick one or more:
+#   MCU | SBC | SoM | Carrier | Expansion | FPGA | AI | SDR
+#   Industrial | DSP | Other
+board_type:
+  - MCU
+
+# beginner | intermediate | advanced
+difficulty_level: beginner
+
+# small | medium | large | niche
+ecosystem_size: small
+
+# What is this board typically used for?
+use_cases:
+  - IoT
+  - Prototyping
+
+# Free-form tags for discoverability.
+tags:
+  - iot
+  - low-power
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PROCESSING ELEMENTS
+# ──────────────────────────────────────────────────────────────────────────────
+# Array of all processors / compute elements on the board.
+# Omit entirely for carrier or expansion boards.
+
+processing:
+
+  - name: "Main MCU"
+    part_number: "STM32F407VGT6"
+    role: primary                    # primary | co-processor
+    integrated: true                 # true = on-SoC, false = discrete chip
+    type: mcu                        # mcu | fpga | gpu | npu | tpu | dsp | hybrid
+    datasheet_url: "https://example.com/datasheet.pdf"
+
+    cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        bit_width: 32
+        count: 1
+        clock_mhz: 168
+        features: [FPU]
+
+    # On-chip memory. Use ram_kb / flash_kb for MCUs.
+    memory:
+      ram_kb: 192
+      flash_kb: 1024
+
+  # Uncomment and fill in for boards with a second processor:
+  # - name: "Co-processor"
+  #   role: co-processor
+  #   type: mcu
+  #   cpu_cores:
+  #     - architecture: "ARM Cortex-M0+"
+  #       bit_width: 32
+  #       count: 1
+  #       clock_mhz: 48
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# INTERFACES
+# ──────────────────────────────────────────────────────────────────────────────
+# Wired communication interfaces exposed on the board.
+
+interfaces:
+
+  - type: USB
+    version: "2.0"
+    connector: "Micro-B"
+    count: 1
+    role: device                     # host | device | OTG
+    notes: "Programming and debug"
+
+  - type: UART
+    count: 2
+
+  - type: SPI
+    count: 2
+
+  - type: I2C
+    count: 2
+
+  - type: CAN
+    version: "2.0B"
+    count: 1
+
+  # Other interface types:
+  #   GPIO, ADC, DAC, PWM, Ethernet, HDMI, DisplayPort, CSI, DSI,
+  #   JTAG, SWD, SDIO, QSPI, I2S, PCIe, MIPI, Thunderbolt, SATA
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# WIRELESS
+# ──────────────────────────────────────────────────────────────────────────────
+# Delete this entire section if the board has no wireless.
+
+wireless:
+
+  - protocol: WiFi
+    standard: "802.11n"
+    frequency_ghz: [2.4]
+    antenna: onboard                 # onboard | external | u.fl | sma
+    notes: null
+
+  - protocol: Bluetooth
+    standard: "5.0"
+    frequency_ghz: [2.4]
+    features: [BLE]
+    antenna: onboard
+
+  # Other wireless protocols:
+  #   LoRa, Zigbee, Thread, Z-Wave, NFC, LTE, 5G, GPS, SigFox,
+  #   UWB, WiFi-HaLow, DECT, ISM, Cellular
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# POWER
+# ──────────────────────────────────────────────────────────────────────────────
+
+power:
+  input_voltage_min_v: 3.0
+  input_voltage_max_v: 5.5
+  input_voltage_typical_v: 5.0
+  power_consumption_typical_mw: 150
+  power_consumption_max_mw: 500
+  battery_support: false
+  battery_connector: null
+  power_connector: "USB Micro-B"
+  sleep_modes:
+    - name: "Stop"
+      consumption_ua: 20
+    - name: "Standby"
+      consumption_ua: 2
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# MECHANICAL / PHYSICAL
+# ──────────────────────────────────────────────────────────────────────────────
+
+physical:
+  length_mm: 66.0
+  width_mm: 25.4
+  weight_g: 10.0
+  form_factor: "Custom"             # e.g. Arduino Uno, Feather, Raspberry Pi HAT
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SOFTWARE SUPPORT
+# ──────────────────────────────────────────────────────────────────────────────
+
+software:
+
+  # SDKs and frameworks the board officially supports.
+  frameworks:
+    - name: "Arduino"
+      url: "https://www.arduino.cc/"
+    - name: "STM32CubeIDE"
+      url: "https://www.st.com/stm32cubeide"
+
+  # Programming languages with first-class support.
+  languages:
+    - name: "C"
+    - name: "C++"
+    - name: "MicroPython"
+
+  # Real-time operating systems.
+  rtos:
+    - name: "FreeRTOS"
+      url: "https://www.freertos.org/"
+    - name: "Zephyr"
+      url: "https://zephyrproject.org/"
+
+  # Operating systems (for SBCs).
+  # os:
+  #   - name: "Ubuntu"
+  #     url: "https://ubuntu.com/"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# GETTING STARTED
+# ──────────────────────────────────────────────────────────────────────────────
+
+getting_started:
+  quickstart_url: "https://example.com/getting-started"
+  documentation_url: "https://example.com/docs"
+  purchase_url: "https://example.com/buy"
+  community_url: "https://forum.example.com/"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# META (REQUIRED)
+# ──────────────────────────────────────────────────────────────────────────────
+
+meta:
+  # [REQUIRED] Canonical manufacturer product page — NOT a reseller link.
+  product_url: "https://manufacturer.example.com/product-page"
+
+  # [REQUIRED] At least one verifiable public source.
+  sources:
+    - "https://manufacturer.example.com/datasheet.pdf"
+    - "https://manufacturer.example.com/reference-manual.pdf"
+
+  # Date you last checked / updated this file (YYYY-MM-DD).
+  last_verified: "2024-01-01"
+
+  # Rough percentage of UBDS fields filled in (0-100).
+  data_completeness: 60
+
+  # Has this data been reviewed by at least one other person?
+  community_reviewed: false
+
+  # true = verified against official sources by a maintainer.
+  verified: false
+
+  # [RECOMMENDED] How confident are you in each section?
+  #   high   = copied from official datasheet or verified on hardware
+  #   medium = cross-referenced multiple sources but not verified
+  #   low    = best guess from product page, needs verification
+  confidence:
+    processing: high
+    interfaces: medium
+    wireless: medium
+    power: low
+    software: medium
+    getting_started: high

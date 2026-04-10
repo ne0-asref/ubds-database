@@ -1,0 +1,95 @@
+# ============================================================================
+# UBDS Minimal Board Template
+# ============================================================================
+# Copy this file to boards/<your-board-slug>.ubds.yaml, fill in the values,
+# and run `dbf validate boards/<your-board-slug>.ubds.yaml` before opening
+# a pull request.
+#
+# This template covers REQUIRED fields only. For a full-featured template
+# with all optional sections, see templates/full.ubds.yaml.
+# For the exhaustive reference, see spec/ubds-v1.reference.ubds.yaml.
+# ============================================================================
+
+# Schema version — always "1.1" for now.
+ubds_version: "1.1"
+
+# Display name exactly as the manufacturer markets it.
+name: "Your Board Name Here"
+
+# URL-safe unique identifier. Lowercase, hyphens only.
+# Example: "esp32-devkitc-v4", "stm32f4-discovery"
+slug: "your-board-slug"
+
+# Company or organisation that makes (or designed) this board.
+manufacturer: "Manufacturer Name"
+
+# What kind of board is this? Pick one or more from:
+#   MCU | SBC | SoM | Carrier | Expansion | FPGA | AI | SDR
+#   Industrial | DSP | Other
+board_type:
+  - MCU
+
+# How much experience does a user need?
+#   beginner | intermediate | advanced
+difficulty_level: beginner
+
+# How large is the community / ecosystem?
+#   small | medium | large | niche
+ecosystem_size: small
+
+# When was this board first publicly available? (YYYY-MM-DD)
+release_date: "2024-01-01"
+
+# Free-form tags for discoverability — keep them short and lowercase.
+tags:
+  - iot
+
+# What is this board typically used for?
+use_cases:
+  - IoT
+
+# ── Processing ──────────────────────────────────────────────────────────────
+# At least one processing element for MCU / SBC / SoM boards.
+# Omit this section entirely for carrier or expansion boards.
+processing:
+  - name: "Main MCU or SoC"
+    role: primary
+    type: mcu        # mcu | fpga | gpu | npu | tpu | dsp | hybrid
+    cpu_cores:
+      - architecture: "ARM Cortex-M4"
+        bit_width: 32
+        count: 1
+        clock_mhz: 80
+
+# ── Wireless (if applicable) ───────────────────────────────────────────────
+# Delete this section if the board has no wireless capability.
+wireless:
+  - protocol: WiFi
+    standard: "802.11n"
+    frequency_ghz: [2.4]
+
+# ── Software ───────────────────────────────────────────────────────────────
+software:
+  frameworks:
+    - name: "Arduino"
+  languages:
+    - name: "C++"
+
+# ── Meta (REQUIRED) ────────────────────────────────────────────────────────
+meta:
+  # Canonical manufacturer product page — NOT a reseller or affiliate link.
+  product_url: "https://manufacturer.example.com/product-page"
+
+  # At least one verifiable public source used to compile this data.
+  # Datasheets, official docs, or manufacturer pages.
+  sources:
+    - "https://manufacturer.example.com/datasheet.pdf"
+
+  # How confident are you in each section? (high | medium | low)
+  # high   = copied from official datasheet or verified on hardware
+  # medium = cross-referenced multiple sources
+  # low    = best guess, needs verification
+  confidence:
+    processing: high
+    wireless: medium
+    software: medium

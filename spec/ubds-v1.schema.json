@@ -190,13 +190,7 @@
       "properties": {
         "official_page_url": {"type": ["string", "null"]},
         "image_url": {"type": ["string", "null"]},
-        "image_tags": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["top-view", "angle", "sim-ready", "pinout", "block-diagram"]
-          }
-        },
+        "top_view": {"type": "boolean"},
         "pinout_image_url": {"type": ["string", "null"]},
         "pinout_table_url": {"type": ["string", "null"]},
         "schematic_url": {"type": ["string", "null"]},

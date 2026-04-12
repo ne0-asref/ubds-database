@@ -133,9 +133,9 @@ def test_each_confidence_value_accepted(validator, minimal_doc, value):
     validator.validate(minimal_doc)
 
 
-@pytest.mark.parametrize("value", ["top-view", "angle", "sim-ready", "pinout", "block-diagram"])
-def test_each_image_tag_value_accepted(validator, minimal_doc, value):
-    minimal_doc["metadata"] = {"image_tags": [value]}
+@pytest.mark.parametrize("value", [True, False])
+def test_top_view_boolean_accepted(validator, minimal_doc, value):
+    minimal_doc["metadata"] = {"top_view": value}
     validator.validate(minimal_doc)
 
 

@@ -931,7 +931,7 @@ compatible_boards:
 metadata:
   official_page_url: "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
   image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/jetson-orin-nano-dev-kit/top-view.png"
-  image_tags: [top-view]                                # top-view | angle | sim-ready | pinout | block-diagram
+  top_view: true                                        # true if the primary image is a top-down view
   pinout_image_url: null
   pinout_table_url: null                              # If pinout is a web page, not an image
   schematic_url: null

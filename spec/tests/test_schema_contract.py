@@ -26,7 +26,7 @@ FLATTENING_CONTRACT = [
     ("/properties/meta/properties/verified", "boolean"),
     ("/properties/parent_board", ["string", "null"]),
     ("/properties/metadata/properties/image_url", "string"),
-    ("/properties/metadata/properties/image_tags", "array"),
+    ("/properties/metadata/properties/top_view", "boolean"),
 ]
 
 

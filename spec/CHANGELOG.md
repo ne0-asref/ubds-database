@@ -1,5 +1,14 @@
 # UBDS Changelog
 
+## v1.1.1 — 2026-04-12
+
+Image tag simplification.
+
+### Changed
+- `metadata.image_tags` (array of enum strings) replaced with `metadata.top_view` (boolean).
+  The image is either a top-down view or it isn't — the extra tag values (angle, sim-ready,
+  pinout, block-diagram) were unused and added no value.
+
 ## v1.1.0 — 2026-04-08
 
 Commerce separation. UBDS now describes only the board; pricing, vendors,

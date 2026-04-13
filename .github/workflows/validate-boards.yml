@@ -22,3 +22,44 @@ jobs:
         run: pip install ./cli
       - name: Validate boards
         run: dbf validate boards/
+
+  validate-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check image filenames
+        run: |
+          ALLOWED="top-view.png converted-top-view.png non-top-view.png pinout.png"
+          FAIL=0
+          for dir in images/*/; do
+            [ -d "$dir" ] || continue
+            for f in "$dir"*; do
+              [ -f "$f" ] || continue
+              name=$(basename "$f")
+              if ! echo "$ALLOWED" | grep -qw "$name"; then
+                echo "FAIL: disallowed file $f (allowed: $ALLOWED)"
+                FAIL=1
+              fi
+              mime=$(file --mime-type -b "$f")
+              if [ "$mime" != "image/png" ]; then
+                echo "FAIL: $f is $mime, expected image/png"
+                FAIL=1
+              fi
+              size=$(stat -c%s "$f" 2>/dev/null || stat -f%z "$f")
+              if [ "$size" -gt 1048576 ]; then
+                echo "FAIL: $f is ${size} bytes, max 1MB"
+                FAIL=1
+              fi
+            done
+          done
+          # Cross-ref slugs
+          for dir in images/*/; do
+            [ -d "$dir" ] || continue
+            slug=$(basename "$dir")
+            if [ ! -f "boards/${slug}.ubds.yaml" ]; then
+              echo "FAIL: images/$slug/ has no matching board YAML"
+              FAIL=1
+            fi
+          done
+          if [ "$FAIL" -eq 1 ]; then exit 1; fi
+          echo "Image validation passed ($(find images -name '*.png' 2>/dev/null | wc -l) images)"

@@ -28,7 +28,9 @@ processing:
       flash_kb: 1024
 wireless:
   - protocol: ble
+    version: "5.0"
   - protocol: cellular
+    version: "Cat M1"
 software:
   frameworks:
     - name: zephyr

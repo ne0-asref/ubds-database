@@ -1,0 +1,98 @@
+ubds_version: "1.1"
+name: "Raspberry Pi Pico 2"
+slug: rp2350-pico-2
+manufacturer: Raspberry Pi Ltd
+board_type:
+  - MCU
+difficulty_level: beginner
+ecosystem_size: large
+tags:
+  - dual-core
+  - dual-architecture
+  - breadboard-friendly
+  - castellated
+  - usb-c
+  - pico
+use_cases:
+  - prototyping
+  - education
+  - sensors
+  - dsp
+processing:
+  - name: RP2350
+    part_number: RP2350
+    cpu_cores:
+      - architecture: ARM Cortex-M33
+        count: 2
+        clock_mhz: 150
+      - architecture: RISC-V Hazard3
+        count: 2
+        clock_mhz: 150
+    memory:
+      ram_kb: 520
+      flash_kb: 4096
+wireless: []
+software:
+  languages:
+    - name: c
+      support_level: board
+      notes: "Official Pico SDK 2.x uses C"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via Pico SDK 2.x"
+    - name: micropython
+      support_level: board
+      notes: "Official MicroPython port for RP2350"
+    - name: circuitpython
+      support_level: community
+      notes: "Adafruit CircuitPython port available"
+    - name: rust
+      support_level: community
+      notes: "rp235x-hal crate, active community"
+  frameworks:
+    - name: pico-sdk
+      support_level: board
+      notes: "Official Raspberry Pi Pico SDK 2.x with RP2350 support"
+    - name: arduino
+      support_level: community
+      notes: "Arduino-Pico core by Earle Philhower"
+    - name: zephyr
+      support_level: community
+      notes: "Zephyr RTOS support for RP2350"
+  rtos:
+    - name: freertos
+      support_level: board
+      notes: "FreeRTOS SMP port included in Pico SDK 2.x"
+  sdks:
+    - name: pico-sdk
+      support_level: board
+      notes: "Official C/C++ SDK 2.x with CMake build system"
+  ides:
+    - name: vscode
+      support_level: board
+      notes: "Raspberry Pi Pico VS Code extension"
+    - name: thonny
+      support_level: board
+      notes: "Recommended for MicroPython development"
+    - name: arduino-ide
+      support_level: community
+      notes: "Via Arduino-Pico core"
+physical:
+  form_factor:
+    - pico
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://www.raspberrypi.com/products/raspberry-pi-pico-2/
+    - https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf
+  product_url: https://www.raspberrypi.com/products/raspberry-pi-pico-2/
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    pricing: medium
+    use_cases: low
+    tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/rp2350-pico-2/top-view.png
+  top_view: false

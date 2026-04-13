@@ -1,0 +1,51 @@
+ubds_version: "1.1"
+name: "Adafruit Motor/Stepper/Servo Shield v2.3"
+slug: adafruit-motor-shield-v2
+manufacturer: Adafruit Industries
+board_type:
+  - Expansion
+difficulty_level: beginner
+ecosystem_size: medium
+tags:
+  - motor-driver
+  - arduino-shield
+  - i2c
+  - stackable
+use_cases:
+  - robotics
+  - prototyping
+  - motor-control
+processing: []
+wireless: []
+interfaces:
+  - type: i2c
+    notes: "Configurable address 0x60-0x80 via solder jumpers"
+  - type: pwm
+    notes: "PCA9685 PWM driver, 1.6 kHz default frequency"
+software:
+  frameworks:
+    - name: arduino
+  languages:
+    - name: cpp
+    - name: c
+physical:
+  form_factor:
+    - arduino-uno
+  pin_headers:
+    - type: arduino-uno-r3
+      count: 1
+      pitch_mm: 2.54
+      notes: "Arduino Uno R3 compatible stacking headers"
+meta:
+  sources:
+    - https://www.adafruit.com/product/1438
+    - https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino
+  product_url: https://www.adafruit.com/product/1438
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  top_view: false
+  confidence:
+    processing: high
+    use_cases: medium
+    tags: medium
+  status: active

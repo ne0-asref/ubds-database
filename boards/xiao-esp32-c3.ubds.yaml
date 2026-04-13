@@ -29,7 +29,9 @@ processing:
       flash_kb: 4096
 wireless:
   - protocol: wifi
+    version: "WiFi 4 (802.11n)"
   - protocol: ble
+    version: "5.0"
 software:
   frameworks:
     - name: arduino

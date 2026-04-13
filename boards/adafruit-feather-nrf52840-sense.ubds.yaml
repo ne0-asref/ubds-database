@@ -30,6 +30,7 @@ processing:
       flash_kb: 1024
 wireless:
   - protocol: ble
+    version: "5.0"
 software:
   frameworks:
     - name: arduino

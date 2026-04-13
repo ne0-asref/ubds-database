@@ -120,7 +120,11 @@
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "protocol": {"type": "string"}
+          "protocol": {"type": "string"},
+          "version": {
+            "type": "string",
+            "description": "Protocol version (e.g., WiFi 6, BLE 5.0, LoRa 1.0.3)"
+          }
         }
       }
     },

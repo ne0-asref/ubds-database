@@ -1,0 +1,83 @@
+ubds_version: "1.1"
+name: "BeagleBone Black"
+slug: beaglebone-black
+manufacturer: BeagleBoard.org Foundation
+board_type:
+  - SBC
+difficulty_level: intermediate
+ecosystem_size: medium
+tags:
+  - ethernet
+  - hdmi
+  - emmc
+  - pru
+  - capes
+  - linux
+use_cases:
+  - prototyping
+  - industrial
+  - automation
+  - education
+  - embedded-linux
+processing:
+  - name: AM3358
+    part_number: AM3358BZCZ100
+    cpu_cores:
+      - architecture: ARM Cortex-A8
+        count: 1
+        clock_mhz: 1000
+    memory:
+      ram_kb: 524288
+      flash_kb: 4194304
+wireless: []
+software:
+  languages:
+    - name: c
+      support_level: board
+      notes: "Native Linux C development"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via GCC on Linux"
+    - name: python
+      support_level: board
+      notes: "Python with Adafruit_BBIO library"
+    - name: javascript
+      support_level: board
+      notes: "Node.js with BoneScript library"
+    - name: rust
+      support_level: community
+      notes: "Cross-compilation for ARM Linux target"
+  frameworks:
+    - name: bonescript
+      support_level: board
+      notes: "Node.js framework pre-installed on BeagleBone"
+    - name: adafruit-bbio
+      support_level: community
+      notes: "Python library for BeagleBone GPIO/PWM/ADC"
+  rtos: []
+  sdks: []
+  ides:
+    - name: vscode
+      support_level: community
+      notes: "Remote SSH development"
+    - name: cloud9
+      support_level: board
+      notes: "Cloud9 IDE pre-installed on BeagleBone images"
+physical:
+  form_factor:
+    - sbc
+meta:
+  sources:
+    - https://beagleboard.org/black
+    - https://github.com/beagleboard/beaglebone-black/wiki
+  product_url: https://beagleboard.org/black
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: medium
+    pricing: medium
+    use_cases: low
+    tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/beaglebone-black/top-view.png
+  top_view: false

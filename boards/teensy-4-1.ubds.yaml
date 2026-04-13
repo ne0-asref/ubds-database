@@ -1,0 +1,84 @@
+ubds_version: "1.1"
+name: "Teensy 4.1"
+slug: teensy-4-1
+manufacturer: PJRC
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: medium
+tags:
+  - high-performance
+  - ethernet
+  - sd-card
+  - usb-host
+  - audio
+  - breadboard-friendly
+use_cases:
+  - prototyping
+  - audio
+  - dsp
+  - hid
+  - data-logging
+processing:
+  - name: i.MX RT1062
+    part_number: MIMXRT1062DVJ6B
+    cpu_cores:
+      - architecture: ARM Cortex-M7
+        count: 1
+        clock_mhz: 600
+    memory:
+      ram_kb: 1024
+      flash_kb: 8192
+wireless: []
+software:
+  languages:
+    - name: c
+      support_level: board
+      notes: "Teensyduino uses C"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via Teensyduino"
+    - name: rust
+      support_level: community
+      notes: "teensy4-rs crate for Rust development"
+  frameworks:
+    - name: arduino
+      support_level: board
+      notes: "Teensyduino add-on for Arduino IDE"
+    - name: zephyr
+      support_level: community
+      notes: "Zephyr RTOS support for i.MX RT1062"
+  rtos:
+    - name: freertos
+      support_level: community
+      notes: "FreeRTOS port available for Teensy 4.x"
+  sdks:
+    - name: teensyduino
+      support_level: board
+      notes: "Official Teensy add-on with extensive libraries"
+  ides:
+    - name: arduino-ide
+      support_level: board
+      notes: "Via Teensyduino add-on"
+    - name: vscode
+      support_level: community
+      notes: "PlatformIO with Teensy support"
+physical:
+  form_factor:
+    - breadboard-module
+  breadboard_friendly: true
+meta:
+  sources:
+    - https://www.pjrc.com/store/teensy41.html
+    - https://www.pjrc.com/teensy/techspecs.html
+  product_url: https://www.pjrc.com/store/teensy41.html
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    pricing: medium
+    use_cases: low
+    tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/teensy-4-1/top-view.png
+  top_view: false

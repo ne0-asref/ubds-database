@@ -49,5 +49,5 @@ meta:
     software: high
     use_cases: low
     tags: low
-  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/mimxrt1060-evk/cover.png
-  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/mimxrt1060-evk/pinout.png
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/mimxrt1060-evk/top-view.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/mimxrt1060-evk/pinout.png

@@ -54,5 +54,5 @@ meta:
     wireless: high
     use_cases: low
     tags: low
-  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/seeed-wio-terminal/cover.png
-  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/seeed-wio-terminal/pinout.png
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/seeed-wio-terminal/top-view.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/seeed-wio-terminal/pinout.png

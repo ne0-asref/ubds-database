@@ -55,4 +55,6 @@ meta:
     processing: high
     use_cases: medium
     tags: medium
+  image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/raspberry-pi-cm4-io-board/top-view.png"
+  pinout_image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/raspberry-pi-cm4-io-board/pinout.png"
   status: active

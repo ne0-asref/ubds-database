@@ -48,4 +48,6 @@ meta:
     processing: high
     use_cases: medium
     tags: medium
+  image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/adafruit-motor-shield-v2/top-view.png"
+  pinout_image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/adafruit-motor-shield-v2/pinout.png"
   status: active

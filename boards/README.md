@@ -4,7 +4,7 @@
 official platform JSON plus the manufacturer's product page. All boards
 include `meta.product_url` pointing to the manufacturer's own page and
 `meta.image_url` / `meta.pinout_image_url` pointing to stable URLs in
-the `ubds-images` repository.
+the `images/` directory in this repository.
 
 All files validate against `spec/ubds-v1.schema.json` via
 `boards/tests/`. Run:

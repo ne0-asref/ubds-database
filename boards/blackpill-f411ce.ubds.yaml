@@ -55,5 +55,5 @@ meta:
     software: high
     use_cases: low
     tags: low
-  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/blackpill-f411ce/cover.png
-  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/blackpill-f411ce/pinout.png
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/blackpill-f411ce/top-view.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/blackpill-f411ce/pinout.png

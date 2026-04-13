@@ -51,5 +51,5 @@ meta:
     wireless: high
     use_cases: low
     tags: low
-  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/particle-boron/cover.png
-  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-images/main/images/particle-boron/pinout.png
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/particle-boron/top-view.png
+  pinout_image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/particle-boron/pinout.png

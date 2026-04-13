@@ -1,0 +1,76 @@
+ubds_version: "1.1"
+name: "Lattice iCEstick"
+slug: lattice-icestick
+manufacturer: Lattice Semiconductor
+board_type:
+  - FPGA
+difficulty_level: advanced
+ecosystem_size: small
+tags:
+  - fpga
+  - open-source-toolchain
+  - usb
+  - ice40
+  - low-power
+use_cases:
+  - prototyping
+  - education
+  - fpga-learning
+  - digital-logic
+processing:
+  - name: iCE40HX1K
+    part_number: iCE40HX1K-TQ144
+    cpu_cores: []
+    memory:
+      ram_kb: 8
+      flash_kb: 0
+    logic_cells: 1280
+wireless: []
+software:
+  languages:
+    - name: verilog
+      support_level: board
+      notes: "Primary HDL for iCE40 development"
+    - name: vhdl
+      support_level: board
+      notes: "Supported via Lattice iCEcube2"
+  frameworks:
+    - name: yosys
+      support_level: community
+      notes: "Open-source synthesis framework for iCE40"
+    - name: nextpnr
+      support_level: community
+      notes: "Open-source place-and-route for iCE40"
+    - name: icestorm
+      support_level: community
+      notes: "Project IceStorm open-source bitstream tools"
+  rtos: []
+  sdks:
+    - name: icecube2
+      support_level: board
+      notes: "Official Lattice iCEcube2 design software"
+  ides:
+    - name: vscode
+      support_level: community
+      notes: "Verilog/VHDL extensions available"
+    - name: icecube2
+      support_level: board
+      notes: "Official Lattice IDE for iCE40 FPGAs"
+physical:
+  form_factor:
+    - usb-stick
+meta:
+  sources:
+    - https://www.latticesemi.com/icestick
+    - https://www.latticesemi.com/products/developmentboardsandkits/icestick
+  product_url: https://www.latticesemi.com/icestick
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: medium
+    pricing: medium
+    use_cases: low
+    tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/lattice-icestick/top-view.png
+  top_view: false

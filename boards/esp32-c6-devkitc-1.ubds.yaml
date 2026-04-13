@@ -1,0 +1,106 @@
+ubds_version: "1.1"
+name: "Espressif ESP32-C6-DevKitC-1"
+slug: esp32-c6-devkitc-1
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - wifi
+  - wifi6
+  - ble
+  - thread
+  - zigbee
+  - usb-c
+  - risc-v
+  - devkit
+use_cases:
+  - prototyping
+  - iot
+  - mesh-networking
+  - smart-home
+  - matter
+processing:
+  - name: ESP32-C6
+    part_number: ESP32-C6-WROOM-1
+    cpu_cores:
+      - architecture: RISC-V
+        count: 1
+        clock_mhz: 160
+    memory:
+      ram_kb: 512
+      flash_kb: 4096
+wireless:
+  - protocol: wifi
+    version: "WiFi 6 (802.11ax)"
+  - protocol: ble
+    version: "5.0"
+  - protocol: thread
+    version: "1.3 (802.15.4)"
+  - protocol: zigbee
+    version: "3.0 (802.15.4)"
+software:
+  languages:
+    - name: c
+      support_level: board
+      notes: "Official ESP-IDF uses C"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via ESP-IDF and Arduino"
+    - name: micropython
+      support_level: community
+      notes: "MicroPython port available for ESP32-C6"
+    - name: rust
+      support_level: experimental
+      notes: "esp-rs project, RISC-V target"
+  frameworks:
+    - name: espidf
+      support_level: board
+      notes: "Official Espressif IoT Development Framework"
+    - name: arduino
+      support_level: board
+      notes: "ESP32 Arduino Core with C6 support"
+    - name: zephyr
+      support_level: community
+      notes: "Zephyr RTOS support for ESP32-C6"
+  rtos:
+    - name: freertos
+      support_level: board
+      notes: "Built into ESP-IDF"
+  sdks:
+    - name: esp-idf
+      support_level: board
+      notes: "Official SDK, includes toolchain, build system, and libraries"
+    - name: esp-matter
+      support_level: board
+      notes: "Matter/Thread SDK built on ESP-IDF"
+  ides:
+    - name: vscode
+      support_level: board
+      notes: "ESP-IDF VS Code extension"
+    - name: eclipse
+      support_level: board
+      notes: "ESP-IDF Eclipse plugin"
+    - name: arduino-ide
+      support_level: board
+      notes: "Via ESP32 Arduino Core board package"
+physical:
+  form_factor:
+    - devkit
+meta:
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html
+    - https://www.espressif.com/en/products/socs/esp32-c6
+  product_url: https://www.espressif.com/en/products/devkits/esp32-c6-devkitc-1
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  confidence:
+    processing: high
+    software: high
+    wireless: high
+    pricing: medium
+    use_cases: low
+    tags: low
+  image_url: https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/esp32-c6-devkitc-1/top-view.png
+  top_view: false

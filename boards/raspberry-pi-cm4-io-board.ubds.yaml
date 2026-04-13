@@ -1,0 +1,58 @@
+ubds_version: "1.1"
+name: "Raspberry Pi Compute Module 4 IO Board"
+slug: raspberry-pi-cm4-io-board
+manufacturer: Raspberry Pi Foundation
+board_type:
+  - Carrier
+difficulty_level: intermediate
+ecosystem_size: large
+tags:
+  - cm4
+  - carrier
+  - pcie
+  - industrial
+use_cases:
+  - prototyping
+  - industrial
+  - embedded-linux
+processing: []
+wireless: []
+interfaces:
+  - type: hdmi
+    count: 2
+  - type: pcie
+    notes: "PCIe x1 Gen 2.0"
+  - type: usb
+    count: 2
+    notes: "USB 2.0"
+  - type: ethernet
+    notes: "Gigabit Ethernet"
+  - type: microsd
+software:
+  frameworks: []
+  languages: []
+physical:
+  form_factor:
+    - carrier
+  pin_headers:
+    - type: cm4-connector
+      count: 2
+      pitch_mm: 0.4
+      notes: "2x 100-pin high-density Hirose connectors for CM4"
+    - type: gpio
+      count: 1
+      pitch_mm: 2.54
+      notes: "40-pin GPIO header"
+meta:
+  sources:
+    - https://www.raspberrypi.com/products/compute-module-4-io-board/
+    - https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
+  product_url: https://www.raspberrypi.com/products/compute-module-4-io-board/
+  last_verified: "2026-04-13"
+  data_completeness: partial
+  top_view: false
+  confidence:
+    processing: high
+    use_cases: medium
+    tags: medium
+  status: active

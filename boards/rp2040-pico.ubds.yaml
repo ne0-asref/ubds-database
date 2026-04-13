@@ -28,12 +28,50 @@ processing:
       flash_kb: 2048
 wireless: []
 software:
-  frameworks:
-    - name: arduino
   languages:
-    - name: cpp
     - name: c
-    - name: python
+      support_level: board
+      notes: "Official Pico SDK uses C"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via Pico SDK"
+    - name: micropython
+      support_level: board
+      notes: "Official MicroPython port maintained by Raspberry Pi"
+    - name: circuitpython
+      support_level: community
+      notes: "Adafruit CircuitPython port available"
+    - name: rust
+      support_level: community
+      notes: "rp2040-hal crate, active community"
+  frameworks:
+    - name: pico-sdk
+      support_level: board
+      notes: "Official Raspberry Pi Pico SDK"
+    - name: arduino
+      support_level: community
+      notes: "Arduino-Pico core by Earle Philhower"
+    - name: zephyr
+      support_level: community
+      notes: "Zephyr RTOS support for RP2040"
+  rtos:
+    - name: freertos
+      support_level: board
+      notes: "FreeRTOS SMP port included in Pico SDK"
+  sdks:
+    - name: pico-sdk
+      support_level: board
+      notes: "Official C/C++ SDK with CMake build system"
+  ides:
+    - name: vscode
+      support_level: board
+      notes: "Raspberry Pi Pico VS Code extension"
+    - name: thonny
+      support_level: board
+      notes: "Recommended for MicroPython development"
+    - name: arduino-ide
+      support_level: community
+      notes: "Via Arduino-Pico core"
 physical:
   form_factor:
     - pico

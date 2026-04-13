@@ -30,12 +30,47 @@ wireless:
   - protocol: wifi
   - protocol: ble
 software:
-  frameworks:
-    - name: arduino
-    - name: espidf
   languages:
-    - name: cpp
     - name: c
+      support_level: board
+      notes: "Official ESP-IDF uses C"
+    - name: cpp
+      support_level: board
+      notes: "Full C++ support via ESP-IDF and Arduino"
+    - name: micropython
+      support_level: community
+      notes: "MicroPython port available for ESP32-S3"
+    - name: rust
+      support_level: experimental
+      notes: "esp-rs project, active development"
+  frameworks:
+    - name: espidf
+      support_level: board
+      notes: "Official Espressif IoT Development Framework"
+    - name: arduino
+      support_level: board
+      notes: "ESP32 Arduino Core"
+    - name: zephyr
+      support_level: community
+      notes: "Zephyr RTOS support for ESP32-S3"
+  rtos:
+    - name: freertos
+      support_level: board
+      notes: "Built into ESP-IDF"
+  sdks:
+    - name: esp-idf
+      support_level: board
+      notes: "Official SDK, includes toolchain, build system, and libraries"
+  ides:
+    - name: vscode
+      support_level: board
+      notes: "ESP-IDF VS Code extension"
+    - name: eclipse
+      support_level: board
+      notes: "ESP-IDF Eclipse plugin"
+    - name: arduino-ide
+      support_level: board
+      notes: "Via ESP32 Arduino Core board package"
 physical:
   form_factor:
     - devkit

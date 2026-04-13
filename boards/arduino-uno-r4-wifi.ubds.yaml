@@ -42,13 +42,40 @@ wireless:
   - protocol: wifi
   - protocol: ble
 software:
+  languages:
+    - name: c
+      support_level: board
+      notes: "Supported via Arduino Core and Renesas FSP"
+    - name: cpp
+      support_level: board
+      notes: "Primary language for Arduino sketches"
+    - name: micropython
+      support_level: community
+      notes: "MicroPython port for Renesas RA4M1"
   frameworks:
     - name: arduino
+      support_level: board
+      notes: "Official Arduino Core for Renesas RA4M1"
     - name: fsp
+      support_level: controller
+      notes: "Renesas Flexible Software Package"
     - name: cmsis
-  languages:
-    - name: cpp
-    - name: c
+      support_level: controller
+      notes: "ARM CMSIS support via Renesas toolchain"
+  sdks:
+    - name: arduino-renesas
+      support_level: board
+      notes: "Arduino Core for Renesas boards"
+  ides:
+    - name: arduino-ide
+      support_level: board
+      notes: "Official Arduino IDE 2.x"
+    - name: vscode
+      support_level: board
+      notes: "Arduino extension for VS Code"
+    - name: arduino-cloud
+      support_level: board
+      notes: "Arduino Cloud Editor with IoT integration"
 physical:
   form_factor:
     - arduino-uno

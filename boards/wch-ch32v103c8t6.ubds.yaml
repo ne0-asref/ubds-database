@@ -1,0 +1,30 @@
+ubds_version: '1.1'
+name: CH32V103-EVT-R1
+slug: wch-ch32v103c8t6
+manufacturer: WCH
+board_type:
+- MCU
+processing:
+- part_number: CH32V103C8T6
+  role: primary
+  integrated: true
+  type: mcu
+  cpu_cores:
+  - architecture: RISC-V
+    clock_mhz: 80
+    count: 1
+  memory:
+    flash_kb: 64
+    ram_kb: 20
+meta:
+  sources:
+  - https://github.com/openwch/ch32v103
+  - https://www.wch-ic.com/downloads/CH32V103DS0_PDF.html
+  - https://www.wch-ic.com/products/CH32V103.html
+  product_url: https://www.wch-ic.com/products/CH32V103.html
+  last_verified: '2026-04-18'
+  community_reviewed: false
+  verified: false
+  data_completeness: complete
+  confidence:
+    processing: medium

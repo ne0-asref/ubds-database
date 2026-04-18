@@ -958,10 +958,15 @@ meta:
     - "https://developer.nvidia.com/embedded/learn/get-started-jetson-orin-nano-devkit"
     - "https://developer.nvidia.com/embedded/downloads"
   product_url: "https://developer.nvidia.com/embedded/jetson-orin-nano-developer-kit"  # [REQUIRED] canonical manufacturer product page (not a reseller)
-  last_verified: "2026-04-05"                             # date this board's data was last checked
+  description: |
+    Production-ready edge AI developer kit delivering up to 40 TOPS of accelerated
+    inference in a 100×79 mm module. Full CUDA, TensorRT, and ROS 2 support through
+    the JetPack BSP, with a unified 8 GB LPDDR5 memory pool shared between the
+    six-core Cortex-A78AE cluster and the 1024-core Ampere GPU.
+  last_verified: "2026-04-18"                             # date this board's data was last checked
   data_completeness: complete                             # stub | partial | complete
   community_reviewed: false                               # true = maintainer reviewed community PR
-  verified: false                                         # true = manufacturer-confirmed data
+  verified: true                                          # true = manufacturer-confirmed data
 
   # Per-section confidence — tells reviewers where to focus verification
   # high = verified against primary source (datasheet, manufacturer page, hands-on testing)

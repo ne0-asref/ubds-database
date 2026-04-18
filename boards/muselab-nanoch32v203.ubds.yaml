@@ -1,0 +1,30 @@
+ubds_version: '1.1'
+name: nanoCH32V203
+slug: muselab-nanoch32v203
+manufacturer: MuseLab
+board_type:
+- MCU
+processing:
+- part_number: CH32V203F6P6
+  role: primary
+  integrated: true
+  type: mcu
+  cpu_cores:
+  - architecture: RISC-V
+    clock_mhz: 144
+    count: 1
+  memory:
+    flash_kb: 64
+    ram_kb: 20
+meta:
+  sources:
+  - https://github.com/openwch/ch32v20x
+  - https://github.com/wuxx/nanoCH32V203
+  - https://www.wch-ic.com/downloads/CH32V203DS0_PDF.html
+  product_url: https://www.wch-ic.com/downloads/CH32V203DS0_PDF.html
+  last_verified: '2026-04-18'
+  community_reviewed: false
+  verified: false
+  data_completeness: complete
+  confidence:
+    processing: medium

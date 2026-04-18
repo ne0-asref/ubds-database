@@ -1,0 +1,28 @@
+ubds_version: '1.1'
+name: Longan Nano
+slug: sipeed-longan-nano
+manufacturer: Sipeed
+board_type:
+- MCU
+processing:
+- part_number: GD32VF103CBT6
+  role: primary
+  integrated: true
+  type: mcu
+  cpu_cores:
+  - architecture: RISC-V
+    count: 1
+  memory:
+    flash_kb: 128
+    ram_kb: 32
+meta:
+  sources:
+  - https://longan.sipeed.com/en/start/lgn_en.html
+  - https://wiki.sipeed.com/hardware/en/longan/Nano/Longan_nano.html
+  product_url: https://wiki.sipeed.com/hardware/en/longan/Nano/Longan_nano.html
+  last_verified: '2026-04-18'
+  community_reviewed: false
+  verified: false
+  data_completeness: complete
+  confidence:
+    processing: medium

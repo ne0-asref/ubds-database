@@ -6,6 +6,7 @@ from __future__ import annotations
 import json as _json
 import sys
 import time
+from pathlib import Path
 
 import click
 
@@ -43,16 +44,72 @@ def main() -> None:
 # --- placeholder subcommands (real bodies land in later tasks) ---
 
 
+def _resolve_image_root(path_arg: str) -> Path | None:
+    """Infer the ubds-database repo root for ``dbf validate --check-images``.
+
+    The user's argument may be the repo root, the ``boards/`` directory,
+    or a single board YAML. Image checks always walk ``<root>/images/`` +
+    ``<root>/boards/``, so we have to climb back to the repo root.
+
+    Returns ``None`` when no sensible root can be inferred (e.g. isolated
+    YAML outside a repo tree) — caller prints the actionable error.
+    """
+    p = Path(path_arg)
+    if p.is_dir():
+        # Case 1: caller passed the repo root directly.
+        if (p / "images").is_dir() and (p / "boards").is_dir():
+            return p
+        # Case 2: caller passed the boards/ dir; images/ sits next to it.
+        if p.name == "boards" and (p.parent / "images").is_dir():
+            return p.parent
+        return None
+    if p.is_file():
+        # File must live under <root>/boards/ for image checks to make sense.
+        parent = p.parent
+        if parent.name == "boards" and (parent.parent / "images").is_dir():
+            return parent.parent
+        return None
+    return None
+
+
+def _print_image_result(r: _validate.ImageCheckResult) -> None:
+    """Render one :class:`ImageCheckResult` as an Elm-style block."""
+    if r.severity == "error":
+        header = "-- IMAGE VALIDATION ERROR " + "-" * 40
+    else:
+        header = "-- IMAGE WARNING " + "-" * 49
+    click.echo(header)
+    click.echo(f"  path:   {r.path}")
+    click.echo(f"  rule:   {r.message}")
+    click.echo("  remedy: see CONTRIBUTING.md §Adding a board image")
+    click.echo("")
+
+
 @main.command("validate")
 @click.argument("path", required=True)
 @click.option("--fix", is_flag=True, help="Auto-correct fixable issues in place.")
 @click.option("--json", "as_json", is_flag=True, help="Machine-readable error output.")
-def validate_cmd(path: str, fix: bool, as_json: bool) -> None:
+@click.option(
+    "--check-images/--no-check-images",
+    "check_images",
+    default=None,
+    help=(
+        "Run board-image validation in addition to schema checks. "
+        "Default: on for directories, off for single-file invocations."
+    ),
+)
+def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None) -> None:
     """Validate a UBDS YAML file, glob, or directory."""
     paths = _validate.collect_paths(path)
     if not paths:
         click.echo("No YAML files found.")
         sys.exit(0)
+
+    # Resolve the effective check_images choice:
+    # - None (default)  → on iff arg is a directory.
+    # - True / False    → honor the explicit flag.
+    arg_is_dir = Path(path).is_dir()
+    run_image_check = arg_is_dir if check_images is None else check_images
 
     if fix:
         for p in paths:
@@ -116,6 +173,53 @@ def validate_cmd(path: str, fix: bool, as_json: bool) -> None:
                 click.echo(f"\u2717 {r.path}: {r.version_message}")
             if r.ok:
                 click.echo(f"\u2713 {r.path}")
+
+    # Board-image validation (C21.2). Runs after schema checks so schema
+    # errors and image errors never shadow each other.
+    if run_image_check:
+        root = _resolve_image_root(path)
+        if root is None:
+            click.echo(
+                "error: cannot locate images/ directory; run from repo root "
+                "or pass a directory argument containing boards/ and images/.",
+                err=True,
+            )
+            sys.exit(2)
+
+        image_results = _validate.check_images(root)
+        # Rule 13 is directory-scoped. On single-file invocations it still runs
+        # against the full boards/ tree via the resolved root, but contributors
+        # running `--check-images` against one file may not expect cross-file
+        # errors \u2014 so surface a one-line note the first time the flag is used
+        # explicitly on a single file.
+        if not arg_is_dir and check_images is True:
+            click.echo(
+                "note: --check-images on a single file runs cross-file "
+                "checks (Rule 13) against the full boards/ tree."
+            )
+
+        errors_for_exit = [r for r in image_results if r.severity == "error"]
+        warns = [r for r in image_results if r.severity == "warn"]
+        if as_json:
+            click.echo(_json.dumps(
+                [
+                    {
+                        "path": str(r.path),
+                        "severity": r.severity,
+                        "message": r.message,
+                    }
+                    for r in image_results
+                ],
+                indent=2,
+                sort_keys=True,
+            ))
+        else:
+            for r in errors_for_exit:
+                _print_image_result(r)
+            for r in warns:
+                _print_image_result(r)
+        if errors_for_exit:
+            any_failed = True
 
     sys.exit(1 if any_failed else 0)
 

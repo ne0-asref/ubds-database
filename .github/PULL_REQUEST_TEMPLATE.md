@@ -59,7 +59,8 @@ paste output here
 
 </details>
 
-<!--
-See CONTRIBUTING.md §Adding a board image for the full image-contribution
-workflow, capture guidance, and the `dbf add-image` helper.
--->
+---
+
+New contributor? The full image-contribution workflow, capture guidance,
+and the `dbf add-image` helper live in
+[CONTRIBUTING.md §Adding a board image](CONTRIBUTING.md#adding-a-board-image).

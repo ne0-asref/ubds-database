@@ -10,10 +10,13 @@ from pathlib import Path
 
 import click
 
+from pathlib import Path
+
 from . import __version__
 from . import data as _data
 from . import validate as _validate
 from .errors import format_errors
+from .images import AddImageError, add_image
 from .importers.platformio import import_platformio_cmd as _import_platformio_cmd
 from .info import info_cmd as _info_cmd
 from .search import search_cmd as _search_cmd
@@ -232,6 +235,72 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
 
 main.add_command(_search_cmd)
 main.add_command(_info_cmd)
+
+
+@main.command("add-image")
+@click.argument("slug")
+@click.argument(
+    "source",
+    type=click.Path(exists=False, dir_okay=False, readable=True, path_type=Path),
+)
+@click.option(
+    "--as",
+    "as_view",
+    required=True,
+    help="Canonical view: top-view, pinout, angle, bottom-view, or block-diagram.",
+)
+@click.option(
+    "--no-write-yaml",
+    is_flag=True,
+    help="Copy the image file only; do not edit the board YAML's URL fields.",
+)
+@click.option(
+    "--overwrite",
+    is_flag=True,
+    help="Replace the destination image if it already exists.",
+)
+def add_image_cmd(
+    slug: str,
+    source: Path,
+    as_view: str,
+    no_write_yaml: bool,
+    overwrite: bool,
+) -> None:
+    """Add an image to boards/<slug>/ and update the matching board YAML.
+
+    Copies SOURCE (a PNG file on disk) into images/<slug>/<view>.png and
+    rewrites meta.image_url (or meta.pinout_image_url for --as pinout) to
+    the canonical raw.githubusercontent.com URL. Use --no-write-yaml to
+    skip the YAML edit; use --overwrite to replace an existing image.
+    """
+    # Honor DBF_REPO_ROOT for tests + non-cwd invocations; default to cwd.
+    import os as _os
+    repo_root = Path(_os.environ.get("DBF_REPO_ROOT") or _os.getcwd())
+    try:
+        result = add_image(
+            slug=slug,
+            source_path=source,
+            as_view=as_view,
+            repo_root=repo_root,
+            write_yaml=not no_write_yaml,
+            overwrite=overwrite,
+        )
+    except AddImageError as exc:
+        click.echo(f"error: {exc}", err=True)
+        sys.exit(1)
+
+    click.echo(f"copied {result.source} -> {result.dest}")
+    if result.yaml_edit is not None:
+        e = result.yaml_edit
+        old_display = e.old if e.old else "(inserted)"
+        click.echo(f"edited {e.path}:{e.line_number}")
+        click.echo(f"  - {old_display}")
+        click.echo(f"  + {e.new}")
+    if result.backup is not None:
+        click.echo(f"backup: {result.backup}")
+    click.echo(
+        f"next: git add images/{result.slug}/ boards/{result.slug}.ubds.yaml"
+    )
 
 
 @main.group("import")

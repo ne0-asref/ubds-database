@@ -497,4 +497,42 @@ def test_git_status_surface(fake_repo, source_png):
     assert "boards/rp2040-pico.ubds.yaml" in status
 
 
-# CLI smoke tests (Click surface) land alongside the cli.py edit — see T2.
+# ---------------------------------------------------------------------------
+# CLI surface smoke — Click subcommand is wired and delegates to add_image.
+# ---------------------------------------------------------------------------
+
+def test_cli_add_image_happy_path(runner, fake_repo, source_png, monkeypatch):
+    from dbf.cli import main
+
+    monkeypatch.setenv("DBF_REPO_ROOT", str(fake_repo))
+    result = runner.invoke(
+        main,
+        ["add-image", "rp2040-pico", str(source_png), "--as", "top-view"],
+    )
+    assert result.exit_code == 0, result.output
+    assert (fake_repo / "images" / "rp2040-pico" / "top-view.png").exists()
+    assert "copied" in result.output
+    assert "next: git add" in result.output
+
+
+def test_cli_add_image_reports_error(runner, fake_repo, source_png, monkeypatch):
+    from dbf.cli import main
+
+    monkeypatch.setenv("DBF_REPO_ROOT", str(fake_repo))
+    result = runner.invoke(
+        main,
+        ["add-image", "rp2040-picko", str(source_png), "--as", "top-view"],
+    )
+    assert result.exit_code == 1
+    # `rp2040-pico` should appear in the nearest-match suggestion output.
+    combined = result.output + (result.stderr if result.stderr_bytes else "")
+    assert "rp2040-pico" in combined
+
+
+def test_cli_add_image_help_lists_flags(runner):
+    from dbf.cli import main
+
+    result = runner.invoke(main, ["add-image", "--help"])
+    assert result.exit_code == 0
+    for flag in ("--as", "--no-write-yaml", "--overwrite"):
+        assert flag in result.output, f"missing flag {flag!r} in add-image --help"

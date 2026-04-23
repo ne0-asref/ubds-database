@@ -6,7 +6,7 @@ def test_top_level_help_lists_all_subcommands(runner):
     result = runner.invoke(main, ["--help"])
     assert result.exit_code == 0
     out = result.output
-    for sub in ("validate", "search", "info", "import", "cache"):
+    for sub in ("validate", "search", "info", "import", "cache", "add-image"):
         assert sub in out, f"missing subcommand {sub!r} in --help output:\n{out}"
 
 
@@ -55,7 +55,7 @@ def test_import_platformio_help_lists_output_dir(runner):
 def test_top_level_help_only_locked_subcommands(runner):
     result = runner.invoke(main, ["--help"])
     assert result.exit_code == 0
-    locked = {"validate", "search", "info", "import", "cache"}
+    locked = {"validate", "search", "info", "import", "cache", "add-image"}
     # Parse the Commands: section to extract command names.
     lines = result.output.splitlines()
     in_commands = False

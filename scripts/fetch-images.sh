@@ -19,6 +19,39 @@ if ! command -v curl &>/dev/null; then echo "curl required"; exit 1; fi
 
 CANONICAL_PREFIX="https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/"
 
+fetch_one() {
+  local slug="$1"
+  local stem="$2"  # top-view | pinout
+  local url="$3"
+  local dest="$IMAGES_DIR/$slug/$stem.png"
+
+  if [[ -z "$url" ]]; then
+    echo "SKIP $slug $stem: no URL"
+    return 0
+  fi
+  if [[ "$url" == "$CANONICAL_PREFIX$slug/$stem.png" ]]; then
+    echo "SKIP $slug $stem: already canonical"
+    return 0
+  fi
+  if [[ -f "$dest" ]]; then
+    echo "SKIP $slug $stem: already cached"
+    return 0
+  fi
+  if $DRY_RUN; then
+    echo "WOULD FETCH $slug $stem: $url → $dest"
+    return 0
+  fi
+  mkdir -p "$IMAGES_DIR/$slug"
+  echo "FETCH $slug $stem: $url"
+  if curl -fsSL --max-time 30 -o "$dest" "$url"; then
+    echo "  OK: $dest"
+  else
+    echo "  FAIL: could not download $url"
+    rm -f "$dest"
+    rmdir "$IMAGES_DIR/$slug" 2>/dev/null || true
+  fi
+}
+
 for yaml_file in "$BOARDS_DIR"/*.ubds.yaml; do
   slug=$(python3 -c "import yaml; print(yaml.safe_load(open('$yaml_file'))['slug'])")
 
@@ -27,39 +60,20 @@ for yaml_file in "$BOARDS_DIR"/*.ubds.yaml; do
   image_url=$(python3 -c "
 import yaml
 d = yaml.safe_load(open('$yaml_file'))
-m = d.get('meta', {})
-url = m.get('image_url', '')
-print(url if url else '')
+m = d.get('meta', {}) or {}
+url = m.get('image_url', '') or ''
+print(url)
 " 2>/dev/null || echo "")
+  fetch_one "$slug" top-view "$image_url"
 
-  # Skip if no URL, already canonical, or already cached
-  if [[ -z "$image_url" ]]; then
-    echo "SKIP $slug: no image_url"
-    continue
-  fi
-  if [[ "$image_url" == "$CANONICAL_PREFIX"* ]]; then
-    echo "SKIP $slug: already canonical URL"
-    continue
-  fi
-  if [[ -f "$IMAGES_DIR/$slug/top-view.png" ]]; then
-    echo "SKIP $slug: already cached"
-    continue
-  fi
-
-  if $DRY_RUN; then
-    echo "WOULD FETCH $slug: $image_url → $IMAGES_DIR/$slug/top-view.png"
-    continue
-  fi
-
-  mkdir -p "$IMAGES_DIR/$slug"
-  echo "FETCH $slug: $image_url"
-  if curl -fsSL --max-time 30 -o "$IMAGES_DIR/$slug/top-view.png" "$image_url"; then
-    echo "  OK: $IMAGES_DIR/$slug/top-view.png"
-  else
-    echo "  FAIL: could not download $image_url"
-    rm -f "$IMAGES_DIR/$slug/top-view.png"
-    rmdir "$IMAGES_DIR/$slug" 2>/dev/null || true
-  fi
+  pinout_url=$(python3 -c "
+import yaml
+d = yaml.safe_load(open('$yaml_file'))
+m = d.get('meta', {}) or {}
+url = m.get('pinout_image_url', '') or ''
+print(url)
+" 2>/dev/null || echo "")
+  fetch_one "$slug" pinout "$pinout_url"
 done
 
 echo "Done."

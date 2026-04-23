@@ -159,3 +159,56 @@ def test_changelog_has_image_filenames_entry():
         "spec/CHANGELOG.md is missing an entry that mentions `image_filenames` — "
         "add an additive entry naming the new meta.image_filenames schema field."
     )
+
+
+# The next two tests check cross-file drift against CONTRIBUTING.md and
+# templates/minimal.ubds.yaml — files that land in C21.6. They are skipped
+# until then. When C21.6 merges, remove the @pytest.mark.skip decorator
+# from each (this is called out in C21.6's spec as part of its DONE
+# criteria). See module docstring.
+
+@pytest.mark.skip(
+    reason="CONTRIBUTING.md §Adding a board image section is C21.6 territory; "
+           "unskip when that component merges."
+)
+def test_contributing_names_present():
+    from pathlib import Path
+    from dbf.constants import CANONICAL_IMAGE_FILENAMES
+
+    contributing_path = (
+        Path(__file__).resolve().parent.parent.parent / "CONTRIBUTING.md"
+    )
+    text = contributing_path.read_text()
+
+    section_start = text.find("## Adding a board image")
+    assert section_start != -1, (
+        "CONTRIBUTING.md is missing '## Adding a board image' section"
+    )
+    section_end = text.find("\n## ", section_start + 1)
+    if section_end == -1:
+        section_end = len(text)
+    section = text[section_start:section_end]
+
+    missing = [name for name in CANONICAL_IMAGE_FILENAMES if name not in section]
+    assert not missing, (
+        f"CONTRIBUTING.md §Adding a board image does not mention: {missing}"
+    )
+
+
+@pytest.mark.skip(
+    reason="templates/minimal.ubds.yaml canonical-filenames reminder is C21.6 territory; "
+           "unskip when that component merges."
+)
+def test_templates_minimal_reminder():
+    from pathlib import Path
+    from dbf.constants import CANONICAL_IMAGE_FILENAMES
+
+    minimal_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "templates" / "minimal.ubds.yaml"
+    )
+    text = minimal_path.read_text()
+    missing = [name for name in CANONICAL_IMAGE_FILENAMES if name not in text]
+    assert not missing, (
+        f"templates/minimal.ubds.yaml missing canonical filenames: {missing}"
+    )

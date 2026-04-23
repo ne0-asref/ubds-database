@@ -397,6 +397,29 @@ def test_uppercase_slug_rejected(fake_repo, source_png):
     assert not (fake_repo / "images" / "rp2040-pico").exists()
 
 
+def test_slug_path_traversal_rejected(fake_repo, source_png, tmp_path):
+    """Security guard: a slug with '..' or '/' must be rejected before any
+    path is joined under ``repo_root``. Otherwise an attacker-controlled
+    slug could escape the repo boundary and plant files elsewhere on disk.
+    """
+    from dbf.images import add_image, AddImageError
+
+    for bad in ("../evil", "foo/bar", "a.b", "foo\\bar"):
+        with pytest.raises(AddImageError) as exc:
+            add_image(
+                slug=bad,
+                source_path=source_png,
+                as_view="top-view",
+                repo_root=fake_repo,
+            )
+        msg = str(exc.value).lower()
+        assert "lowercase" in msg or "invalid slug" in msg, (
+            f"expected format-rejection for slug {bad!r}, got: {exc.value}"
+        )
+    # Ensure nothing leaked onto disk outside the expected dirs.
+    assert not any(tmp_path.glob("**/evil"))
+
+
 # ---------------------------------------------------------------------------
 # Tier 2 — integration (4 cases)
 # ---------------------------------------------------------------------------

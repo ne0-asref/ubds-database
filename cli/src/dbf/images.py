@@ -66,6 +66,12 @@ _URL_BASE = "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/imag
 # the dedicated pinout slot.
 _PINOUT_VIEW = "pinout"
 
+# Slug must be lowercased alphanumerics + hyphens. This is deliberately
+# stricter than a simple lowercase check so that a slug like "../foo"
+# cannot walk us out of repo_root when we resolve boards/<slug>.ubds.yaml
+# or write into images/<slug>/.
+_SLUG_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+
 
 # ---------------------------------------------------------------------------
 # Public dataclasses
@@ -376,6 +382,13 @@ def add_image(
         raise AddImageError(
             f"slug must be lowercase (got '{slug}'). UBDS slugs are "
             "lowercased [a-z0-9-]. Rename the board file first."
+        )
+    # Block path-escape characters (dot, slash, backslash, null, etc.)
+    # before any filesystem path is constructed from ``slug``.
+    if not _SLUG_PATTERN.match(slug):
+        raise AddImageError(
+            f"invalid slug '{slug}': must match [a-z0-9][a-z0-9-]* "
+            "(lowercased alphanumerics and hyphens only)."
         )
 
     # 2. view must be canonical

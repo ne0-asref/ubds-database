@@ -12,6 +12,9 @@ This repository holds three things:
 - **`cli/`** — `dbf`, a small Python CLI for validating, searching, and
   importing UBDS files. Install with `pip install ./cli`.
 
+Boards can include a top-view image — see
+[CONTRIBUTING.md §Adding a board image](CONTRIBUTING.md#adding-a-board-image).
+
 ## License
 
 Dual-licensed. Code (`spec/`, `cli/`) under Apache-2.0; board data

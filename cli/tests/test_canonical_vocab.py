@@ -145,3 +145,17 @@ def test_schema_enum_matches_constants():
         "update spec/ubds-v1.schema.json::meta.properties.image_filenames.items.enum "
         "or cli/src/dbf/constants.py::CANONICAL_IMAGE_FILENAMES."
     )
+
+
+def test_changelog_has_image_filenames_entry():
+    from pathlib import Path
+
+    changelog_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "spec" / "CHANGELOG.md"
+    )
+    text = changelog_path.read_text()
+    assert "image_filenames" in text, (
+        "spec/CHANGELOG.md is missing an entry that mentions `image_filenames` — "
+        "add an additive entry naming the new meta.image_filenames schema field."
+    )

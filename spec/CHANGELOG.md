@@ -1,5 +1,20 @@
 # UBDS Changelog
 
+## Unreleased — 2026-04-23
+
+Canonical board-image vocabulary advertisement. No version bump (v1.1
+stays); purely additive.
+
+### Added
+- Optional `meta.image_filenames` — array of enum listing the five
+  canonical board-image filename stems: `angle`, `block-diagram`,
+  `bottom-view`, `pinout`, `top-view`. Informational only; JSON Schema
+  cannot validate filesystem contents, so the enum exists to advertise
+  the vocabulary to downstream UBDS consumers. `uniqueItems: true`.
+  Not required. See `cli/src/dbf/constants.py::CANONICAL_IMAGE_FILENAMES`
+  (the runtime source of truth) and `CONTRIBUTING.md §Adding a board
+  image` for the contributor-facing reference.
+
 ## v1.1.1 — 2026-04-12
 
 Image tag simplification.

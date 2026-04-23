@@ -1,0 +1,11 @@
+ubds_version: "1.1"
+name: "Clean Board Fixture"
+slug: clean-board
+manufacturer: "Test Co"
+board_type:
+  - MCU
+meta:
+  sources:
+    - "https://example.com/datasheet"
+  product_url: "https://example.com/clean-board"
+  image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/clean-board/top-view.png"

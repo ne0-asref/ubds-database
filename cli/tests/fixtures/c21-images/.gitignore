@@ -1,0 +1,4 @@
+# Generated at test time by the `make_fixture_pngs` fixture in
+# cli/tests/conftest.py. Keeping them out of git so the repo stays
+# binary-free per C21.2 spec.
+images/**/*.png

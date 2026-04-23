@@ -176,16 +176,23 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
 
     # Board-image validation (C21.2). Runs after schema checks so schema
     # errors and image errors never shadow each other.
-    if run_image_check:
-        root = _resolve_image_root(path)
-        if root is None:
+    root: Path | None = _resolve_image_root(path) if run_image_check else None
+    if run_image_check and root is None:
+        if check_images is True:
+            # Explicit opt-in but we can't find a root — tell the user.
             click.echo(
-                "error: cannot locate images/ directory; run from repo root "
-                "or pass a directory argument containing boards/ and images/.",
+                "error: cannot locate images/ directory; run from repo "
+                "root or pass a directory argument containing boards/ "
+                "and images/.",
                 err=True,
             )
             sys.exit(2)
+        # Default mode on a directory with no images/ sibling — silently
+        # skip. Legacy trees (tests, ad-hoc YAML dirs) still schema-validate.
+        run_image_check = False
 
+    if run_image_check:
+        assert root is not None  # narrowed by the is_dir check above
         image_results = _validate.check_images(root)
         # Rule 13 is directory-scoped. On single-file invocations it still runs
         # against the full boards/ tree via the resolved root, but contributors

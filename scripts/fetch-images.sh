@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# fetch-images.sh — download canonical board images referenced by meta.image_url
+# and meta.pinout_image_url into images/<slug>/{top-view,pinout}.png.
+#
+# The filename vocabulary is defined in cli/src/dbf/constants.py::CANONICAL_IMAGE_FILENAMES.
+# Keep the two in sync if the vocabulary ever changes.
 set -euo pipefail
 
 BOARDS_DIR="boards"

@@ -665,12 +665,13 @@ def _check_url_coupling(
 
 def _check_slug_uniqueness(
     slug_map: Dict[str, List[Path]],
-    boards_dir: Path,
 ) -> List[ImageCheckResult]:
     """Rule 13 — cross-file slug uniqueness AND slug-field ≠ filename-stem.
 
     Runs ONCE per directory invocation. Consolidates multi-file collisions
-    into a single error that names every offender.
+    into a single error that names every offender. Files without a parseable
+    ``slug:`` field are absent from ``slug_map`` and therefore skipped — they
+    surface via schema validation instead.
     """
     out: List[ImageCheckResult] = []
 
@@ -687,21 +688,11 @@ def _check_slug_uniqueness(
             message=f"duplicate slug '{slug}' declared in: {names}",
         ))
 
-    # Part 2 — slug-field must match the filename stem. Computed from the
-    # directory listing so files missing from slug_map (parse failure, missing
-    # slug field) don't silently pass.
-    if boards_dir.is_dir():
-        for yml in sorted(boards_dir.glob(f"*{YAML_SUFFIX}")):
+    # Part 2 — slug-field must match the filename stem. Iterates slug_map to
+    # avoid re-parsing YAML.
+    for slug, paths in sorted(slug_map.items()):
+        for yml in paths:
             filename_stem = yml.name[: -len(YAML_SUFFIX)]
-            try:
-                data = yaml.safe_load(yml.read_text(encoding="utf-8"))
-            except (OSError, yaml.YAMLError):
-                continue
-            if not isinstance(data, dict):
-                continue
-            slug = data.get("slug")
-            if not isinstance(slug, str) or not slug:
-                continue
             if slug != filename_stem:
                 out.append(ImageCheckResult(
                     path=yml,
@@ -734,7 +725,7 @@ def check_images(root: Path) -> List[ImageCheckResult]:
     declared_slugs = set(slug_map.keys())
 
     # Rule 13 — cross-file slug uniqueness (directory-scoped, runs once).
-    results.extend(_check_slug_uniqueness(slug_map, boards_dir))
+    results.extend(_check_slug_uniqueness(slug_map))
 
     if images_dir.is_dir():
         for slug_dir in sorted(images_dir.iterdir()):

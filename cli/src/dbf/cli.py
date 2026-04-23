@@ -191,8 +191,7 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
         # skip. Legacy trees (tests, ad-hoc YAML dirs) still schema-validate.
         run_image_check = False
 
-    if run_image_check:
-        assert root is not None  # narrowed by the is_dir check above
+    if run_image_check and root is not None:
         image_results = _validate.check_images(root)
         # Rule 13 is directory-scoped. On single-file invocations it still runs
         # against the full boards/ tree via the resolved root, but contributors

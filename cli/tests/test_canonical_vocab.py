@@ -16,18 +16,15 @@ If these three ever disagree, contributors get conflicting instructions.
 The tests below are the drift alarm.
 
 Two tests — ``test_contributing_names_present`` and
-``test_templates_minimal_reminder`` — are ``@pytest.mark.skip``-ed in this
-component's branch (C21.1) because the docs + template edits they check
-are owned by a later component in the same cycle (C21.6). When C21.6
-merges, whoever merges it is responsible for removing the ``@pytest.mark.skip``
-decorators. The skip reasons name C21.6 explicitly to make the handoff
-obvious.
+``test_templates_minimal_reminder`` — check docs + template edges that
+C21.1 could not assert on its own (the content they grep lands in C21.6).
+Both are now active in this tree because C21.6 shipped the required
+CONTRIBUTING.md section and template reminder.
 
 Run::
 
     pytest cli/tests/test_canonical_vocab.py -v
 """
-import pytest
 
 
 # ---------- Tier 1: unit (all GREEN on build/C21.1) ----------
@@ -162,15 +159,9 @@ def test_changelog_has_image_filenames_entry():
 
 
 # The next two tests check cross-file drift against CONTRIBUTING.md and
-# templates/minimal.ubds.yaml — files that land in C21.6. They are skipped
-# until then. When C21.6 merges, remove the @pytest.mark.skip decorator
-# from each (this is called out in C21.6's spec as part of its DONE
-# criteria). See module docstring.
+# templates/minimal.ubds.yaml. C21.6 shipped the required content, so
+# they run unconditionally now. See module docstring.
 
-@pytest.mark.skip(
-    reason="CONTRIBUTING.md §Adding a board image section is C21.6 territory; "
-           "unskip when that component merges."
-)
 def test_contributing_names_present():
     from pathlib import Path
     from dbf.constants import CANONICAL_IMAGE_FILENAMES
@@ -195,10 +186,6 @@ def test_contributing_names_present():
     )
 
 
-@pytest.mark.skip(
-    reason="templates/minimal.ubds.yaml canonical-filenames reminder is C21.6 territory; "
-           "unskip when that component merges."
-)
 def test_templates_minimal_reminder():
     from pathlib import Path
     from dbf.constants import CANONICAL_IMAGE_FILENAMES

@@ -234,6 +234,11 @@
             "type": "string",
             "enum": ["low", "medium", "high"]
           }
+        },
+        "image_filenames": {
+          "type": "array",
+          "items": { "enum": ["angle", "block-diagram", "bottom-view", "pinout", "top-view"] },
+          "uniqueItems": true
         }
       }
     },

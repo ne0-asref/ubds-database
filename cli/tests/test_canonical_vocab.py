@@ -122,3 +122,26 @@ def test_png_signature():
 def test_png_ihdr_color_type_rgba():
     from dbf.constants import PNG_IHDR_COLOR_TYPE_RGBA
     assert PNG_IHDR_COLOR_TYPE_RGBA == 6
+
+
+# ---------- Tier 2: integration (drift protection) ----------
+
+def test_schema_enum_matches_constants():
+    import json
+    from pathlib import Path
+    from dbf.constants import CANONICAL_IMAGE_FILENAMES
+
+    schema_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "spec" / "ubds-v1.schema.json"
+    )
+    with schema_path.open() as f:
+        schema = json.load(f)
+
+    enum = schema["properties"]["meta"]["properties"]["image_filenames"]["items"]["enum"]
+
+    assert sorted(enum) == sorted(CANONICAL_IMAGE_FILENAMES), (
+        f"Schema enum {sorted(enum)} != CLI constant {sorted(CANONICAL_IMAGE_FILENAMES)} — "
+        "update spec/ubds-v1.schema.json::meta.properties.image_filenames.items.enum "
+        "or cli/src/dbf/constants.py::CANONICAL_IMAGE_FILENAMES."
+    )

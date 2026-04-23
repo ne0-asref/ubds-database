@@ -109,3 +109,77 @@ def test_slug_filter(fake_repo_for_fetch):
     assert r.returncode == 0, r.stderr
     assert "WOULD FETCH foo top-view" in r.stdout
     assert "WOULD FETCH bar" not in r.stdout
+
+
+# ---------------------------------------------------------------------------
+# Tier 2 — integration (loopback HTTP, exercises real curl)
+# ---------------------------------------------------------------------------
+
+
+_PNG_STUB = b"\x89PNG\r\n\x1a\n" + b"\x00" * 20
+
+
+class _Handler(http.server.BaseHTTPRequestHandler):
+    """Canned responses for the fetch-images.sh integration tests."""
+
+    _responses = {
+        "/top.png": (200, _PNG_STUB),
+        "/pinout.png": (200, _PNG_STUB),
+        "/404.png": (404, b""),
+    }
+
+    def do_GET(self):  # noqa: N802 — BaseHTTPRequestHandler API.
+        code, body = self._responses.get(self.path, (404, b""))
+        self.send_response(code)
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *_args, **_kwargs):  # silence per-request access logs.
+        pass
+
+
+@pytest.fixture
+def mock_http_server():
+    """Spin a tiny HTTPServer on 127.0.0.1:<random> and yield the bound port."""
+    srv = socketserver.TCPServer(("127.0.0.1", 0), _Handler)
+    port = srv.server_address[1]
+    thread = threading.Thread(target=srv.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield port
+    finally:
+        srv.shutdown()
+        srv.server_close()
+        thread.join(timeout=5)
+
+
+def test_fetch_both_from_mock(fake_repo_for_fetch, mock_http_server):
+    """5.2.1 — both URLs served: both files land at the canonical paths."""
+    port = mock_http_server
+    _write_board(
+        fake_repo_for_fetch,
+        "foo",
+        image_url=f"http://127.0.0.1:{port}/top.png",
+        pinout_url=f"http://127.0.0.1:{port}/pinout.png",
+    )
+    r = _run(fake_repo_for_fetch)
+    assert r.returncode == 0, r.stderr
+    assert (fake_repo_for_fetch / "images" / "foo" / "top-view.png").exists()
+    assert (fake_repo_for_fetch / "images" / "foo" / "pinout.png").exists()
+    assert "OK" in r.stdout
+
+
+def test_fetch_pinout_404_continues(fake_repo_for_fetch, mock_http_server):
+    """5.2.2 — pinout 404 is logged as FAIL, top-view still saved, exit 0."""
+    port = mock_http_server
+    _write_board(
+        fake_repo_for_fetch,
+        "foo",
+        image_url=f"http://127.0.0.1:{port}/top.png",
+        pinout_url=f"http://127.0.0.1:{port}/404.png",
+    )
+    r = _run(fake_repo_for_fetch)
+    assert r.returncode == 0, r.stderr
+    assert (fake_repo_for_fetch / "images" / "foo" / "top-view.png").exists()
+    assert not (fake_repo_for_fetch / "images" / "foo" / "pinout.png").exists()
+    assert "FAIL" in r.stdout

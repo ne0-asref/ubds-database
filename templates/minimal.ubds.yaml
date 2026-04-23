@@ -93,3 +93,11 @@ meta:
     processing: high
     wireless: medium
     software: medium
+
+# Canonical board-image filenames (see cli/src/dbf/constants.py::CANONICAL_IMAGE_FILENAMES
+# and CONTRIBUTING.md §Adding a board image):
+#   top-view.png        # primary — strongly preferred
+#   pinout.png          # distinct asset — no fallback
+#   angle.png           # fallback for top-view
+#   bottom-view.png     # fallback for top-view
+#   block-diagram.png   # fallback for top-view

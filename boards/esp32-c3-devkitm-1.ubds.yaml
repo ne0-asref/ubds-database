@@ -1,0 +1,82 @@
+name: ESP32-C3-DevKitM-1
+slug: esp32-c3-devkitm-1
+manufacturer: Espressif
+board_type:
+  - MCU
+  - DSP
+processing:
+  - part_number: ESP32-C3FN4
+    architecture: RISC-V
+    cores: 1
+    clock: 160 MHz
+    bit_width: 32
+interfaces:
+  - name: Micro-USB Port
+    type: USB
+    count: 1
+  - name: UART0
+    type: UART
+    count: 1
+  - name: FSPI
+    type: SPI
+    count: 1
+wireless:
+  - protocol: WiFi
+  - protocol: BLE
+inputs:
+  - name: BOOT
+    type: button
+    description: Download button. Holding down Boot and then pressing Reset 
+      initiates Firmware Download mode for downloading firmware through the 
+      serial port.
+  - name: RESET
+    type: button
+    description: Press this button to restart the system.
+outputs:
+  - name: 5 V Power On LED
+    type: led
+  - name: RGB LED
+    type: led
+    color: rgb
+onboard_components:
+  flash:
+    role: flash
+    key spec: 4 MB
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software:
+  ides:
+    - Arduino IDE
+  libraries:
+    - Arduino core for ESP32
+    - ESP-IDF
+  languages:
+    - name: C
+    - name: C++
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-devkitm-1/index.html
+    - https://dl.espressif.com/dl/schematics/SCH_ESP32-C3-DEVKITM-1_V1_20200915A.pdf
+    - https://github.com/espressif/arduino-esp32/blob/master/docs/en/boards/ESP32-C3-DevKitM-1.rst
+    - https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-devkitm-1/index.html
+ubds_version: '1.1'

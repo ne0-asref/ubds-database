@@ -14,6 +14,7 @@ from pathlib import Path
 
 from . import __version__
 from . import data as _data
+from . import migrate as _migrate
 from . import validate as _validate
 from .errors import format_errors
 from .images import AddImageError, add_image
@@ -324,6 +325,108 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
 
 main.add_command(_search_cmd)
 main.add_command(_info_cmd)
+
+
+def _resolve_boards_root(arg: Path) -> Path | None:
+    """Infer the ``boards/`` root for ``--nest-by-manufacturer``.
+
+    Mirrors the validator's resolver style: accept the boards/ dir
+    directly, the repo root (with a child boards/), or a single board
+    YAML inside boards/. Returns ``None`` if no sensible root exists.
+    """
+    if arg.is_dir():
+        if arg.name == "boards":
+            return arg
+        if (arg / "boards").is_dir():
+            return arg / "boards"
+        return None
+    if arg.is_file():
+        parent = arg.parent
+        if parent.name == "boards":
+            return parent
+        if parent.parent.name == "boards":
+            return parent.parent
+    return None
+
+
+@main.command("migrate")
+@click.argument("path", required=True)
+@click.option(
+    "--in-place",
+    is_flag=True,
+    help="Actually write changes. Default: dry-run (print planned changes only).",
+)
+@click.option(
+    "--nest-by-manufacturer",
+    "nest",
+    is_flag=True,
+    help=(
+        "Move flat-layout files into boards/<manufacturer-slug>/<slug>.ubds.yaml. "
+        "Standalone-safe: contributors can run this without touching content."
+    ),
+)
+def migrate_cmd(path: str, in_place: bool, nest: bool) -> None:
+    """Upgrade UBDS YAML files from v1.1 to v1.2 (idempotent, line-preserving).
+
+    Adds ``aliases: []`` and ``manufacturer_slug: <slug>`` (when the
+    vendor map resolves) and bumps ``ubds_version`` to ``1.2`` when the
+    post-transform file uses any v1.2 field. Comments and key ordering
+    are preserved — no ``yaml.dump`` round-trip.
+    """
+    arg_path = Path(path)
+    if arg_path.is_file():
+        files = [arg_path] if arg_path.name.endswith(".ubds.yaml") else []
+    elif arg_path.is_dir():
+        files = sorted(arg_path.rglob("*.ubds.yaml"))
+    else:
+        click.echo(f"error: {path} is not a file or directory", err=True)
+        sys.exit(2)
+
+    if not files:
+        click.echo("No YAML files found.")
+        sys.exit(0)
+
+    boards_root: Path | None = None
+    if nest:
+        boards_root = _resolve_boards_root(arg_path)
+        if boards_root is None:
+            click.echo(
+                "error: --nest-by-manufacturer requires a boards/ tree; "
+                "pass the boards/ dir, the repo root, or a board YAML "
+                "under boards/.",
+                err=True,
+            )
+            sys.exit(2)
+
+    any_failed = False
+    mode_label = "in-place" if in_place else "dry-run"
+    click.echo(f"dbf migrate ({mode_label}): {len(files)} file(s)")
+
+    for f in files:
+        report = _migrate.migrate_file(f, in_place=in_place)
+        if report.aborted:
+            any_failed = True
+            click.echo(f"✗ {f}: aborted (existing schema violation; run `dbf validate` first)")
+            continue
+        if report.skipped_reason:
+            click.echo(f"- {f}: skipped ({report.skipped_reason})")
+            continue
+        if not report.changes and not nest:
+            click.echo(f"✓ {f}: no changes")
+            continue
+        if report.changes:
+            verb = "applied" if report.written else "would apply"
+            click.echo(f"✓ {f}: {verb}")
+            for ch in report.changes:
+                click.echo(f"  - {ch}")
+        if nest and boards_root is not None:
+            current = report.file if not report.written else f
+            dest = _migrate.nest_file(current, boards_root, in_place=in_place)
+            if dest is not None:
+                verb = "moved" if in_place else "would move"
+                click.echo(f"  - {verb} -> {dest}")
+
+    sys.exit(1 if any_failed else 0)
 
 
 @main.command("add-image")

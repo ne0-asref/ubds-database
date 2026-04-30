@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/ne0-asref/ubds-database/spec/ubds-v1.schema.json",
-  "title": "UBDS — Universal Board Description Standard v1.1",
+  "title": "UBDS — Universal Board Description Standard v1.2",
   "type": "object",
   "additionalProperties": true,
   "required": ["ubds_version", "name", "slug", "manufacturer", "board_type", "meta"],
@@ -22,6 +22,15 @@
     "manufacturer": {
       "type": "string",
       "minLength": 1
+    },
+    "manufacturer_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
     },
     "series": {"type": ["string", "null"]},
     "parent_board": {"type": ["string", "null"]},
@@ -120,7 +129,11 @@
         "type": "object",
         "additionalProperties": true,
         "properties": {
-          "protocol": {"type": "string"}
+          "protocol": {"type": "string"},
+          "version": {
+            "type": "string",
+            "description": "Protocol version (e.g., WiFi 6, BLE 5.0, LoRa 1.0.3)"
+          }
         }
       }
     },
@@ -190,13 +203,7 @@
       "properties": {
         "official_page_url": {"type": ["string", "null"]},
         "image_url": {"type": ["string", "null"]},
-        "image_tags": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["top-view", "angle", "sim-ready", "pinout", "block-diagram"]
-          }
-        },
+        "top_view": {"type": "boolean"},
         "pinout_image_url": {"type": ["string", "null"]},
         "pinout_table_url": {"type": ["string", "null"]},
         "schematic_url": {"type": ["string", "null"]},
@@ -235,6 +242,57 @@
           "additionalProperties": {
             "type": "string",
             "enum": ["low", "medium", "high"]
+          }
+        },
+        "image_filenames": {
+          "type": "array",
+          "items": { "enum": ["angle", "block-diagram", "bottom-view", "pinout", "top-view"] },
+          "uniqueItems": true
+        },
+        "confidence_skipped": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "processing", "interfaces", "inputs-outputs", "wireless", "onboard",
+              "power", "pinout", "software", "libraries", "resources",
+              "thermal-physical", "boot", "compatible", "certifications"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "fetch_warnings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "low-quality-source-set",
+              "single-source",
+              "no-manufacturer-domain",
+              "search-mode-fallback"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "source_quality": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "per_source": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "url": {"type": "string", "format": "uri"},
+                  "score": {"type": "number", "minimum": 0, "maximum": 1},
+                  "tier": {"type": "string", "enum": ["primary", "secondary", "tertiary"]}
+                },
+                "required": ["url", "score"]
+              }
+            },
+            "aggregate_score": {"type": "number", "minimum": 0, "maximum": 1},
+            "median_score": {"type": "number", "minimum": 0, "maximum": 1}
           }
         }
       }

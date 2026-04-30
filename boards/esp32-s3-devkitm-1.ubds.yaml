@@ -1,0 +1,78 @@
+name: ESP32-S3-DevKitM-1
+slug: esp32-s3-devkitm-1
+manufacturer: Espressif
+board_type:
+  - MCU
+processing:
+  - part_number: ESP32-S3
+    architecture: Xtensa LX7
+    cores: 2
+    bit_width: 32
+    clock: 240 MHz
+interfaces:
+  - name: ADC
+    type: Analog-to-Digital Converter
+    count: 20
+  - name: SPI
+    type: SPI
+    count: 4
+  - name: UART
+    type: UART
+    count: 3
+  - name: I2C
+    type: I2C
+    count: 2
+  - name: PWM
+    type: PWM
+    count: 8
+  - name: I2S
+    type: I2S
+    count: 2
+  - name: Capacitive Sensing GPIO
+    type: Capacitive Sensing
+    count: 14
+wireless:
+  - protocol: WiFi
+    version: '4'
+  - protocol: BLE
+    version: '5.0'
+outputs:
+  - name: RGB_LED
+    type: led
+onboard_components: {}
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software:
+  ides:
+    - PlatformIO
+  libraries:
+    - Arduino
+    - ESP-IDF
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: low
+    outputs: medium
+    onboard_components: low
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitm-1/index.html
+    - https://dl.espressif.com/dl/schematics/SCH_ESP32-S3-DEVKITM-1_V1_20210310A.pdf
+    - https://github.com/platformio/platformio-docs/blob/develop/boards/espressif32/esp32-s3-devkitm-1.rst
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/index.html
+    - https://randomnerdtutorials.com/esp32-s3-devkitc-pinout-guide/
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitm-1/index.html
+ubds_version: '1.1'

@@ -23,6 +23,7 @@ import glob as _glob
 import os
 import re
 import struct
+import unicodedata as _ud
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
@@ -742,3 +743,142 @@ def check_images(root: Path) -> List[ImageCheckResult]:
                     results.extend(_check_url_coupling(slug, slug_dir, meta))
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Alias-collision validation (C22 U4)
+#
+# ``check_aliases(root)`` walks every board YAML under ``root/boards/`` and
+# every ``root/manufacturers/<slug>.yaml``. It builds a registry of:
+#
+#   - board ``slug``                (kind=slug)
+#   - board ``aliases[]`` entries   (kind=alias)
+#   - manufacturer ``slug``         (kind=manufacturer-slug)
+#   - manufacturer ``canonical_name`` (kind=manufacturer-canonical-name)
+#
+# keyed by a normalized form (NFKC + casefold + whitespace-stripped).
+# Two distinct sources whose normalized values collide are reported as one
+# :class:`AliasCollision`, *provided* at least one of them is alias-valued
+# (``alias`` or ``manufacturer-canonical-name``). Pure slug-vs-slug
+# collisions are intentionally NOT this rule's job — image-validator Rule 13
+# already catches duplicate board slugs and a future check will catch
+# duplicate manufacturer slugs.
+# ---------------------------------------------------------------------------
+
+_ALIAS_WHITESPACE_RE = re.compile(r"\s+")
+
+# Source kinds that COUNT as alias-equivalents for collision triggering.
+# A collision must include at least one of these; otherwise it falls through
+# to other validators (Rule 13 for board slugs, etc.).
+_ALIAS_LIKE_KINDS = frozenset({"alias", "manufacturer-canonical-name"})
+
+
+def _normalize_alias(value: str) -> str:
+    """Return the comparison key for ``value``.
+
+    Case-folded (so casing differs are equal) and with all whitespace stripped
+    (so ``"RPi 5"`` and ``"rpi5"`` are equal). NFKC first so visually-identical
+    Unicode forms compare equal too.
+    """
+    if not isinstance(value, str):
+        return ""
+    s = _ud.normalize("NFKC", value)
+    s = s.casefold()
+    return _ALIAS_WHITESPACE_RE.sub("", s)
+
+
+@dataclass
+class AliasCollision:
+    """One within-batch alias collision.
+
+    ``paths`` lists every distinct file involved (deduplicated, sorted by
+    path string). ``sources`` is the human-readable rendering used in the
+    error message — one entry per (file, kind, raw_value) triple, in the
+    order they were collected.
+    """
+
+    paths: List[Path]
+    sources: List[str]
+    normalized: str
+    severity: ImageSeverity = "error"
+
+    @property
+    def message(self) -> str:
+        return (
+            f"alias collision (normalized={self.normalized!r}): "
+            + "; ".join(self.sources)
+        )
+
+
+def _iter_yaml_files(directory: Path, suffix: str) -> List[Path]:
+    """Sorted list of ``*<suffix>`` files under ``directory`` (recursive).
+
+    Manufacturer files use ``.yaml`` (not ``.ubds.yaml``); board files use
+    ``.ubds.yaml`` and may live one level deep under
+    ``boards/<manufacturer-slug>/`` after U2's nesting migration.
+    """
+    if not directory.is_dir():
+        return []
+    return sorted(directory.rglob(f"*{suffix}"))
+
+
+def check_aliases(root: Path) -> List[AliasCollision]:
+    """Within-batch alias-collision check across boards/ and manufacturers/.
+
+    See module-level docstring for the registry kinds + collision rules.
+    Returns one :class:`AliasCollision` per colliding normalized key, sorted
+    by that key for deterministic output. Empty list when clean.
+    """
+    boards_dir = root / "boards"
+    manufacturers_dir = root / "manufacturers"
+
+    pool: Dict[str, List[Tuple[Path, str, str]]] = {}
+
+    def _add(value: object, path: Path, kind: str) -> None:
+        if not isinstance(value, str) or not value:
+            return
+        key = _normalize_alias(value)
+        if not key:
+            return
+        pool.setdefault(key, []).append((path, kind, value))
+
+    for yml in _iter_yaml_files(boards_dir, YAML_SUFFIX):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        _add(data.get("slug"), yml, "slug")
+        aliases = data.get("aliases")
+        if isinstance(aliases, list):
+            for alias in aliases:
+                _add(alias, yml, "alias")
+
+    for yml in _iter_yaml_files(manufacturers_dir, ".yaml"):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        _add(data.get("slug"), yml, "manufacturer-slug")
+        _add(data.get("canonical_name"), yml, "manufacturer-canonical-name")
+
+    out: List[AliasCollision] = []
+    for key, entries in sorted(pool.items()):
+        if len(entries) < 2:
+            continue
+        if not any(kind in _ALIAS_LIKE_KINDS for _, kind, _ in entries):
+            continue
+        # Deduplicate paths preserving first-seen order, then sort for stability.
+        unique_paths = sorted({p for p, _, _ in entries}, key=str)
+        descriptors = [
+            f"{p}: {kind} {raw!r}" for p, kind, raw in entries
+        ]
+        out.append(AliasCollision(
+            paths=unique_paths,
+            sources=descriptors,
+            normalized=key,
+        ))
+    return out

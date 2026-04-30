@@ -49,12 +49,21 @@ from .version import check_version
 
 YAML_SUFFIX = ".ubds.yaml"
 
+FLAT_LAYOUT_DEPRECATION = (
+    "flat layout deprecated; move boards under "
+    "boards/<manufacturer-slug>/<slug>.ubds.yaml"
+)
+
 
 def collect_paths(arg: str) -> List[Path]:
     """Expand ``arg`` (file, directory, or glob) into a sorted list of YAML files.
 
     - File: returned as-is (must end in ``.ubds.yaml`` to be considered).
-    - Directory: walked recursively for ``*.ubds.yaml``.
+    - Directory: walked recursively for ``*.ubds.yaml``. Both the legacy
+      flat layout (``boards/<slug>.ubds.yaml``) and the C22 U2 nested
+      layout (``boards/<manufacturer-slug>/<slug>.ubds.yaml``) are
+      accepted during the transition window — the validator emits a
+      deprecation warning for any file still at the flat-layout depth.
     - Glob: expanded via :mod:`glob`.
     """
     p = Path(arg)
@@ -65,6 +74,54 @@ def collect_paths(arg: str) -> List[Path]:
     # Treat as glob
     matches = sorted(Path(m) for m in _glob.glob(arg, recursive=True))
     return [m for m in matches if m.is_file()]
+
+
+def is_flat_layout_board(path: Path, boards_root: Path) -> bool:
+    """True iff ``path`` is a ``*.ubds.yaml`` sitting directly under
+    ``boards_root`` (legacy layout — flagged for deprecation).
+
+    Returns False for files outside ``boards_root`` (e.g. fixture YAMLs in
+    test temp dirs, single-file invocations on standalone YAMLs) so the
+    deprecation warning never fires outside the canonical tree.
+    """
+    try:
+        resolved_path = path.resolve()
+        resolved_root = boards_root.resolve()
+    except OSError:
+        return False
+    try:
+        rel = resolved_path.relative_to(resolved_root)
+    except ValueError:
+        return False
+    # rel.parts == ("<slug>.ubds.yaml",) means the file is directly under
+    # boards/, i.e. flat layout. Anything deeper (("<mfr>", "<slug>.yaml"))
+    # is the new nested layout and stays silent.
+    return len(rel.parts) == 1
+
+
+def find_flat_layout_files(arg: str, paths: List[Path]) -> List[Path]:
+    """Return the subset of ``paths`` that are flat-layout entries under
+    ``<arg>/boards/`` or ``<arg>`` (when the caller passed boards/ directly).
+
+    Used by the CLI to render the one-time deprecation warning per
+    ``dbf validate`` invocation. Files outside the boards tree (single-file
+    invocations on a temporary fixture, ad-hoc trees) never trigger.
+    """
+    arg_path = Path(arg)
+    if arg_path.is_file():
+        return []
+    if arg_path.is_dir():
+        if arg_path.name == "boards":
+            boards_root = arg_path
+        elif (arg_path / "boards").is_dir():
+            boards_root = arg_path / "boards"
+        else:
+            # Caller passed an ad-hoc directory (no boards/ child); nothing
+            # in it counts as "flat layout" for deprecation purposes.
+            return []
+    else:
+        return []
+    return [p for p in paths if is_flat_layout_board(p, boards_root)]
 
 
 # ---------------------------------------------------------------------------
@@ -494,14 +551,16 @@ def _is_valid_png(path: Path) -> Tuple[bool, Optional[int]]:
 def _collect_slug_map(boards_dir: Path) -> Dict[str, List[Path]]:
     """Map each declared ``slug:`` value to the board YAMLs that declare it.
 
-    Only files whose content is a mapping with a scalar ``slug`` key are
-    included. Parse failures are silently skipped here — the schema-level
-    validator surfaces them separately.
+    Walks ``boards_dir`` recursively so both the legacy flat layout and the
+    C22 U2 nested ``boards/<manufacturer-slug>/<board-slug>.ubds.yaml``
+    layout are covered in one pass. Only files whose content is a mapping
+    with a scalar ``slug`` key are included. Parse failures are silently
+    skipped here — the schema-level validator surfaces them separately.
     """
     out: Dict[str, List[Path]] = {}
     if not boards_dir.is_dir():
         return out
-    for yml in sorted(boards_dir.glob(f"*{YAML_SUFFIX}")):
+    for yml in sorted(boards_dir.rglob(f"*{YAML_SUFFIX}")):
         try:
             data = yaml.safe_load(yml.read_text(encoding="utf-8"))
         except (OSError, yaml.YAMLError):

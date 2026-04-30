@@ -108,6 +108,18 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
         click.echo("No YAML files found.")
         sys.exit(0)
 
+    # C22 U2 — one-time deprecation warning for flat-layout files. Renders
+    # to stderr so machine-readable callers (--json) keep clean stdout. Does
+    # not affect exit code; flat layout is still accepted during transition.
+    if not as_json:
+        flat_files = _validate.find_flat_layout_files(path, paths)
+        if flat_files:
+            click.echo(
+                f"warning: {_validate.FLAT_LAYOUT_DEPRECATION} "
+                f"({len(flat_files)} file(s) still at flat layout)",
+                err=True,
+            )
+
     # Resolve the effective check_images choice:
     # - None (default)  → on iff arg is a directory.
     # - True / False    → honor the explicit flag.

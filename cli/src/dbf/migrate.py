@@ -75,9 +75,6 @@ def _read_manufacturer_value(text: str) -> Optional[str]:
 
 
 def _split_lines_keepends(text: str) -> List[str]:
-    """``str.splitlines(keepends=True)`` but keeps a trailing empty entry
-    when the original text ends without a newline so re-joining is exact.
-    """
     return text.splitlines(keepends=True)
 
 

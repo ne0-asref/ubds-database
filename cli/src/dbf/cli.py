@@ -374,14 +374,7 @@ def migrate_cmd(path: str, in_place: bool, nest: bool) -> None:
     are preserved — no ``yaml.dump`` round-trip.
     """
     arg_path = Path(path)
-    if arg_path.is_file():
-        files = [arg_path] if arg_path.name.endswith(".ubds.yaml") else []
-    elif arg_path.is_dir():
-        files = sorted(arg_path.rglob("*.ubds.yaml"))
-    else:
-        click.echo(f"error: {path} is not a file or directory", err=True)
-        sys.exit(2)
-
+    files = _validate.collect_paths(path)
     if not files:
         click.echo("No YAML files found.")
         sys.exit(0)
@@ -411,17 +404,15 @@ def migrate_cmd(path: str, in_place: bool, nest: bool) -> None:
         if report.skipped_reason:
             click.echo(f"- {f}: skipped ({report.skipped_reason})")
             continue
-        if not report.changes and not nest:
-            click.echo(f"✓ {f}: no changes")
-            continue
         if report.changes:
             verb = "applied" if report.written else "would apply"
             click.echo(f"✓ {f}: {verb}")
             for ch in report.changes:
                 click.echo(f"  - {ch}")
+        elif not nest:
+            click.echo(f"✓ {f}: no changes")
         if nest and boards_root is not None:
-            current = report.file if not report.written else f
-            dest = _migrate.nest_file(current, boards_root, in_place=in_place)
+            dest = _migrate.nest_file(f, boards_root, in_place=in_place)
             if dest is not None:
                 verb = "moved" if in_place else "would move"
                 click.echo(f"  - {verb} -> {dest}")

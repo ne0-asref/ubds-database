@@ -33,3 +33,11 @@ where = ["src"]
 # Bundle the UBDS schema so installed wheels work outside the worktree.
 # Task 2 finalizes the loader; for now we ship whatever lands under src/dbf/data/.
 dbf = ["data/*.json", "data/**/*.json"]
+
+[tool.pytest.ini_options]
+# Run tests against this checkout's src/, not whatever copy of dbf happens to
+# be installed in site-packages. Worktree-based development (build branches
+# under worktrees/{component}/) needs each worktree's tests to exercise that
+# worktree's source; without this, schema/validator changes are invisible to
+# pytest until the package is reinstalled.
+pythonpath = ["src"]

@@ -135,7 +135,9 @@ def validate_file(path: Path) -> FileValidation:
             version_message="not a mapping",
         )
 
-    errors = sorted(_get_validator().iter_errors(data), key=lambda e: list(e.absolute_path))
+    errors = list(_get_validator().iter_errors(data))
+    errors.extend(_check_confidence_mutual_exclusion(data))
+    errors.sort(key=lambda e: list(e.absolute_path))
     board_version = data.get("ubds_version", "")
     level, msg = check_version(str(board_version)) if board_version else ("error", "missing ubds_version")
 
@@ -147,6 +149,50 @@ def validate_file(path: Path) -> FileValidation:
         version_level=level,
         version_message=msg,
     )
+
+
+def _check_confidence_mutual_exclusion(data: dict) -> List[ValidationError]:
+    """C22 U5 — ``meta.confidence_skipped`` and ``meta.confidence`` keys must
+    not overlap.
+
+    A section listed in ``confidence_skipped`` is hidden from the UI outright;
+    a section keyed in ``confidence`` carries a verification level. Documenting
+    both for the same section is contradictory — the contributor must pick one.
+    Emits one :class:`ValidationError` per offending section so the renderer
+    can show one clear block per problem.
+
+    Schema (U1) accepts each side in isolation; this function only fires when
+    both shapes are well-formed (dict + list-of-strings). Malformed shapes
+    surface via schema validation instead.
+    """
+    meta = data.get("meta")
+    if not isinstance(meta, dict):
+        return []
+    confidence = meta.get("confidence")
+    skipped = meta.get("confidence_skipped")
+    if not isinstance(confidence, dict) or not isinstance(skipped, list):
+        return []
+
+    out: List[ValidationError] = []
+    confidence_keys = set(confidence.keys())
+    seen: set = set()
+    for idx, section in enumerate(skipped):
+        if not isinstance(section, str) or section in seen:
+            continue
+        seen.add(section)
+        if section in confidence_keys:
+            err = ValidationError(
+                message=(
+                    f"section {section!r} is in meta.confidence_skipped "
+                    f"AND has a meta.confidence value — pick one."
+                ),
+                validator="confidence_mutual_exclusion",
+                validator_value=section,
+                instance=section,
+                path=("meta", "confidence_skipped", idx),
+            )
+            out.append(err)
+    return out
 
 
 # ---------------------------------------------------------------------------

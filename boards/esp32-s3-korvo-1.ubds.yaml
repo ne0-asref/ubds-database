@@ -1,0 +1,96 @@
+name: ESP32-S3-Korvo-1
+slug: esp32-s3-korvo-1
+manufacturer: Espressif
+board_type:
+  - AI
+processing:
+  - part_number: esp32s3
+    architecture: xtensa
+    clock: 240 MHz
+  - part_number: ESP32-S3
+    architecture: xtensa
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: USB Power Port
+    type: USB
+    count: 1
+  - name: USB-to-UART Bridge
+    type: USB-to-UART
+    count: 1
+  - name: USB-to-UART Port
+    type: USB
+    count: 1
+  - name: MicroSD Card Slot
+    type: SPI
+    count: 1
+  - name: ADC Chip I2S interface
+    type: I2S
+    count: 1
+  - name: ADC Chip I2C interface
+    type: I2C
+    count: 1
+  - name: Audio Codec Chip I2S bus
+    type: I2S
+    count: 1
+  - name: Audio Codec Chip I2C bus
+    type: I2C
+    count: 1
+  - name: UART
+    type: UART
+    count: 1
+wireless:
+  - protocol: WiFi
+  - protocol: BT
+    version: '5'
+  - protocol: BLE
+    version: '5'
+outputs:
+  - name: 5V Power On LED
+    type: led
+    color: red
+  - name: Battery Green LED
+    type: led
+    color: green
+  - name: Battery Red LED
+    type: led
+    color: red
+  - name: RGB LED Array
+    type: led
+    color: RGB
+  - name: Speaker
+    type: speaker
+onboard_components: {}
+power: {}
+thermal: {}
+physical:
+  notes: Dimension details available in linked PDF files
+boot: {}
+software: {}
+metadata:
+  image_url: 
+    https://opengraph.githubassets.com/f49607f1a53e018742fbf0b56616013aa0c5dcba628ea0adab80c3fa50d07a02/espressif/esp-skainet
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: low
+    outputs: medium
+    onboard_components: low
+    power: low
+    thermal: low
+    physical: medium
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://github.com/espressif/esp-skainet/blob/master/docs/en/hw-reference/esp32s3/user-guide-korvo-1.md
+    - https://www.espboards.dev/esp32/esp32-s3-korvo-1/
+  product_url: 
+    https://github.com/espressif/esp-skainet/blob/master/docs/en/hw-reference/esp32s3/user-guide-korvo-1.md
+ubds_version: '1.1'

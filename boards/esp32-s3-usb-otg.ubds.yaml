@@ -1,0 +1,99 @@
+name: ESP32-S3-USB-OTG
+slug: esp32-s3-usb-otg
+manufacturer: Espressif
+board_type:
+  - MCU
+  - Expansion
+processing:
+  - part_number: ESP32-S3
+    architecture: Xtensa LX7
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: USB_HOST Interface
+    type: USB
+    count: 1
+  - name: USB_DEV Interface
+    type: USB
+    count: 1
+  - name: Micro_USB interface
+    type: USB
+    count: 1
+  - name: USB-to-UART Interface
+    type: UART
+    count: 1
+  - name: LCD Interface
+    type: SPI
+    count: 1
+  - name: SD Card Interface
+    type: SDIO
+    count: 1
+  - name: USB
+    type: Host/Device
+    count: 2
+  - name: UART
+    type: Serial
+    count: 1
+  - name: SPI
+    type: Master
+    count: 2
+wireless:
+  - protocol: WiFi
+  - protocol: BLE
+    version: '5.0'
+inputs:
+  - name: MENU Button
+    type: button
+  - name: Reset Button
+    type: button
+  - name: Boot Button
+    type: button
+  - name: DW- Button
+    type: button
+  - name: UP+ Button
+    type: button
+  - name: Power Switch
+    type: switch
+outputs:
+  - name: Yellow LED
+    type: led
+    color: yellow
+  - name: Green LED
+    type: led
+    color: green
+  - name: Charging LED
+    type: led
+    color: red
+  - name: LCD
+    type: display
+    description: 1.3-inch LCD color screen, ST7789
+onboard_components: {}
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software: {}
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: high
+    inputs: medium
+    outputs: medium
+    onboard_components: low
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-usb-otg/user_guide.html
+    - https://github.com/georgik/esp32-s3-usb-otg-lcd
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-usb-otg/user_guide.html
+ubds_version: '1.1'

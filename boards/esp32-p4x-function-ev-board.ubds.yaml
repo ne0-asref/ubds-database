@@ -1,0 +1,102 @@
+name: ESP32-P4X-Function-EV-Board
+slug: esp32-p4x-function-ev-board
+manufacturer: Espressif
+board_type:
+  - SBC
+  - Expansion
+processing:
+  - part_number: ESP32-P4
+    architecture: RISC-V
+    cores: 2
+    clock: 400 MHz
+    bit_width: 32
+interfaces:
+  - name: USB Full-speed Port
+    type: USB Type-C
+    count: 1
+  - name: USB Serial/JTAG Port
+    type: USB Type-C
+    count: 1
+  - name: USB 2.0 Type-C Port
+    type: USB Type-C
+    count: 1
+  - name: USB 2.0 Type-A Port
+    type: USB Type-A
+    count: 1
+  - name: ESP32-C6 Module Programming Connector
+    type: UART
+    count: 1
+  - name: UART
+    type: Pin Header
+    count: 1
+  - name: RJ45 Ethernet Port
+    type: RJ45
+    count: 1
+  - name: MIPI CSI Connector
+    type: FPC
+    count: 1
+  - name: MIPI DSI Connector
+    type: FPC
+    count: 1
+  - name: MicroSD Card Slot
+    type: Slot
+    count: 1
+  - name: GPIO
+    type: Pin Header
+    count: 26
+wireless:
+  - protocol: WiFi
+    version: 6","bands":"2.4GHz","chip":"ESP32-C6"},{
+inputs:
+  - name: RESET
+    type: button
+    description: Resets the board.
+  - name: BOOT
+    type: button
+    description: Boot mode control button.
+  - name: MIC1
+    type: microphone
+    description: Onboard microphone connected to the audio codec chip.
+  - name: POWER_SW
+    type: switch
+    description: Power On/Off Switch.
+  - name: TOUCHSCREEN
+    type: touchpad
+    description: 7-inch capacitive touch screen with resolution 1024x600.
+outputs:
+  - name: PWR LED
+    type: led
+  - name: Speaker
+    type: speaker
+onboard_components: {}
+power:
+  vin_range: 5V
+  usb: 'USB Type-C 5V (multiple ports: USB 2.0 Type-C, USB Full-speed, USB Serial/JTAG)'
+  regulators: 5V to 3.3V LDO, 3.3V buck converter, VDD_HP buck converter
+thermal: {}
+physical: {}
+boot: {}
+software: {}
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: low
+    power: medium
+    thermal: low
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html
+    - https://github.com/espressif/esp-dev-kits/tree/master/examples/esp32-p4-function-ev-board
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html
+ubds_version: '1.1'

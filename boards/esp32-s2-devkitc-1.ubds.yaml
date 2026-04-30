@@ -1,0 +1,67 @@
+name: ESP32-S2-DevKitC-1
+slug: esp32-s2-devkitc-1
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+processing:
+  - part_number: ESP32-S2
+    architecture: Xtensa LX7
+    cores: 1
+    bit_width: 32
+    clock: 240 MHz
+interfaces:
+  - name: UART
+    type: UART
+    count: 3
+  - name: SPI
+    type: SPI
+    count: 3
+  - name: I2C
+    type: I2C
+    count: 2
+wireless:
+  - protocol: WiFi
+  - protocol: BT
+onboard_components:
+  flash:
+    role: integrated SPI flash
+    key spec: connected to GPIOs 6-11 on ESP-WROOM-32
+  hall_effect_sensor:
+    role: built-in hall effect sensor
+    key spec: detects changes in magnetic field
+power: {}
+thermal:
+  operating_temp_min: -40
+  operating_temp_max: 85
+physical: {}
+boot: {}
+software: {}
+metadata:
+  image_url: https://dfimg.dfrobot.com/enshop/image/data/DFR0813/DFR0813_260212 
+    (1).jpg
+meta:
+  confidence:
+    top_level: medium
+    processing: high
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: low
+    outputs: low
+    onboard_components: medium
+    power: low
+    thermal: medium
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s2/esp32-s2-devkitc-1/index.html
+    - https://github.com/platformio/platform-espressif32/issues/1477
+    - https://www.olimex.com/Products/IoT/ESP32-S2/ESP32-S2-DevKit-Lipo/open-source-hardware
+    - https://www.dfrobot.com/product-2249.html
+    - https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s2/esp32-s2-devkitc-1/index.html
+ubds_version: '1.1'

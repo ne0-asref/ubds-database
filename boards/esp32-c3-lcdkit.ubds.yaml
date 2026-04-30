@@ -1,0 +1,79 @@
+name: ESP32-C3-LCDkit
+slug: esp32-c3-lcdkit
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+  - DSP
+processing:
+  - part_number: ESP32-C3-MINI-1
+    architecture: RISC-V
+    clock: 160 MHz
+    cores: 1
+    bit_width: 32
+interfaces:
+  - name: SPI
+    type: interface
+    count: 1
+  - name: I2C
+    type: interface
+    count: 1
+  - name: Infrared TX/RX
+    type: wireless control
+    count: 1
+  - name: USB Type-C
+    type: download/debug/communication/power
+    count: 1
+  - name: UART
+    type: I/O
+    count: 1
+pin_headers:
+  - name: UART & RGB Expander I/O
+    pitch: 2.54mm
+  - name: LCD Display Connector
+    pitch: 2.54mm
+  - name: Infrared TX/RX I/O Select
+    pitch: 2.54mm
+wireless:
+  - protocol: WiFi
+    version: '4'
+  - protocol: BLE
+  - protocol: Infrared
+  - protocol: BT
+    version: '5.0'
+inputs:
+  - name: Reset
+    type: button
+    description: Press this button to reset the system.
+  - name: EC11 Rotary Encoder Switch
+    type: switch
+    description: Features both a 360° rotary encoder and a key switch to enable 
+      control of the on-screen GUI.
+onboard_components: {}
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software: {}
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: medium
+    wireless: medium
+    inputs: medium
+    outputs: low
+    onboard_components: low
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-lcdkit/user_guide.html
+    - https://github.com/espressif/esp-bsp/tree/master/bsp/esp32_c3_lcdkit
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-lcdkit/user_guide.html
+ubds_version: '1.1'

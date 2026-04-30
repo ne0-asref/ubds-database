@@ -27,8 +27,13 @@ def fake_repo_for_fetch(tmp_path):
     return tmp_path
 
 
-def _write_board(repo: Path, slug: str, image_url=None, pinout_url=None) -> None:
-    """Emit a tiny .ubds.yaml under repo/boards/ exposing only slug + meta urls."""
+def _write_board(repo: Path, slug: str, image_url=None, pinout_url=None, manufacturer_slug: str | None = None) -> None:
+    """Emit a tiny .ubds.yaml under repo/boards/ exposing only slug + meta urls.
+
+    When ``manufacturer_slug`` is set, the file lands under the C22 U2
+    nested layout (``boards/<mfr>/<slug>.ubds.yaml``); otherwise it sits
+    at the legacy flat-layout depth.
+    """
     parts = [f'slug: "{slug}"', "meta:"]
     if image_url is not None:
         parts.append(f'  image_url: "{image_url}"' if image_url else "  image_url: null")
@@ -36,7 +41,12 @@ def _write_board(repo: Path, slug: str, image_url=None, pinout_url=None) -> None
         parts.append(
             f'  pinout_image_url: "{pinout_url}"' if pinout_url else "  pinout_image_url: null"
         )
-    (repo / "boards" / f"{slug}.ubds.yaml").write_text("\n".join(parts) + "\n")
+    if manufacturer_slug is None:
+        target = repo / "boards" / f"{slug}.ubds.yaml"
+    else:
+        target = repo / "boards" / manufacturer_slug / f"{slug}.ubds.yaml"
+        target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("\n".join(parts) + "\n")
 
 
 def _run(repo: Path, *extra_args: str) -> subprocess.CompletedProcess:
@@ -109,6 +119,34 @@ def test_slug_filter(fake_repo_for_fetch):
     assert r.returncode == 0, r.stderr
     assert "WOULD FETCH foo top-view" in r.stdout
     assert "WOULD FETCH bar" not in r.stdout
+
+
+def test_walks_nested_layout(fake_repo_for_fetch):
+    """C22 U2 — boards under boards/<mfr>/<slug>.ubds.yaml are discovered."""
+    _write_board(
+        fake_repo_for_fetch,
+        "foo",
+        image_url="https://example.com/foo.png",
+        manufacturer_slug="espressif",
+    )
+    r = _run(fake_repo_for_fetch, "--dry-run")
+    assert r.returncode == 0, r.stderr
+    assert "WOULD FETCH foo top-view" in r.stdout
+
+
+def test_walks_mixed_layouts(fake_repo_for_fetch):
+    """Transition window — both flat and nested files are visited in one run."""
+    _write_board(fake_repo_for_fetch, "flat", image_url="https://example.com/flat.png")
+    _write_board(
+        fake_repo_for_fetch,
+        "nested",
+        image_url="https://example.com/nested.png",
+        manufacturer_slug="adafruit-industries",
+    )
+    r = _run(fake_repo_for_fetch, "--dry-run")
+    assert r.returncode == 0, r.stderr
+    assert "WOULD FETCH flat top-view" in r.stdout
+    assert "WOULD FETCH nested top-view" in r.stdout
 
 
 # ---------------------------------------------------------------------------

@@ -57,7 +57,19 @@ fetch_one() {
   fi
 }
 
-for yaml_file in "$BOARDS_DIR"/*.ubds.yaml; do
+# C22 U2 — discover boards under both layouts: the legacy flat layout
+# (boards/*.ubds.yaml) and the new nested layout
+# (boards/<manufacturer-slug>/*.ubds.yaml). `find` is portable enough across
+# the bash versions we target (CI + macOS dev) and produces a NUL-delimited
+# stream so paths with spaces survive intact.
+mapfile -d '' YAML_FILES < <(find "$BOARDS_DIR" -name '*.ubds.yaml' -type f -print0 | sort -z)
+
+if [[ ${#YAML_FILES[@]} -eq 0 ]]; then
+  echo "No board YAMLs found under $BOARDS_DIR/"
+  exit 0
+fi
+
+for yaml_file in "${YAML_FILES[@]}"; do
   slug=$(python3 -c "import yaml; print(yaml.safe_load(open('$yaml_file'))['slug'])")
 
   if [[ -n "$SINGLE_SLUG" && "$slug" != "$SINGLE_SLUG" ]]; then continue; fi

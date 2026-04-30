@@ -162,6 +162,31 @@ wireless:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# ON-BOARD COMPONENTS
+# ──────────────────────────────────────────────────────────────────────────────
+# Components soldered onto the board itself (sensors, actuators, displays,
+# integrated cameras, etc.). Delete sub-sections that don't apply.
+# See spec/ubds-v1.reference.ubds.yaml for the full set of categories.
+#
+# Integrated cameras live under `onboard_components.cameras[]` — only for
+# boards that ship with a camera module physically attached (e.g. ESP32-CAM).
+# Field set is documentation-only under additionalProperties:true; the
+# validator does not enforce types or required keys.
+
+# onboard_components:
+#
+#   cameras:
+#     - sensor: "OV2640"
+#       manufacturer: "OmniVision"
+#       resolution: "1600x1200"
+#       interface: "DVP"                 # DVP | MIPI-CSI2 | parallel
+#       lens: "fixed-focus"              # fixed-focus | autofocus | interchangeable
+#       fov_deg: 78                      # diagonal
+#       ir_filter: true
+#       notes: null
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # POWER
 # ──────────────────────────────────────────────────────────────────────────────
 

@@ -1,0 +1,37 @@
+# Minimal valid v1.2 board exercising every new v1.2 field surface.
+# Used by `cli/tests/test_v12_features.py` to assert that the schema
+# accepts a realistic populated example. Not a real `boards/` entry —
+# the ESP32-CAM is a plausible v1.2 candidate that doesn't yet exist
+# under boards/, so this fixture cannot collide with the canonical set.
+ubds_version: "1.2"
+name: "ESP32-CAM"
+slug: esp32-cam
+manufacturer: "Espressif Systems"
+manufacturer_slug: espressif
+aliases:
+  - "ESP32 CAM"
+  - "ESP32-CAM Module"
+board_type: [MCU]
+difficulty_level: intermediate
+status: active
+
+meta:
+  sources:
+    - "https://docs.ai-thinker.com/esp32-cam"
+  product_url: "https://www.espressif.com/en/products/devkits"
+  last_verified: "2026-04-30"
+  data_completeness: stub
+  confidence:
+    processing: high
+    onboard: high
+  confidence_skipped:
+    - certifications
+  fetch_warnings:
+    - search-mode-fallback
+  source_quality:
+    per_source:
+      - url: "https://docs.ai-thinker.com/esp32-cam"
+        score: 0.6
+        tier: tertiary
+    aggregate_score: 0.6
+    median_score: 0.6

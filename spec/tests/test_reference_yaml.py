@@ -16,11 +16,12 @@ def test_reference_yaml_validates_against_schema(validator):
     validator.validate(doc)
 
 
-def test_reference_yaml_validates_at_v11(validator):
-    """v1.1: reference must declare ubds_version 1.1, carry meta.product_url,
-    and have no top-level pricing block."""
+def test_reference_yaml_validates_at_v12(validator):
+    """v1.2: reference must declare ubds_version 1.2, carry meta.product_url,
+    and have no top-level pricing block. v1.1 boards still pass the schema —
+    the additive-only iron rule lives in cli/tests/test_v12_back_compat.py."""
     doc = yaml.safe_load(REFERENCE.read_text())
-    assert doc.get("ubds_version") == "1.1"
+    assert doc.get("ubds_version") == "1.2"
     assert "pricing" not in doc
     assert "product_url" in doc.get("meta", {})
     validator.validate(doc)

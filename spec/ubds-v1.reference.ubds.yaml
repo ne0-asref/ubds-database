@@ -1,5 +1,5 @@
 # ============================================================================
-# UBDS — Universal Board Description Standard v1.0
+# UBDS — Universal Board Description Standard v1.2
 # ============================================================================
 # A portable, human-readable standard for describing development boards.
 # Spec:   https://github.com/<tbd>/ubds
@@ -12,7 +12,7 @@
 #   omit the `processing` section entirely.
 # - File extension: .ubds.yaml
 # ============================================================================
-ubds_version: "1.1"
+ubds_version: "1.2"
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -22,6 +22,10 @@ ubds_version: "1.1"
 name: "NVIDIA Jetson Orin Nano Developer Kit"        # [REQUIRED] Display name
 slug: "jetson-orin-nano-dev-kit"                      # [REQUIRED] URL-safe unique ID
 manufacturer: "NVIDIA"                                # [REQUIRED]
+manufacturer_slug: nvidia                             # kebab-case pointer to manufacturers/<slug>.yaml (v1.2+)
+aliases:                                              # Alternate display names / common abbreviations (v1.2+)
+  - "Jetson Orin Nano DevKit"
+  - "Orin Nano Dev Kit"
 series: "Jetson"                                      # Board family / product line
 parent_board: null                                    # slug of parent if this is a variant
 hardware_version: "Rev A02"
@@ -567,6 +571,24 @@ onboard_components:
   #     manufacturer: "Microchip"
   #     features: [ECDH, ECDSA, AES-128, SHA-256, secure_key_storage]
 
+  # ── Integrated Cameras ──
+  # The Jetson Orin Nano Developer Kit has no integrated camera (cameras
+  # attach via the MIPI CSI-2 connectors documented under `interfaces`),
+  # so this section is left commented out as an illustrative example.
+  # Use `onboard_components.cameras[]` when the board itself ships with a
+  # camera module soldered or rigidly attached (e.g., ESP32-CAM).
+  # Field set is documentation-only under additionalProperties:true — the
+  # validator does not yet enforce types or required keys.
+  # cameras:
+  #   - sensor: "OV2640"
+  #     manufacturer: "OmniVision"
+  #     resolution: "1600x1200"
+  #     interface: "DVP"                                  # DVP | MIPI-CSI2 | parallel
+  #     lens: "fixed-focus"                               # fixed-focus | autofocus | interchangeable
+  #     fov_deg: 78                                       # diagonal
+  #     ir_filter: true
+  #     notes: "Example only — Jetson Orin Nano has no integrated camera."
+
   # ── Other ──
   other: []
   # other:
@@ -973,3 +995,28 @@ meta:
     wireless: high                                        # N/A for boards with no wireless
     software: medium
     power: medium
+
+  # Sections the UI should NOT render at all (instead of low-confidence). v1.2+.
+  # Mutually exclusive with `meta.confidence.<section>` — a section name listed
+  # here must NOT also appear in `meta.confidence`. Validator enforces this.
+  # Allowed values: processing, interfaces, inputs-outputs, wireless, onboard,
+  # power, pinout, software, libraries, resources, thermal-physical, boot,
+  # compatible, certifications.
+  confidence_skipped: []                                  # Jetson reference: no sections skipped.
+
+  # Pipeline-side flags about source quality during ingestion. v1.2+.
+  # Allowed values: low-quality-source-set, single-source,
+  # no-manufacturer-domain, search-mode-fallback.
+  fetch_warnings: []                                      # Jetson reference: clean fetch.
+
+  # Per-source scoring of each citation used during fetch. v1.2+. Optional.
+  source_quality:
+    per_source:
+      - url: "https://developer.nvidia.com/embedded/jetson-orin-nano-developer-kit"
+        score: 1.0
+        tier: primary
+      - url: "https://www.arrow.com/en/products/945-13766-0005-000/nvidia"
+        score: 0.78
+        tier: secondary
+    aggregate_score: 0.92
+    median_score: 0.92

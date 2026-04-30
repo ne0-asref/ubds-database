@@ -14,6 +14,7 @@ from pathlib import Path
 
 from . import __version__
 from . import data as _data
+from . import migrate as _migrate
 from . import validate as _validate
 from .errors import format_errors
 from .images import AddImageError, add_image
@@ -71,6 +72,34 @@ def _resolve_image_root(path_arg: str) -> Path | None:
         parent = p.parent
         if parent.name == "boards" and (parent.parent / "images").is_dir():
             return parent.parent
+        # C22 U2 nested layout: file lives at <root>/boards/<mfr>/<slug>.yaml
+        if parent.parent.name == "boards" and (parent.parent.parent / "images").is_dir():
+            return parent.parent.parent
+        return None
+    return None
+
+
+def _resolve_manufacturer_root(path_arg: str) -> Path | None:
+    """Infer the repo root for C22 U3 manufacturer + link checks.
+
+    Mirrors :func:`_resolve_image_root` but keys off the presence of
+    ``<root>/manufacturers/`` rather than ``<root>/images/`` so the new
+    rules fire on freshly-cloned trees that haven't bothered with image
+    contributions yet.
+    """
+    p = Path(path_arg)
+    if p.is_dir():
+        if (p / "manufacturers").is_dir() and (p / "boards").is_dir():
+            return p
+        if p.name == "boards" and (p.parent / "manufacturers").is_dir():
+            return p.parent
+        return None
+    if p.is_file():
+        parent = p.parent
+        if parent.name == "boards" and (parent.parent / "manufacturers").is_dir():
+            return parent.parent
+        if parent.parent.name == "boards" and (parent.parent.parent / "manufacturers").is_dir():
+            return parent.parent.parent
         return None
     return None
 
@@ -85,6 +114,15 @@ def _print_image_result(r: _validate.ImageCheckResult) -> None:
     click.echo(f"  path:   {r.path}")
     click.echo(f"  rule:   {r.message}")
     click.echo("  remedy: see CONTRIBUTING.md §Adding a board image")
+    click.echo("")
+
+
+def _print_manufacturer_result(path: Path, message: str) -> None:
+    """Render one manufacturer / link / alias error as an Elm-style block."""
+    click.echo("-- MANUFACTURER VALIDATION ERROR " + "-" * 33)
+    click.echo(f"  path:   {path}")
+    click.echo(f"  rule:   {message}")
+    click.echo("  remedy: see manufacturers/ + spec/ubds-manufacturer.schema.json")
     click.echo("")
 
 
@@ -107,6 +145,18 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
     if not paths:
         click.echo("No YAML files found.")
         sys.exit(0)
+
+    # C22 U2 — one-time deprecation warning for flat-layout files. Renders
+    # to stderr so machine-readable callers (--json) keep clean stdout. Does
+    # not affect exit code; flat layout is still accepted during transition.
+    if not as_json:
+        flat_files = _validate.find_flat_layout_files(path, paths)
+        if flat_files:
+            click.echo(
+                f"warning: {_validate.FLAT_LAYOUT_DEPRECATION} "
+                f"({len(flat_files)} file(s) still at flat layout)",
+                err=True,
+            )
 
     # Resolve the effective check_images choice:
     # - None (default)  → on iff arg is a directory.
@@ -194,6 +244,46 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
         # skip. Legacy trees (tests, ad-hoc YAML dirs) still schema-validate.
         run_image_check = False
 
+    # C22 U3 — manufacturer index validation + link rule + alias collisions
+    # across boards/ ↔ manufacturers/. Runs whenever a manufacturers/ tree
+    # sits next to the path the user passed; silently skipped otherwise so
+    # ad-hoc invocations (single fixture, scratch tree) keep their slim
+    # output. Independent of --check-images.
+    mfr_root = _resolve_manufacturer_root(path)
+    if mfr_root is not None:
+        mfr_errors = _validate.validate_manufacturers(mfr_root)
+        link_errors = _validate.check_manufacturer_links(mfr_root)
+        alias_errors = _validate.check_aliases(mfr_root)
+        any_mfr = bool(mfr_errors or link_errors or alias_errors)
+        if any_mfr:
+            any_failed = True
+        if as_json:
+            click.echo(_json.dumps(
+                [
+                    {"path": str(e.path), "severity": e.severity, "message": e.message}
+                    for e in mfr_errors
+                ] + [
+                    {"path": str(e.board_path), "severity": e.severity, "message": e.message}
+                    for e in link_errors
+                ] + [
+                    {
+                        "paths": [str(p) for p in e.paths],
+                        "severity": e.severity,
+                        "message": e.message,
+                    }
+                    for e in alias_errors
+                ],
+                indent=2, sort_keys=True,
+            ))
+        else:
+            for e in mfr_errors:
+                _print_manufacturer_result(e.path, e.message)
+            for e in link_errors:
+                _print_manufacturer_result(e.board_path, e.message)
+            for e in alias_errors:
+                # check_aliases collisions span multiple paths; show first.
+                _print_manufacturer_result(e.paths[0], e.message)
+
     if run_image_check and root is not None:
         image_results = _validate.check_images(root)
         # Rule 13 is directory-scoped. On single-file invocations it still runs
@@ -235,6 +325,99 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
 
 main.add_command(_search_cmd)
 main.add_command(_info_cmd)
+
+
+def _resolve_boards_root(arg: Path) -> Path | None:
+    """Infer the ``boards/`` root for ``--nest-by-manufacturer``.
+
+    Mirrors the validator's resolver style: accept the boards/ dir
+    directly, the repo root (with a child boards/), or a single board
+    YAML inside boards/. Returns ``None`` if no sensible root exists.
+    """
+    if arg.is_dir():
+        if arg.name == "boards":
+            return arg
+        if (arg / "boards").is_dir():
+            return arg / "boards"
+        return None
+    if arg.is_file():
+        parent = arg.parent
+        if parent.name == "boards":
+            return parent
+        if parent.parent.name == "boards":
+            return parent.parent
+    return None
+
+
+@main.command("migrate")
+@click.argument("path", required=True)
+@click.option(
+    "--in-place",
+    is_flag=True,
+    help="Actually write changes. Default: dry-run (print planned changes only).",
+)
+@click.option(
+    "--nest-by-manufacturer",
+    "nest",
+    is_flag=True,
+    help=(
+        "Move flat-layout files into boards/<manufacturer-slug>/<slug>.ubds.yaml. "
+        "Standalone-safe: contributors can run this without touching content."
+    ),
+)
+def migrate_cmd(path: str, in_place: bool, nest: bool) -> None:
+    """Upgrade UBDS YAML files from v1.1 to v1.2 (idempotent, line-preserving).
+
+    Adds ``aliases: []`` and ``manufacturer_slug: <slug>`` (when the
+    vendor map resolves) and bumps ``ubds_version`` to ``1.2`` when the
+    post-transform file uses any v1.2 field. Comments and key ordering
+    are preserved — no ``yaml.dump`` round-trip.
+    """
+    arg_path = Path(path)
+    files = _validate.collect_paths(path)
+    if not files:
+        click.echo("No YAML files found.")
+        sys.exit(0)
+
+    boards_root: Path | None = None
+    if nest:
+        boards_root = _resolve_boards_root(arg_path)
+        if boards_root is None:
+            click.echo(
+                "error: --nest-by-manufacturer requires a boards/ tree; "
+                "pass the boards/ dir, the repo root, or a board YAML "
+                "under boards/.",
+                err=True,
+            )
+            sys.exit(2)
+
+    any_failed = False
+    mode_label = "in-place" if in_place else "dry-run"
+    click.echo(f"dbf migrate ({mode_label}): {len(files)} file(s)")
+
+    for f in files:
+        report = _migrate.migrate_file(f, in_place=in_place)
+        if report.aborted:
+            any_failed = True
+            click.echo(f"✗ {f}: aborted (existing schema violation; run `dbf validate` first)")
+            continue
+        if report.skipped_reason:
+            click.echo(f"- {f}: skipped ({report.skipped_reason})")
+            continue
+        if report.changes:
+            verb = "applied" if report.written else "would apply"
+            click.echo(f"✓ {f}: {verb}")
+            for ch in report.changes:
+                click.echo(f"  - {ch}")
+        elif not nest:
+            click.echo(f"✓ {f}: no changes")
+        if nest and boards_root is not None:
+            dest = _migrate.nest_file(f, boards_root, in_place=in_place)
+            if dest is not None:
+                verb = "moved" if in_place else "would move"
+                click.echo(f"  - {verb} -> {dest}")
+
+    sys.exit(1 if any_failed else 0)
 
 
 @main.command("add-image")

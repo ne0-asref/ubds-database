@@ -26,6 +26,13 @@ intent is obvious to reviewers at a glance:
 
 - [ ] `dbf validate boards/ --check-images` runs locally and passes
 - [ ] Slug in YAML matches the board filename (`boards/<slug>.ubds.yaml`)
+- [ ] Board placed under `boards/<manufacturer-slug>/<board-slug>.ubds.yaml`
+      (new layout) OR justified flat-layout exception.
+- [ ] If introducing a new manufacturer, `manufacturers/<slug>.yaml`
+      created and `canonical_name` verified against vendor homepage.
+- [ ] If using v1.2 fields (`aliases`, `confidence_skipped`,
+      `fetch_warnings`, `source_quality`, `manufacturer_slug`, integrated
+      cameras), ubds_version bumped to 1.2.
 - [ ] If images are included, they live under `images/<slug>/` using the
       canonical filenames — `top-view.png`, `pinout.png`, `angle.png`,
       `bottom-view.png`, `block-diagram.png` (no suffixes or versions)

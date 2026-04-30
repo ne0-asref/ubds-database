@@ -23,6 +23,7 @@ import glob as _glob
 import os
 import re
 import struct
+import unicodedata as _ud
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
@@ -38,7 +39,7 @@ from .constants import (
     PNG_IHDR_COLOR_TYPE_RGBA,
     PNG_SIGNATURE,
 )
-from .schema import load_schema
+from .schema import load_manufacturer_schema, load_schema
 from .vendor_map import normalize_vendor
 from .version import check_version
 
@@ -48,12 +49,21 @@ from .version import check_version
 
 YAML_SUFFIX = ".ubds.yaml"
 
+FLAT_LAYOUT_DEPRECATION = (
+    "flat layout deprecated; move boards under "
+    "boards/<manufacturer-slug>/<slug>.ubds.yaml"
+)
+
 
 def collect_paths(arg: str) -> List[Path]:
     """Expand ``arg`` (file, directory, or glob) into a sorted list of YAML files.
 
     - File: returned as-is (must end in ``.ubds.yaml`` to be considered).
-    - Directory: walked recursively for ``*.ubds.yaml``.
+    - Directory: walked recursively for ``*.ubds.yaml``. Both the legacy
+      flat layout (``boards/<slug>.ubds.yaml``) and the C22 U2 nested
+      layout (``boards/<manufacturer-slug>/<slug>.ubds.yaml``) are
+      accepted during the transition window — the validator emits a
+      deprecation warning for any file still at the flat-layout depth.
     - Glob: expanded via :mod:`glob`.
     """
     p = Path(arg)
@@ -64,6 +74,54 @@ def collect_paths(arg: str) -> List[Path]:
     # Treat as glob
     matches = sorted(Path(m) for m in _glob.glob(arg, recursive=True))
     return [m for m in matches if m.is_file()]
+
+
+def is_flat_layout_board(path: Path, boards_root: Path) -> bool:
+    """True iff ``path`` is a ``*.ubds.yaml`` sitting directly under
+    ``boards_root`` (legacy layout — flagged for deprecation).
+
+    Returns False for files outside ``boards_root`` (e.g. fixture YAMLs in
+    test temp dirs, single-file invocations on standalone YAMLs) so the
+    deprecation warning never fires outside the canonical tree.
+    """
+    try:
+        resolved_path = path.resolve()
+        resolved_root = boards_root.resolve()
+    except OSError:
+        return False
+    try:
+        rel = resolved_path.relative_to(resolved_root)
+    except ValueError:
+        return False
+    # rel.parts == ("<slug>.ubds.yaml",) means the file is directly under
+    # boards/, i.e. flat layout. Anything deeper (("<mfr>", "<slug>.yaml"))
+    # is the new nested layout and stays silent.
+    return len(rel.parts) == 1
+
+
+def find_flat_layout_files(arg: str, paths: List[Path]) -> List[Path]:
+    """Return the subset of ``paths`` that are flat-layout entries under
+    ``<arg>/boards/`` or ``<arg>`` (when the caller passed boards/ directly).
+
+    Used by the CLI to render the one-time deprecation warning per
+    ``dbf validate`` invocation. Files outside the boards tree (single-file
+    invocations on a temporary fixture, ad-hoc trees) never trigger.
+    """
+    arg_path = Path(arg)
+    if arg_path.is_file():
+        return []
+    if arg_path.is_dir():
+        if arg_path.name == "boards":
+            boards_root = arg_path
+        elif (arg_path / "boards").is_dir():
+            boards_root = arg_path / "boards"
+        else:
+            # Caller passed an ad-hoc directory (no boards/ child); nothing
+            # in it counts as "flat layout" for deprecation purposes.
+            return []
+    else:
+        return []
+    return [p for p in paths if is_flat_layout_board(p, boards_root)]
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +192,9 @@ def validate_file(path: Path) -> FileValidation:
             version_message="not a mapping",
         )
 
-    errors = sorted(_get_validator().iter_errors(data), key=lambda e: list(e.absolute_path))
+    errors = list(_get_validator().iter_errors(data))
+    errors.extend(_check_confidence_mutual_exclusion(data))
+    errors.sort(key=lambda e: list(e.absolute_path))
     board_version = data.get("ubds_version", "")
     level, msg = check_version(str(board_version)) if board_version else ("error", "missing ubds_version")
 
@@ -146,6 +206,50 @@ def validate_file(path: Path) -> FileValidation:
         version_level=level,
         version_message=msg,
     )
+
+
+def _check_confidence_mutual_exclusion(data: dict) -> List[ValidationError]:
+    """C22 U5 — ``meta.confidence_skipped`` and ``meta.confidence`` keys must
+    not overlap.
+
+    A section listed in ``confidence_skipped`` is hidden from the UI outright;
+    a section keyed in ``confidence`` carries a verification level. Documenting
+    both for the same section is contradictory — the contributor must pick one.
+    Emits one :class:`ValidationError` per offending section so the renderer
+    can show one clear block per problem.
+
+    Schema (U1) accepts each side in isolation; this function only fires when
+    both shapes are well-formed (dict + list-of-strings). Malformed shapes
+    surface via schema validation instead.
+    """
+    meta = data.get("meta")
+    if not isinstance(meta, dict):
+        return []
+    confidence = meta.get("confidence")
+    skipped = meta.get("confidence_skipped")
+    if not isinstance(confidence, dict) or not isinstance(skipped, list):
+        return []
+
+    out: List[ValidationError] = []
+    confidence_keys = set(confidence.keys())
+    seen: set = set()
+    for idx, section in enumerate(skipped):
+        if not isinstance(section, str) or section in seen:
+            continue
+        seen.add(section)
+        if section in confidence_keys:
+            err = ValidationError(
+                message=(
+                    f"section {section!r} is in meta.confidence_skipped "
+                    f"AND has a meta.confidence value — pick one."
+                ),
+                validator="confidence_mutual_exclusion",
+                validator_value=section,
+                instance=section,
+                path=("meta", "confidence_skipped", idx),
+            )
+            out.append(err)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -447,14 +551,16 @@ def _is_valid_png(path: Path) -> Tuple[bool, Optional[int]]:
 def _collect_slug_map(boards_dir: Path) -> Dict[str, List[Path]]:
     """Map each declared ``slug:`` value to the board YAMLs that declare it.
 
-    Only files whose content is a mapping with a scalar ``slug`` key are
-    included. Parse failures are silently skipped here — the schema-level
-    validator surfaces them separately.
+    Walks ``boards_dir`` recursively so both the legacy flat layout and the
+    C22 U2 nested ``boards/<manufacturer-slug>/<board-slug>.ubds.yaml``
+    layout are covered in one pass. Only files whose content is a mapping
+    with a scalar ``slug`` key are included. Parse failures are silently
+    skipped here — the schema-level validator surfaces them separately.
     """
     out: Dict[str, List[Path]] = {}
     if not boards_dir.is_dir():
         return out
-    for yml in sorted(boards_dir.glob(f"*{YAML_SUFFIX}")):
+    for yml in sorted(boards_dir.rglob(f"*{YAML_SUFFIX}")):
         try:
             data = yaml.safe_load(yml.read_text(encoding="utf-8"))
         except (OSError, yaml.YAMLError):
@@ -742,3 +848,449 @@ def check_images(root: Path) -> List[ImageCheckResult]:
                     results.extend(_check_url_coupling(slug, slug_dir, meta))
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Alias-collision validation (C22 U4)
+#
+# ``check_aliases(root)`` walks every board YAML under ``root/boards/`` and
+# every ``root/manufacturers/<slug>.yaml``. It builds a registry of:
+#
+#   - board ``slug``                (kind=slug)
+#   - board ``aliases[]`` entries   (kind=alias)
+#   - manufacturer ``slug``         (kind=manufacturer-slug)
+#   - manufacturer ``canonical_name`` (kind=manufacturer-canonical-name)
+#
+# keyed by a normalized form (NFKC + casefold + whitespace-stripped).
+# Two distinct sources whose normalized values collide are reported as one
+# :class:`AliasCollision`, *provided* at least one of them is alias-valued
+# (``alias`` or ``manufacturer-canonical-name``). Pure slug-vs-slug
+# collisions are intentionally NOT this rule's job — image-validator Rule 13
+# already catches duplicate board slugs and a future check will catch
+# duplicate manufacturer slugs.
+# ---------------------------------------------------------------------------
+
+_ALIAS_WHITESPACE_RE = re.compile(r"\s+")
+
+# Source kinds that COUNT as alias-equivalents for collision triggering.
+# A collision must include at least one of these; otherwise it falls through
+# to other validators (Rule 13 for board slugs, etc.).
+_ALIAS_LIKE_KINDS = frozenset({
+    "alias",
+    "manufacturer-canonical-name",
+    "manufacturer-alias",
+})
+
+
+def _normalize_alias(value: str) -> str:
+    """Return the comparison key for ``value``.
+
+    Case-folded (so casing differs are equal) and with all whitespace stripped
+    (so ``"RPi 5"`` and ``"rpi5"`` are equal). NFKC first so visually-identical
+    Unicode forms compare equal too.
+    """
+    if not isinstance(value, str):
+        return ""
+    s = _ud.normalize("NFKC", value)
+    s = s.casefold()
+    return _ALIAS_WHITESPACE_RE.sub("", s)
+
+
+@dataclass
+class AliasCollision:
+    """One within-batch alias collision.
+
+    ``paths`` lists every distinct file involved (deduplicated, sorted by
+    path string). ``sources`` is the human-readable rendering used in the
+    error message — one entry per (file, kind, raw_value) triple, in the
+    order they were collected.
+    """
+
+    paths: List[Path]
+    sources: List[str]
+    normalized: str
+    severity: ImageSeverity = "error"
+
+    @property
+    def message(self) -> str:
+        return (
+            f"alias collision (normalized={self.normalized!r}): "
+            + "; ".join(self.sources)
+        )
+
+
+def _iter_yaml_files(directory: Path, suffix: str) -> List[Path]:
+    """Sorted list of ``*<suffix>`` files under ``directory`` (recursive).
+
+    Manufacturer files use ``.yaml`` (not ``.ubds.yaml``); board files use
+    ``.ubds.yaml`` and may live one level deep under
+    ``boards/<manufacturer-slug>/`` after U2's nesting migration.
+    """
+    if not directory.is_dir():
+        return []
+    return sorted(directory.rglob(f"*{suffix}"))
+
+
+def check_aliases(root: Path) -> List[AliasCollision]:
+    """Within-batch alias-collision check across boards/ and manufacturers/.
+
+    See module-level docstring for the registry kinds + collision rules.
+    Returns one :class:`AliasCollision` per colliding normalized key, sorted
+    by that key for deterministic output. Empty list when clean.
+    """
+    boards_dir = root / "boards"
+    manufacturers_dir = root / "manufacturers"
+
+    pool: Dict[str, List[Tuple[Path, str, str]]] = {}
+
+    def _add(value: object, path: Path, kind: str) -> None:
+        if not isinstance(value, str) or not value:
+            return
+        key = _normalize_alias(value)
+        if not key:
+            return
+        pool.setdefault(key, []).append((path, kind, value))
+
+    for yml in _iter_yaml_files(boards_dir, YAML_SUFFIX):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        _add(data.get("slug"), yml, "slug")
+        aliases = data.get("aliases")
+        if isinstance(aliases, list):
+            for alias in aliases:
+                _add(alias, yml, "alias")
+
+    for yml in _iter_yaml_files(manufacturers_dir, ".yaml"):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        _add(data.get("slug"), yml, "manufacturer-slug")
+        _add(data.get("canonical_name"), yml, "manufacturer-canonical-name")
+        mfr_aliases = data.get("aliases")
+        if isinstance(mfr_aliases, list):
+            for alias in mfr_aliases:
+                _add(alias, yml, "manufacturer-alias")
+
+    out: List[AliasCollision] = []
+    for key, entries in sorted(pool.items()):
+        # Collisions are cross-file only — a manufacturer file whose slug
+        # equals its own canonical_name normalizes to the same key but is
+        # NOT a collision (same record talking about itself).
+        unique_paths = sorted({p for p, _, _ in entries}, key=str)
+        if len(unique_paths) < 2:
+            continue
+        if not any(kind in _ALIAS_LIKE_KINDS for _, kind, _ in entries):
+            continue
+        descriptors = [
+            f"{p}: {kind} {raw!r}" for p, kind, raw in entries
+        ]
+        out.append(AliasCollision(
+            paths=unique_paths,
+            sources=descriptors,
+            normalized=key,
+        ))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Manufacturer index validation (C22 U3)
+#
+# ``validate_manufacturers(root)`` schema-checks every ``manufacturers/<slug>
+# .yaml`` against ``ubds-manufacturer.schema.json`` AND enforces three
+# directory-scoped rules:
+#
+#   1. ``slug`` field equals filename stem.
+#   2. Add-criterion: a manufacturer file with no referencing board AND
+#      ``well_known: true`` not set is rejected. The 14 well-known vendors
+#      from the C22 spec-revision handoff §6 carry ``well_known: true`` in
+#      their seed YAML; subsequent contributions must add the field
+#      explicitly OR ship a board that references the manufacturer.
+#   3. Manufacturer slug uniqueness across the directory.
+#
+# Cross-file alias-collision (rule from spec.md §Tests) is NOT this function's
+# job — :func:`check_aliases` already covers it (with the U3 extension that
+# pulls manufacturer ``aliases[]`` into the collision pool).
+#
+# ``check_manufacturer_links(root)`` enforces the board↔manufacturer index
+# link rule:
+#
+#   When a board declares ``manufacturer_slug: <s>``, the file
+#   ``manufacturers/<s>.yaml`` MUST exist AND the board's ``manufacturer:``
+#   field MUST equal that file's ``canonical_name`` or be in its ``aliases``.
+#
+# Both functions are pure — they read disk and return a list. The CLI layer
+# in ``cli.py`` formats and exits.
+# ---------------------------------------------------------------------------
+
+_MANUFACTURER_SUFFIX = ".yaml"
+
+
+@dataclass
+class ManufacturerError:
+    """One violation found by :func:`validate_manufacturers`.
+
+    ``severity`` mirrors :class:`ImageCheckResult` so the CLI can render
+    errors and warnings uniformly. The U3 ruleset only emits errors today.
+    """
+
+    path: Path
+    message: str
+    severity: ImageSeverity = "error"
+
+
+_manufacturer_validator: Optional[Draft7Validator] = None
+
+
+def _get_manufacturer_validator() -> Draft7Validator:
+    global _manufacturer_validator
+    if _manufacturer_validator is None:
+        _manufacturer_validator = Draft7Validator(
+            load_manufacturer_schema(), format_checker=FormatChecker()
+        )
+    return _manufacturer_validator
+
+
+def _collect_board_manufacturers(boards_dir: Path) -> List[dict]:
+    """Return a list of ``{path, slug, manufacturer, manufacturer_slug}`` dicts.
+
+    Used by both the manufacturer-orphan check and the link-rule check.
+    Skips parse failures silently — schema validation surfaces them.
+    """
+    out: List[dict] = []
+    if not boards_dir.is_dir():
+        return out
+    for yml in sorted(boards_dir.rglob(f"*{YAML_SUFFIX}")):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        out.append({
+            "path": yml,
+            "slug": data.get("slug"),
+            "manufacturer": data.get("manufacturer"),
+            "manufacturer_slug": data.get("manufacturer_slug"),
+        })
+    return out
+
+
+def _load_manufacturer_yaml(path: Path) -> Optional[dict]:
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    return data
+
+
+def validate_manufacturers(root: Path) -> List[ManufacturerError]:
+    """Validate every ``manufacturers/<slug>.yaml`` under ``root``.
+
+    Per-file rules:
+
+    - Schema: file conforms to ``ubds-manufacturer.schema.json``.
+    - Filename: ``slug`` field equals the filename stem.
+    - Slug pattern: covered by schema (``^[a-z0-9]+(-[a-z0-9]+)*$``).
+    - Parse: YAML must load to a top-level mapping.
+
+    Directory-scoped rules:
+
+    - Slug uniqueness across all manufacturer files.
+    - Add-criterion: each manufacturer must either have ``well_known: true``
+      OR at least one board referencing it (board's ``manufacturer:`` matches
+      ``canonical_name`` / one of ``aliases``, OR board's ``manufacturer_slug``
+      equals the manufacturer's slug).
+    """
+    out: List[ManufacturerError] = []
+    manufacturers_dir = root / "manufacturers"
+    if not manufacturers_dir.is_dir():
+        return out
+
+    files = _iter_yaml_files(manufacturers_dir, _MANUFACTURER_SUFFIX)
+    if not files:
+        return out
+
+    schema_validator = _get_manufacturer_validator()
+    seen_slugs: Dict[str, Path] = {}
+
+    parsed: List[Tuple[Path, dict]] = []
+    for yml in files:
+        data = _load_manufacturer_yaml(yml)
+        if data is None:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"manufacturer file is not a valid YAML mapping: {yml}"
+                ),
+            ))
+            continue
+        # Schema validation.
+        for err in sorted(
+            schema_validator.iter_errors(data),
+            key=lambda e: list(e.absolute_path),
+        ):
+            field = ".".join(str(p) for p in err.absolute_path) or "<root>"
+            out.append(ManufacturerError(
+                path=yml,
+                message=f"schema violation at {field}: {err.message}",
+            ))
+        # Filename-stem ↔ slug field.
+        stem = yml.stem
+        slug = data.get("slug")
+        if isinstance(slug, str) and slug != stem:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"slug field mismatch: file '{yml.name}' declares "
+                    f"slug '{slug}' but stem is '{stem}'"
+                ),
+            ))
+        # Slug uniqueness (only consider well-formed string slugs).
+        if isinstance(slug, str) and slug:
+            prior = seen_slugs.get(slug)
+            if prior is not None:
+                out.append(ManufacturerError(
+                    path=yml,
+                    message=(
+                        f"duplicate manufacturer slug '{slug}': declared in "
+                        f"{prior} and {yml}"
+                    ),
+                ))
+            else:
+                seen_slugs[slug] = yml
+        parsed.append((yml, data))
+
+    # Add-criterion: every manufacturer needs a referencing board OR
+    # well_known: true. Collect referenced manufacturers from boards/.
+    boards = _collect_board_manufacturers(root / "boards")
+
+    referenced_slugs: set = set()
+    referenced_names: set = set()  # normalized
+    for b in boards:
+        ms = b.get("manufacturer_slug")
+        if isinstance(ms, str) and ms:
+            referenced_slugs.add(ms)
+        m = b.get("manufacturer")
+        if isinstance(m, str) and m:
+            referenced_names.add(_normalize_alias(m))
+
+    for yml, data in parsed:
+        if data.get("well_known") is True:
+            continue
+        slug = data.get("slug")
+        canonical = data.get("canonical_name")
+        aliases = data.get("aliases") or []
+        candidates = {canonical}
+        if isinstance(aliases, list):
+            candidates.update(a for a in aliases if isinstance(a, str))
+        normalized = {
+            _normalize_alias(c) for c in candidates if isinstance(c, str) and c
+        }
+        slug_match = isinstance(slug, str) and slug in referenced_slugs
+        name_match = bool(normalized & referenced_names)
+        if not slug_match and not name_match:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"orphan manufacturer: no board in boards/ references "
+                    f"{yml.name} (set 'well_known: true' to grandfather, "
+                    f"or add a board whose manufacturer matches "
+                    f"canonical_name/aliases)"
+                ),
+            ))
+
+    return out
+
+
+@dataclass
+class ManufacturerLinkError:
+    """One board↔manufacturer index link violation."""
+
+    board_path: Path
+    message: str
+    severity: ImageSeverity = "error"
+
+
+def check_manufacturer_links(root: Path) -> List[ManufacturerLinkError]:
+    """For every board with ``manufacturer_slug:``, verify the link.
+
+    Rules:
+
+    - The file ``manufacturers/<manufacturer_slug>.yaml`` must exist.
+    - The board's ``manufacturer:`` must equal the manufacturer's
+      ``canonical_name`` or appear in its ``aliases`` (compared
+      case-insensitively + whitespace-collapsed via :func:`_normalize_alias`).
+
+    Boards without a ``manufacturer_slug:`` field are silently ignored —
+    the field is optional during the v1.1 → v1.2 transition window.
+    """
+    out: List[ManufacturerLinkError] = []
+    manufacturers_dir = root / "manufacturers"
+    boards_dir = root / "boards"
+    if not boards_dir.is_dir():
+        return out
+
+    # Pre-load all manufacturer files keyed by slug for O(1) lookup.
+    mfr_by_slug: Dict[str, dict] = {}
+    for yml in _iter_yaml_files(manufacturers_dir, _MANUFACTURER_SUFFIX):
+        data = _load_manufacturer_yaml(yml)
+        if data is None:
+            continue
+        slug = data.get("slug")
+        if isinstance(slug, str) and slug:
+            mfr_by_slug[slug] = {"path": yml, "data": data}
+
+    for b in _collect_board_manufacturers(boards_dir):
+        mslug = b.get("manufacturer_slug")
+        if not isinstance(mslug, str) or not mslug:
+            continue
+        entry = mfr_by_slug.get(mslug)
+        if entry is None:
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"manufacturer_slug '{mslug}' has no matching "
+                    f"manufacturers/{mslug}.yaml"
+                ),
+            ))
+            continue
+        mfr = entry["data"]
+        canonical = mfr.get("canonical_name")
+        aliases = mfr.get("aliases") or []
+        names: List[str] = []
+        if isinstance(canonical, str) and canonical:
+            names.append(canonical)
+        if isinstance(aliases, list):
+            names.extend(a for a in aliases if isinstance(a, str))
+        manufacturer = b.get("manufacturer")
+        if not isinstance(manufacturer, str) or not manufacturer:
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"board declares manufacturer_slug '{mslug}' but is "
+                    f"missing the manufacturer field"
+                ),
+            ))
+            continue
+        target = _normalize_alias(manufacturer)
+        if target not in {_normalize_alias(n) for n in names}:
+            allowed = ", ".join([repr(canonical)] + [repr(a) for a in aliases])
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"board manufacturer {manufacturer!r} does not match "
+                    f"manufacturers/{mslug}.yaml canonical_name or aliases "
+                    f"({allowed})"
+                ),
+            ))
+
+    return out

@@ -1,0 +1,136 @@
+name: ESP32-S3-LCD-EV-Board
+slug: esp32-s3-lcd-ev-board
+manufacturer: Espressif
+board_type:
+  - MCU
+processing:
+  - part_number: ESP32-S3
+    architecture: Xtensa LX7
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: USB-to-USB
+    type: Communication/Power
+    count: 1
+  - name: USB-to-UART
+    type: Serial Communication/Power
+    count: 1
+  - name: USB Type-A
+    type: Host Adapter
+    count: 1
+  - name: UART
+    type: Native
+    count: 1
+  - name: SPI
+    type: LCD
+    count: 1
+  - name: I2C
+    type: Multipurpose
+    count: 1
+  - name: I2S
+    type: Audio Codec
+    count: 1
+  - name: '8080'
+    type: LCD Parallel
+    count: 1
+  - name: RGB
+    type: LCD Parallel
+    count: 1
+  - name: USB
+    type: USB
+    count: 3
+pin_headers:
+  - name: Expansion Connector
+  - name: LCD Board Connector
+    pitch: 2.54mm
+wireless:
+  - protocol: WiFi
+  - protocol: BLE
+inputs:
+  - name: RESET
+    type: button
+    description: Press this button to reset the system.
+  - name: BOOT
+    type: button
+    description: Holding down the Boot key and momentarily pressing the Reset 
+      key initiates the firmware upload mode.
+  - name: Left Microphone
+    type: microphone
+    description: On-board microphone, connected to Audio ADC Chip.
+  - name: Right Microphone
+    type: microphone
+    description: On-board microphone, connected to Audio ADC Chip.
+  - name: Touch Pad
+    type: touchpad
+    description: Capacitive touch panel (GT1151/FT5x06).
+outputs:
+  - name: LED
+    type: led
+  - name: Speaker
+    type: speaker
+  - name: LCD
+    type: display
+    description: 'Supports multiple LCD subboards: 0.96" 128x64 SSD1315, 2.4" 320x240
+      ST7789V, 3.5" 480x320 ST7796S, 3.95" 480x480 GC9503CV, 4.3" 800x480 ST7262E43'
+onboard_components:
+  io_expander:
+    part: TCA9554
+    vendor: Texas Instruments
+    role: 8-bit I/O expander via I2C
+    key_spec: 8-bit I2C I/O expansion
+  audio_adc:
+    part: ES7210
+    vendor: Everest Semi
+    role: 4-channel audio ADC with AEC
+    key_spec: 4-channel ADC, Acoustic Echo Cancellation
+  usb_uart_bridge:
+    part: CP2102N
+    vendor: Silicon Labs
+    role: USB-to-UART bridge
+    key_spec: up to 3 Mbps
+  audio_codec:
+    part: ES8311
+    vendor: Everest Semi
+    role: mono audio codec
+    key_spec: low-power mono codec with ADC, DAC, headphone driver, digital 
+      audio, analog mixing, gain
+  audio_amplifier:
+    part: NS4150
+    role: 3 W mono class D audio amplifier
+    key_spec: low EMI, 3W mono class D, drives speaker
+power: {}
+thermal: {}
+physical: {}
+boot:
+  modes: USB-DFU + UART bootloader
+  boot_button: BOOT button held during reset
+  programmer: CP2102N USB-to-UART
+software:
+  rtos: FreeRTOS
+  libraries:
+    - ESP-IDF
+    - ESP-IoT-Solution
+meta:
+  confidence:
+    top_level: medium
+    processing: low
+    interfaces: medium
+    pin_headers: medium
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    thermal: low
+    physical: low
+    boot: medium
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-lcd-ev-board/user_guide.html
+    - https://github.com/lvgl/lv_port_espressif_esp32-s3-lcd-ev-board
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-lcd-ev-board/user_guide.html
+ubds_version: '1.1'

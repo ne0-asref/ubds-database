@@ -1,0 +1,113 @@
+name: ESP32-S3-EYE
+slug: esp32-s3-eye
+manufacturer: Espressif
+board_type:
+  - AI
+  - SBC
+processing:
+  - part_number: ESP32-S3R8
+    architecture: Xtensa LX7
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: Digital Microphone
+    type: I2S
+    count: 1
+  - name: Octal SPI PSRAM
+    type: SPI
+    count: 1
+  - name: Micro-USB Port
+    type: USB
+    count: 1
+  - name: LCD Display
+    type: SPI
+    count: 1
+pin_headers:
+  - name: Pin Headers
+    description: Connect the female headers on the sub board.
+  - name: Female Headers
+    description: Used for mounting onto the pin headers on the main board.
+wireless:
+  - protocol: WiFi
+    version: 4,
+  - protocol: BT
+    version: '5'
+  - protocol: BLE
+    version: '5'
+inputs:
+  - name: BOOT
+    type: button
+  - name: RST
+    type: button
+  - name: MENU
+    type: button
+  - name: UP+
+    type: button
+  - name: PLAY
+    type: button
+  - name: MIC1
+    type: microphone
+    description: Digital I2S MEMS microphone with 61 dB SNR and –26 dBFS 
+      sensitivity
+outputs:
+  - name: Module Power LED
+    type: led
+    color: green
+    description: Turns on when USB power is connected, configurable by software
+  - name: Battery Red LED
+    type: led
+    color: red
+    description: Indicates battery charging status
+  - name: LCD Display
+    type: display
+    description: 1.3" LCD display, connected to ESP32-S3 over the SPI bus
+onboard_components:
+  ldo_5v_to_3v3:
+    role: 5 V to 3.3 V power regulator
+    key_spec: Output 3.3 V
+  ldo_3v3_to_1v5:
+    role: 3.3 V to 1.5 V power regulator for camera
+    key_spec: Output 1.5 V
+  ldo_3v3_to_2v8:
+    role: 3.3 V to 2.8 V power regulator for camera
+    key_spec: Output 2.8 V
+  battery_charger:
+    part: ME4054BM5G-N
+    role: 1 A linear Li-ion battery charger
+    key_spec: Charges from USB port
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software:
+  libraries:
+    - ESP-IDF
+    - ESP-WHO
+  languages:
+    - name: C
+metadata:
+  image_url: 
+    https://opengraph.githubassets.com/c206d4f774dddfeaf8a850fb4f1f9eb96bc1f308555e5d98ab3cfc933e1698fd/espressif/esp-who
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: medium
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md
+  product_url: 
+    https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md
+ubds_version: '1.1'

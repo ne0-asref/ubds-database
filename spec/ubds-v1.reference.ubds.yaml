@@ -571,6 +571,24 @@ onboard_components:
   #     manufacturer: "Microchip"
   #     features: [ECDH, ECDSA, AES-128, SHA-256, secure_key_storage]
 
+  # ── Integrated Cameras ──
+  # The Jetson Orin Nano Developer Kit has no integrated camera (cameras
+  # attach via the MIPI CSI-2 connectors documented under `interfaces`),
+  # so this section is left commented out as an illustrative example.
+  # Use `onboard_components.cameras[]` when the board itself ships with a
+  # camera module soldered or rigidly attached (e.g., ESP32-CAM).
+  # Field set is documentation-only under additionalProperties:true — the
+  # validator does not yet enforce types or required keys.
+  # cameras:
+  #   - sensor: "OV2640"
+  #     manufacturer: "OmniVision"
+  #     resolution: "1600x1200"
+  #     interface: "DVP"                                  # DVP | MIPI-CSI2 | parallel
+  #     lens: "fixed-focus"                               # fixed-focus | autofocus | interchangeable
+  #     fov_deg: 78                                       # diagonal
+  #     ir_filter: true
+  #     notes: "Example only — Jetson Orin Nano has no integrated camera."
+
   # ── Other ──
   other: []
   # other:

@@ -140,7 +140,30 @@
 
     "inputs": {"type": "array"},
     "outputs": {"type": "array"},
-    "onboard_components": {"type": ["object", "null"], "additionalProperties": true},
+    "onboard_components": {
+      "type": ["object", "null"],
+      "additionalProperties": true,
+      "properties": {
+        "cameras": {
+          "type": "array",
+          "description": "Integrated camera modules on the board. Documentation-only under additionalProperties:true — fields below describe the convention but the validator does not reject malformed entries (no required keys, all field types accept null). Strict enforcement is deferred to a future cycle once boards using this section exist.",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "sensor": {"type": ["string", "null"], "description": "Sensor model (e.g., \"OV2640\")."},
+              "manufacturer": {"type": ["string", "null"], "description": "Sensor manufacturer (e.g., \"OmniVision\")."},
+              "resolution": {"type": ["string", "null"], "description": "Native resolution as WxH (e.g., \"1600x1200\")."},
+              "interface": {"type": ["string", "null"], "description": "Camera interface (e.g., \"DVP\", \"MIPI-CSI2\", \"parallel\")."},
+              "lens": {"type": ["string", "null"], "description": "Lens type (e.g., \"fixed-focus\", \"autofocus\", \"interchangeable\")."},
+              "fov_deg": {"type": ["number", "null"], "description": "Diagonal field of view in degrees."},
+              "ir_filter": {"type": ["boolean", "null"], "description": "Whether an IR cut filter is fitted."},
+              "notes": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    },
     "power": {"type": ["object", "null"], "additionalProperties": true},
     "thermal": {"type": ["object", "null"], "additionalProperties": true},
 

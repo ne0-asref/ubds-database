@@ -202,6 +202,26 @@ Start with **minimal**. You can always add sections later.
 
 ---
 
+## Integrated cameras
+
+Boards that ship with a camera module physically attached to the PCB
+(for example, an **ESP32-CAM** or a Raspberry Pi camera HAT shipped as
+a single unit) describe the camera under
+`onboard_components.cameras[]`. Common fields are `sensor`,
+`manufacturer`, `resolution`, `interface`, `lens`, `fov_deg`,
+`ir_filter`, and `notes` — see
+[`templates/full.ubds.yaml`](./templates/full.ubds.yaml) for the
+shape and
+[`spec/ubds-v1.reference.ubds.yaml`](./spec/ubds-v1.reference.ubds.yaml)
+for an annotated example.
+
+If a board only exposes a CSI / DVP / parallel **connector** for an
+external camera (the camera ships separately, like the Raspberry Pi 5
+or the Jetson Orin Nano Developer Kit), describe that connector under
+`interfaces:` instead — leave `onboard_components.cameras[]` out.
+
+---
+
 ## Per-section confidence standard
 
 Contributors mark their confidence for each major section in

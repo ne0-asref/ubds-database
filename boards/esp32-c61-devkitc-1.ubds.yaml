@@ -1,0 +1,87 @@
+name: ESP32-C61-DevKitC-1
+slug: esp32-c61-devkitc-1
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+  - DSP
+processing:
+  - part_number: ESP32-C61HR2
+    architecture: RISC-V
+    clock: 160 MHz
+    cores: 1
+    bit_width: 32
+interfaces:
+  - name: SPI
+    type: Bus
+    count: 1
+  - name: USB Type-C (ESP32-C61)
+    type: USB
+    count: 1
+  - name: USB Type-C (UART Bridge)
+    type: USB
+    count: 1
+  - name: UART
+    type: Serial
+    count: 1
+  - name: USB
+    type: USB Type-C to UART Port
+    count: 1
+wireless:
+  - protocol: WiFi
+    version: '6'
+  - protocol: Bluetooth
+    version: '5'
+inputs:
+  - name: BOOT
+    type: button
+    description: Download button. Holding down Boot and then pressing Reset 
+      initiates Firmware Download mode for downloading firmware through the 
+      serial port.
+  - name: RESET
+    type: button
+    description: Press this button to restart the system.
+outputs:
+  - name: PWR LED
+    type: led
+    description: Turns on when the USB power is connected to the board.
+  - name: RGB LED
+    type: led
+    description: Addressable RGB LED, driven by GPIO8.
+onboard_components:
+  pmic:
+    role: 5 V to 3.3 V LDO regulator
+    key_spec: Converts 5 V input to 3.3 V output
+  usb_uart_bridge:
+    role: USB-to-UART bridge
+    key_spec: Transfer rates up to 3 Mbps
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software:
+  libraries:
+    - ESP-IDF
+    - ESP-BSP
+meta:
+  confidence:
+    top_level: low
+    processing: low
+    interfaces: medium
+    pin_headers: low
+    wireless: low
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: partial
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c61/esp32-c61-devkitc-1/user_guide.html
+    - https://github.com/esphome/esphome/issues/13046
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c61/esp32-c61-devkitc-1/user_guide.html
+ubds_version: '1.1'

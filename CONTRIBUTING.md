@@ -14,6 +14,30 @@ contribution under the applicable license.
 
 ---
 
+## Board scope
+
+UBDS describes **boards with their own MCU/SoC** (`board_type: MCU`,
+`SBC`, or `SoM`) **or** **carrier/expansion boards** that host one
+(`board_type: Carrier` or `Expansion`). If your board falls into one of
+those buckets, it belongs here.
+
+**Sensor-only breakouts are out of scope for now.** A bare sensor module
+with no MCU and no carrier role — for example, a plain BME280 or MPU-6050
+breakout that only fans the part's pins out to a header — does not yet
+have a dedicated `board_type` value, and squeezing it into the existing
+enum would muddy filtering for the dev boards UBDS is built around. A
+future cycle will add a dedicated enum value for sensor breakouts; until
+then, please don't submit them.
+
+If your board genuinely sits on the line — for example, a sensor module
+that also acts as an expansion shield with real GPIO fan-out, or a
+breakout that ships its own MCU — classify it with the closest existing
+`board_type` value (`Carrier` or `Expansion` are the usual catch-alls,
+or `MCU` if it has its own controller), or open a maintainer discussion
+before opening the PR. When in doubt, ask first.
+
+---
+
 ## Quick start
 
 1. **Fork** this repository.

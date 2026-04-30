@@ -39,7 +39,7 @@ from .constants import (
     PNG_IHDR_COLOR_TYPE_RGBA,
     PNG_SIGNATURE,
 )
-from .schema import load_schema
+from .schema import load_manufacturer_schema, load_schema
 from .vendor_map import normalize_vendor
 from .version import check_version
 
@@ -875,7 +875,11 @@ _ALIAS_WHITESPACE_RE = re.compile(r"\s+")
 # Source kinds that COUNT as alias-equivalents for collision triggering.
 # A collision must include at least one of these; otherwise it falls through
 # to other validators (Rule 13 for board slugs, etc.).
-_ALIAS_LIKE_KINDS = frozenset({"alias", "manufacturer-canonical-name"})
+_ALIAS_LIKE_KINDS = frozenset({
+    "alias",
+    "manufacturer-canonical-name",
+    "manufacturer-alias",
+})
 
 
 def _normalize_alias(value: str) -> str:
@@ -969,15 +973,21 @@ def check_aliases(root: Path) -> List[AliasCollision]:
             continue
         _add(data.get("slug"), yml, "manufacturer-slug")
         _add(data.get("canonical_name"), yml, "manufacturer-canonical-name")
+        mfr_aliases = data.get("aliases")
+        if isinstance(mfr_aliases, list):
+            for alias in mfr_aliases:
+                _add(alias, yml, "manufacturer-alias")
 
     out: List[AliasCollision] = []
     for key, entries in sorted(pool.items()):
-        if len(entries) < 2:
+        # Collisions are cross-file only — a manufacturer file whose slug
+        # equals its own canonical_name normalizes to the same key but is
+        # NOT a collision (same record talking about itself).
+        unique_paths = sorted({p for p, _, _ in entries}, key=str)
+        if len(unique_paths) < 2:
             continue
         if not any(kind in _ALIAS_LIKE_KINDS for _, kind, _ in entries):
             continue
-        # Deduplicate paths preserving first-seen order, then sort for stability.
-        unique_paths = sorted({p for p, _, _ in entries}, key=str)
         descriptors = [
             f"{p}: {kind} {raw!r}" for p, kind, raw in entries
         ]
@@ -986,4 +996,301 @@ def check_aliases(root: Path) -> List[AliasCollision]:
             sources=descriptors,
             normalized=key,
         ))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Manufacturer index validation (C22 U3)
+#
+# ``validate_manufacturers(root)`` schema-checks every ``manufacturers/<slug>
+# .yaml`` against ``ubds-manufacturer.schema.json`` AND enforces three
+# directory-scoped rules:
+#
+#   1. ``slug`` field equals filename stem.
+#   2. Add-criterion: a manufacturer file with no referencing board AND
+#      ``well_known: true`` not set is rejected. The 14 well-known vendors
+#      from the C22 spec-revision handoff §6 carry ``well_known: true`` in
+#      their seed YAML; subsequent contributions must add the field
+#      explicitly OR ship a board that references the manufacturer.
+#   3. Manufacturer slug uniqueness across the directory.
+#
+# Cross-file alias-collision (rule from spec.md §Tests) is NOT this function's
+# job — :func:`check_aliases` already covers it (with the U3 extension that
+# pulls manufacturer ``aliases[]`` into the collision pool).
+#
+# ``check_manufacturer_links(root)`` enforces the board↔manufacturer index
+# link rule:
+#
+#   When a board declares ``manufacturer_slug: <s>``, the file
+#   ``manufacturers/<s>.yaml`` MUST exist AND the board's ``manufacturer:``
+#   field MUST equal that file's ``canonical_name`` or be in its ``aliases``.
+#
+# Both functions are pure — they read disk and return a list. The CLI layer
+# in ``cli.py`` formats and exits.
+# ---------------------------------------------------------------------------
+
+_MANUFACTURER_SUFFIX = ".yaml"
+
+
+@dataclass
+class ManufacturerError:
+    """One violation found by :func:`validate_manufacturers`.
+
+    ``severity`` mirrors :class:`ImageCheckResult` so the CLI can render
+    errors and warnings uniformly. The U3 ruleset only emits errors today.
+    """
+
+    path: Path
+    message: str
+    severity: ImageSeverity = "error"
+
+
+_manufacturer_validator: Optional[Draft7Validator] = None
+
+
+def _get_manufacturer_validator() -> Draft7Validator:
+    global _manufacturer_validator
+    if _manufacturer_validator is None:
+        _manufacturer_validator = Draft7Validator(
+            load_manufacturer_schema(), format_checker=FormatChecker()
+        )
+    return _manufacturer_validator
+
+
+def _collect_board_manufacturers(boards_dir: Path) -> List[dict]:
+    """Return a list of ``{path, slug, manufacturer, manufacturer_slug}`` dicts.
+
+    Used by both the manufacturer-orphan check and the link-rule check.
+    Skips parse failures silently — schema validation surfaces them.
+    """
+    out: List[dict] = []
+    if not boards_dir.is_dir():
+        return out
+    for yml in sorted(boards_dir.rglob(f"*{YAML_SUFFIX}")):
+        try:
+            data = yaml.safe_load(yml.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        out.append({
+            "path": yml,
+            "slug": data.get("slug"),
+            "manufacturer": data.get("manufacturer"),
+            "manufacturer_slug": data.get("manufacturer_slug"),
+        })
+    return out
+
+
+def _load_manufacturer_yaml(path: Path) -> Optional[dict]:
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    return data
+
+
+def validate_manufacturers(root: Path) -> List[ManufacturerError]:
+    """Validate every ``manufacturers/<slug>.yaml`` under ``root``.
+
+    Per-file rules:
+
+    - Schema: file conforms to ``ubds-manufacturer.schema.json``.
+    - Filename: ``slug`` field equals the filename stem.
+    - Slug pattern: covered by schema (``^[a-z0-9]+(-[a-z0-9]+)*$``).
+    - Parse: YAML must load to a top-level mapping.
+
+    Directory-scoped rules:
+
+    - Slug uniqueness across all manufacturer files.
+    - Add-criterion: each manufacturer must either have ``well_known: true``
+      OR at least one board referencing it (board's ``manufacturer:`` matches
+      ``canonical_name`` / one of ``aliases``, OR board's ``manufacturer_slug``
+      equals the manufacturer's slug).
+    """
+    out: List[ManufacturerError] = []
+    manufacturers_dir = root / "manufacturers"
+    if not manufacturers_dir.is_dir():
+        return out
+
+    files = _iter_yaml_files(manufacturers_dir, _MANUFACTURER_SUFFIX)
+    if not files:
+        return out
+
+    schema_validator = _get_manufacturer_validator()
+    seen_slugs: Dict[str, Path] = {}
+
+    parsed: List[Tuple[Path, dict]] = []
+    for yml in files:
+        data = _load_manufacturer_yaml(yml)
+        if data is None:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"manufacturer file is not a valid YAML mapping: {yml}"
+                ),
+            ))
+            continue
+        # Schema validation.
+        for err in sorted(
+            schema_validator.iter_errors(data),
+            key=lambda e: list(e.absolute_path),
+        ):
+            field = ".".join(str(p) for p in err.absolute_path) or "<root>"
+            out.append(ManufacturerError(
+                path=yml,
+                message=f"schema violation at {field}: {err.message}",
+            ))
+        # Filename-stem ↔ slug field.
+        stem = yml.stem
+        slug = data.get("slug")
+        if isinstance(slug, str) and slug != stem:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"slug field mismatch: file '{yml.name}' declares "
+                    f"slug '{slug}' but stem is '{stem}'"
+                ),
+            ))
+        # Slug uniqueness (only consider well-formed string slugs).
+        if isinstance(slug, str) and slug:
+            prior = seen_slugs.get(slug)
+            if prior is not None:
+                out.append(ManufacturerError(
+                    path=yml,
+                    message=(
+                        f"duplicate manufacturer slug '{slug}': declared in "
+                        f"{prior} and {yml}"
+                    ),
+                ))
+            else:
+                seen_slugs[slug] = yml
+        parsed.append((yml, data))
+
+    # Add-criterion: every manufacturer needs a referencing board OR
+    # well_known: true. Collect referenced manufacturers from boards/.
+    boards = _collect_board_manufacturers(root / "boards")
+
+    referenced_slugs: set = set()
+    referenced_names: set = set()  # normalized
+    for b in boards:
+        ms = b.get("manufacturer_slug")
+        if isinstance(ms, str) and ms:
+            referenced_slugs.add(ms)
+        m = b.get("manufacturer")
+        if isinstance(m, str) and m:
+            referenced_names.add(_normalize_alias(m))
+
+    for yml, data in parsed:
+        if data.get("well_known") is True:
+            continue
+        slug = data.get("slug")
+        canonical = data.get("canonical_name")
+        aliases = data.get("aliases") or []
+        candidates = {canonical}
+        if isinstance(aliases, list):
+            candidates.update(a for a in aliases if isinstance(a, str))
+        normalized = {
+            _normalize_alias(c) for c in candidates if isinstance(c, str) and c
+        }
+        slug_match = isinstance(slug, str) and slug in referenced_slugs
+        name_match = bool(normalized & referenced_names)
+        if not slug_match and not name_match:
+            out.append(ManufacturerError(
+                path=yml,
+                message=(
+                    f"orphan manufacturer: no board in boards/ references "
+                    f"{yml.name} (set 'well_known: true' to grandfather, "
+                    f"or add a board whose manufacturer matches "
+                    f"canonical_name/aliases)"
+                ),
+            ))
+
+    return out
+
+
+@dataclass
+class ManufacturerLinkError:
+    """One board↔manufacturer index link violation."""
+
+    board_path: Path
+    message: str
+    severity: ImageSeverity = "error"
+
+
+def check_manufacturer_links(root: Path) -> List[ManufacturerLinkError]:
+    """For every board with ``manufacturer_slug:``, verify the link.
+
+    Rules:
+
+    - The file ``manufacturers/<manufacturer_slug>.yaml`` must exist.
+    - The board's ``manufacturer:`` must equal the manufacturer's
+      ``canonical_name`` or appear in its ``aliases`` (compared
+      case-insensitively + whitespace-collapsed via :func:`_normalize_alias`).
+
+    Boards without a ``manufacturer_slug:`` field are silently ignored —
+    the field is optional during the v1.1 → v1.2 transition window.
+    """
+    out: List[ManufacturerLinkError] = []
+    manufacturers_dir = root / "manufacturers"
+    boards_dir = root / "boards"
+    if not boards_dir.is_dir():
+        return out
+
+    # Pre-load all manufacturer files keyed by slug for O(1) lookup.
+    mfr_by_slug: Dict[str, dict] = {}
+    for yml in _iter_yaml_files(manufacturers_dir, _MANUFACTURER_SUFFIX):
+        data = _load_manufacturer_yaml(yml)
+        if data is None:
+            continue
+        slug = data.get("slug")
+        if isinstance(slug, str) and slug:
+            mfr_by_slug[slug] = {"path": yml, "data": data}
+
+    for b in _collect_board_manufacturers(boards_dir):
+        mslug = b.get("manufacturer_slug")
+        if not isinstance(mslug, str) or not mslug:
+            continue
+        entry = mfr_by_slug.get(mslug)
+        if entry is None:
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"manufacturer_slug '{mslug}' has no matching "
+                    f"manufacturers/{mslug}.yaml"
+                ),
+            ))
+            continue
+        mfr = entry["data"]
+        canonical = mfr.get("canonical_name")
+        aliases = mfr.get("aliases") or []
+        names: List[str] = []
+        if isinstance(canonical, str) and canonical:
+            names.append(canonical)
+        if isinstance(aliases, list):
+            names.extend(a for a in aliases if isinstance(a, str))
+        manufacturer = b.get("manufacturer")
+        if not isinstance(manufacturer, str) or not manufacturer:
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"board declares manufacturer_slug '{mslug}' but is "
+                    f"missing the manufacturer field"
+                ),
+            ))
+            continue
+        target = _normalize_alias(manufacturer)
+        if target not in {_normalize_alias(n) for n in names}:
+            allowed = ", ".join([repr(canonical)] + [repr(a) for a in aliases])
+            out.append(ManufacturerLinkError(
+                board_path=b["path"],
+                message=(
+                    f"board manufacturer {manufacturer!r} does not match "
+                    f"manufacturers/{mslug}.yaml canonical_name or aliases "
+                    f"({allowed})"
+                ),
+            ))
+
     return out

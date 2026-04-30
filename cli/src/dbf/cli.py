@@ -71,6 +71,34 @@ def _resolve_image_root(path_arg: str) -> Path | None:
         parent = p.parent
         if parent.name == "boards" and (parent.parent / "images").is_dir():
             return parent.parent
+        # C22 U2 nested layout: file lives at <root>/boards/<mfr>/<slug>.yaml
+        if parent.parent.name == "boards" and (parent.parent.parent / "images").is_dir():
+            return parent.parent.parent
+        return None
+    return None
+
+
+def _resolve_manufacturer_root(path_arg: str) -> Path | None:
+    """Infer the repo root for C22 U3 manufacturer + link checks.
+
+    Mirrors :func:`_resolve_image_root` but keys off the presence of
+    ``<root>/manufacturers/`` rather than ``<root>/images/`` so the new
+    rules fire on freshly-cloned trees that haven't bothered with image
+    contributions yet.
+    """
+    p = Path(path_arg)
+    if p.is_dir():
+        if (p / "manufacturers").is_dir() and (p / "boards").is_dir():
+            return p
+        if p.name == "boards" and (p.parent / "manufacturers").is_dir():
+            return p.parent
+        return None
+    if p.is_file():
+        parent = p.parent
+        if parent.name == "boards" and (parent.parent / "manufacturers").is_dir():
+            return parent.parent
+        if parent.parent.name == "boards" and (parent.parent.parent / "manufacturers").is_dir():
+            return parent.parent.parent
         return None
     return None
 
@@ -85,6 +113,15 @@ def _print_image_result(r: _validate.ImageCheckResult) -> None:
     click.echo(f"  path:   {r.path}")
     click.echo(f"  rule:   {r.message}")
     click.echo("  remedy: see CONTRIBUTING.md §Adding a board image")
+    click.echo("")
+
+
+def _print_manufacturer_result(path: Path, message: str) -> None:
+    """Render one manufacturer / link / alias error as an Elm-style block."""
+    click.echo("-- MANUFACTURER VALIDATION ERROR " + "-" * 33)
+    click.echo(f"  path:   {path}")
+    click.echo(f"  rule:   {message}")
+    click.echo("  remedy: see manufacturers/ + spec/ubds-manufacturer.schema.json")
     click.echo("")
 
 
@@ -205,6 +242,46 @@ def validate_cmd(path: str, fix: bool, as_json: bool, check_images: bool | None)
         # Default mode on a directory with no images/ sibling — silently
         # skip. Legacy trees (tests, ad-hoc YAML dirs) still schema-validate.
         run_image_check = False
+
+    # C22 U3 — manufacturer index validation + link rule + alias collisions
+    # across boards/ ↔ manufacturers/. Runs whenever a manufacturers/ tree
+    # sits next to the path the user passed; silently skipped otherwise so
+    # ad-hoc invocations (single fixture, scratch tree) keep their slim
+    # output. Independent of --check-images.
+    mfr_root = _resolve_manufacturer_root(path)
+    if mfr_root is not None:
+        mfr_errors = _validate.validate_manufacturers(mfr_root)
+        link_errors = _validate.check_manufacturer_links(mfr_root)
+        alias_errors = _validate.check_aliases(mfr_root)
+        any_mfr = bool(mfr_errors or link_errors or alias_errors)
+        if any_mfr:
+            any_failed = True
+        if as_json:
+            click.echo(_json.dumps(
+                [
+                    {"path": str(e.path), "severity": e.severity, "message": e.message}
+                    for e in mfr_errors
+                ] + [
+                    {"path": str(e.board_path), "severity": e.severity, "message": e.message}
+                    for e in link_errors
+                ] + [
+                    {
+                        "paths": [str(p) for p in e.paths],
+                        "severity": e.severity,
+                        "message": e.message,
+                    }
+                    for e in alias_errors
+                ],
+                indent=2, sort_keys=True,
+            ))
+        else:
+            for e in mfr_errors:
+                _print_manufacturer_result(e.path, e.message)
+            for e in link_errors:
+                _print_manufacturer_result(e.board_path, e.message)
+            for e in alias_errors:
+                # check_aliases collisions span multiple paths; show first.
+                _print_manufacturer_result(e.paths[0], e.message)
 
     if run_image_check and root is not None:
         image_results = _validate.check_images(root)

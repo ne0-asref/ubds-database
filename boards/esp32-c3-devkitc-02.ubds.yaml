@@ -1,0 +1,83 @@
+name: ESP32-C3-DevKitC-02
+slug: esp32-c3-devkitc-02
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+processing:
+  - part_number: ESP32-C3
+    architecture: RISC-V
+    clock: 160 MHz
+    cores: 1
+    bit_width: 32
+interfaces:
+  - name: SPI
+    type: bus
+    count: 1
+  - name: USB
+    type: communication
+    count: 1
+  - name: UART
+    type: communication
+    count: 1
+  - name: ADC
+    type: analog input
+    count: 1
+wireless:
+  - protocol: WiFi
+    version: '4'
+  - protocol: Bluetooth Low Energy
+  - protocol: BT
+    version: '5.0'
+inputs:
+  - name: Boot Button
+    type: button
+    description: Download button. Holding down Boot and then pressing Reset 
+      initiates Firmware Download mode for downloading firmware through the 
+      serial port.
+  - name: Reset Button
+    type: button
+    description: Press this button to restart the system.
+outputs:
+  - name: 5 V Power On LED
+    type: led
+    description: Turns on when the USB power is connected to the board.
+  - name: RGB LED
+    type: led
+    description: Addressable RGB LED, driven by GPIO8.
+onboard_components:
+  ldo:
+    role: Power regulator
+    key_spec: 5 V to 3.3 V output
+  usb_uart_bridge:
+    role: USB-to-UART bridge
+    key_spec: Transfer rates up to 3 Mbps
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software: {}
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-devkitc-02/index.html
+    - https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitc-02.html
+    - https://github.com/jwillikers/esphome-esp32-c3-devkitc-02
+    - https://github.com/hmr/ESP32-C3-DevKitC-02_Pinout
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-devkitc-02/index.html
+ubds_version: '1.1'

@@ -42,10 +42,12 @@ before opening the PR. When in doubt, ask first.
 
 1. **Fork** this repository.
 2. Copy [`templates/minimal.ubds.yaml`](./templates/minimal.ubds.yaml) to
-   `boards/<your-board-slug>.ubds.yaml`.
+   `boards/<manufacturer-slug>/<your-board-slug>.ubds.yaml`. The
+   `<manufacturer-slug>` segment must match an entry in `manufacturers/`
+   (or be added in the same PR — see [Adding a manufacturer](#adding-a-manufacturer)).
 3. Fill in every field — the template has comments explaining each one.
-4. Run `dbf validate boards/<your-board-slug>.ubds.yaml` to check your file
-   (install the CLI with `pip install ./cli`).
+4. Run `dbf validate boards/<manufacturer-slug>/<your-board-slug>.ubds.yaml`
+   to check your file (install the CLI with `pip install ./cli`).
 5. Open a pull request using the **Board Submission** template.
 
 That's it for most boards. If your board has many features (multiple radios,
@@ -53,6 +55,66 @@ complex power tree, etc.), start from
 [`templates/full.ubds.yaml`](./templates/full.ubds.yaml) instead. For the
 exhaustive field reference, see
 [`spec/ubds-v1.reference.ubds.yaml`](./spec/ubds-v1.reference.ubds.yaml).
+
+---
+
+## Adding a board
+
+For most boards the **Quick start** above is everything — copy the
+template, fill in fields, and open a PR. A few extra notes for boards
+that fall outside the default case:
+
+- **Use the nested layout.** New boards live at
+  `boards/<manufacturer-slug>/<board-slug>.ubds.yaml`. The
+  `<manufacturer-slug>` segment must match a file in `manufacturers/`
+  (see [Adding a manufacturer](#adding-a-manufacturer) below) or be
+  added in the same PR.
+- **If your board has an integrated camera sensor** (not just a
+  connector), populate `onboard_components.cameras[]`. See the
+  [Integrated cameras](#integrated-cameras) section for the full shape.
+- **If your board uses any v1.2 field** — `aliases`,
+  `confidence_skipped`, `fetch_warnings`, `source_quality`,
+  `manufacturer_slug`, or integrated cameras — bump `ubds_version`
+  to `1.2`.
+
+---
+
+## Adding a manufacturer
+
+The `manufacturers/` index is a YAML-per-vendor directory the validator
+uses to resolve `manufacturer_slug` references and to reject misspelled
+variants. Each entry is a single file:
+
+```yaml
+# manufacturers/<slug>.yaml
+slug: "<slug>"                   # kebab-case, must match the filename stem
+canonical_name: "<Vendor name>"  # verified against the vendor's own homepage
+aliases:                         # other names this vendor is known by
+  - "<alias 1>"
+  - "<alias 2>"
+homepage_url: "https://example.com/"
+country_code: "US"               # ISO 3166-1 alpha-2 (optional)
+well_known: false                # see add-criterion below
+```
+
+**Add-criterion.** A manufacturer file is only accepted if **at least
+one** of the following holds:
+
+- a board in `boards/` references this manufacturer's `slug` via its
+  `manufacturer_slug` field, or
+- the entry is marked `well_known: true` — a maintainer-blessed
+  allow-list reserved for vendors that ship many boards we expect to
+  cover over time.
+
+Drive-by manufacturer additions with no referencing board and no
+`well_known: true` are rejected. Pair the manufacturer YAML with the
+board that needs it in the same PR.
+
+**Slug discipline.** `slug` must match the filename stem and use
+kebab-case (`^[a-z0-9]+(-[a-z0-9]+)*$`) — no underscores, no leading or
+trailing hyphens. Aliases are merged into a global pool; the validator
+rejects your PR if any alias collides with an alias or canonical name
+on another manufacturer.
 
 ---
 
@@ -177,8 +239,9 @@ size, PNG signature, pixel format. Paste the output into your PR.
 - **`meta.sources[]` required.** At least one verifiable public URL (datasheet,
   official docs, or manufacturer page) used to compile the data.
 
-- **Must pass `dbf validate`.** Run `dbf validate boards/<slug>.ubds.yaml`
-  before submitting. Paste the output into your PR.
+- **Must pass `dbf validate`.** Run
+  `dbf validate boards/<manufacturer-slug>/<slug>.ubds.yaml` before
+  submitting. Paste the output into your PR.
 
 - **Indie and open-hardware boards are first-class citizens.** A board from a
   solo maker with published KiCad files is just as welcome as one from a

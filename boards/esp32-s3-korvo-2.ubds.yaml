@@ -1,0 +1,130 @@
+name: ESP32-S3 Korvo 2 Main Development Board
+slug: esp32-s3-korvo-2
+manufacturer: Espressif
+board_type:
+  - MCU
+  - AI
+processing:
+  - part_number: ESP32-S3-WROOM-1
+    architecture: Xtensa LX7
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: USB-to-UART Port
+    type: USB
+    count: 1
+  - name: USB Power Port
+    type: USB
+    count: 1
+  - name: UART0
+    type: UART
+    count: 1
+  - name: I2C
+    type: I2C
+    count: 1
+  - name: I2S
+    type: I2S
+    count: 1
+  - name: LCD SPI
+    type: SPI
+    count: 1
+  - name: Camera Interface
+    type: Parallel
+    count: 1
+  - name: MicroSD Slot
+    type: SDIO
+    count: 1
+wireless:
+  - protocol: WiFi
+  - protocol: BLE
+inputs:
+  - name: BOOT
+    type: button
+    description: holding down the Boot key and momentarily pressing the Reset 
+      key initiates the firmware upload mode
+  - name: RESET
+    type: button
+    description: pressing this button alone resets the system
+  - name: REC
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: MUTE
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: PLAY
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: SET
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: VOL-
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: VOL+
+    type: button
+    description: One of six press keys labeled REC, MUTE, PLAY, SET, VOL- and 
+      VOL+. They are routed to ESP32-S3-WROOM-1 module and intended for 
+      development and testing of a UI for audio applications using a dedicated 
+      API.
+  - name: Left Microphone
+    type: microphone
+    description: Onboard microphone connected to ADC.
+  - name: Right Microphone
+    type: microphone
+    description: Onboard microphone connected to ADC.
+  - name: Power Switch
+    type: switch
+    description: 'Power on/off knob: toggling it down powers the board on; toggling
+      it up powers the board off.'
+onboard_components: {}
+power:
+  vin_range: 5V
+  usb: USB Micro-B 5V 2A
+  battery: 3.7V Li-ion via 2-pin socket
+thermal: {}
+physical: {}
+boot: {}
+software: {}
+metadata:
+  image_url: https://www.adafruit.com/images/480x360/5829-05.jpg
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: low
+    onboard_components: low
+    power: medium
+    thermal: low
+    physical: low
+    boot: low
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://www.adafruit.com/product/5829
+    - https://espressif-docs.readthedocs-hosted.com/projects/esp-adf/en/latest/design-guide/dev-boards/user-guide-esp32-s3-korvo-2.html
+    - https://github.com/espressif/esp-adf/blob/master/docs/en/design-guide/dev-boards/user-guide-esp32-s3-korvo-2.rst
+    - https://docs.espressif.com/projects/esp-adf/en/latest/design-guide/dev-boards/user-guide-esp32-s3-korvo-2.html
+  product_url: 
+    https://github.com/espressif/esp-adf/blob/master/docs/en/design-guide/dev-boards/user-guide-esp32-s3-korvo-2.rst
+ubds_version: '1.1'

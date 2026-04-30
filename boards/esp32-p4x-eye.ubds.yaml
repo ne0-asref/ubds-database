@@ -1,0 +1,136 @@
+name: ESP32-P4X-EYE
+slug: esp32-p4x-eye
+manufacturer: Espressif
+processing:
+  - part_number: ESP32-P4
+    architecture: RISC-V
+    cores: 2
+    clock: 400 MHz
+    bit_width: 32
+interfaces:
+  - name: USB 2.0 Device Port
+    type: USB
+    count: 1
+  - name: USB Debug Port
+    type: USB
+    count: 1
+  - name: UART
+    type: Serial
+    count: 1
+  - name: SPI
+    type: Bus
+    count: 3
+  - name: I2C
+    type: Bus
+    count: 1
+  - name: MIPI CSI
+    type: Camera
+    count: 1
+  - name: SDIO
+    type: Bus
+    count: 1
+  - name: ADC
+    type: Analog
+    count: 1
+wireless:
+  - protocol: WiFi
+  - protocol: BT
+inputs:
+  - name: Power Switch
+    type: switch
+    description: Flip to “I” to power on the board with 5 V input; flip to “O” 
+      to power off.
+  - name: User-defined Buttons
+    type: button
+    description: Customizable by user application.
+  - name: Reset Button
+    type: button
+    description: Resets the board. Marked with `↻` on the enclosure.
+  - name: Boot Button
+    type: button
+    description: Controls boot mode. Marked with `⚙` on the enclosure. Press the
+      Reset Button while holding down the Boot Button to reset ESP32-P4 and 
+      enter firmware download mode. Firmware can then be downloaded to SPI flash
+      via the USB Debug Port. In general applications, it can act as a 
+      confirmation button.
+  - name: Digital Microphone
+    type: microphone
+    description: Used for voice recognition or audio recording.
+outputs:
+  - name: LCD
+    type: display
+    description: 1.54-inch LCD with 240 × 240 resolution and SPI interface
+  - name: Charging Indicator
+    type: led
+    color: red/green
+    description: 'Indicates battery charging status: red while charging, green when
+      full'
+  - name: Fill Light
+    type: led
+    description: Provides illumination for image capture and video recording
+onboard_components:
+  spi_flash:
+    role: SPI flash storage
+    key_spec: 16 MB
+  esp32_c6_mini_1u:
+    part: ESP32-C6-MINI-1U
+    vendor: Espressif
+    role: Wi-Fi and Bluetooth communication module
+  fill_light:
+    role: Provides illumination for image capture and video recording
+  digital_microphone:
+    role: Used for voice recognition or audio recording
+  mipi_csi_connector:
+    role: Connects to the camera module
+  female_header:
+    role: 2 x 10P header, customizable based on application
+  camera:
+    role: 2 MP resolution with manually adjustable focal length
+  rotary_encoder:
+    role: Customizable functions such as LCD interface control or camera zoom 
+      adjustment
+  lcd_display:
+    part: ST7789
+    role: LCD display driver
+  microsd_slot:
+    role: MicroSD card interface supports 1-bit and 4-bit SD bus, SDIO or SPI 
+      protocol
+power:
+  vin_range: 5V
+  usb: USB Type-C 5V
+  battery: Lithium battery via Battery Connector
+  regulators: 3.3V LDO
+thermal: {}
+physical: {}
+boot:
+  modes: USB Debug Port
+  boot_button: BOOT button held during reset
+  programmer: USB Debug Port
+software: {}
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: medium
+    thermal: low
+    physical: low
+    boot: medium
+    software: low
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-eye/user_guide.html
+    - https://github.com/espressif/esp-dev-kits/blob/master/examples/esp32-p4-eye/README.md
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4x-eye/user_guide.html
+    - https://www.andibond.com/esp32-p4x-eye-pinout-technical-guide/
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-eye/user_guide.html
+ubds_version: '1.1'
+board_type:
+  - Other

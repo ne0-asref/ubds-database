@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/ne0-asref/ubds-database/spec/ubds-manufacturer.schema.json",
+  "title": "UBDS Manufacturer Index — v1",
+  "description": "One file per distinct vendor under manufacturers/<slug>.yaml. The slug is kebab-case and equals the filename stem. canonical_name is the vendor's own self-name (verified against their homepage); aliases capture short-forms and historical names so board YAMLs can match by either.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["slug", "canonical_name", "homepage_url"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Kebab-case slug; must equal the filename stem and the pattern in ubds-v1.schema.json#/properties/manufacturer_slug."
+    },
+    "canonical_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Vendor's official self-name as it appears on their homepage. Not a reseller, distributor, or affiliate name."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true,
+      "description": "Short-forms, historical names, and stylings the vendor uses or the community recognizes. Compared case-insensitively + whitespace-collapsed across the directory."
+    },
+    "homepage_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Vendor's primary homepage URL (used to verify canonical_name)."
+    },
+    "country_code": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO-3166-1 alpha-2 country code for the vendor's HQ; optional."
+    },
+    "well_known": {
+      "type": "boolean",
+      "description": "If true, the manufacturer is grandfathered into the orphan-add rule (the 14 vendors named in the C22 ubds-spec-revision handoff §6). New non-well-known manufacturers must have at least one referencing board to be accepted."
+    }
+  }
+}

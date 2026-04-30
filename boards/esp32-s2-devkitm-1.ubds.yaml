@@ -1,0 +1,96 @@
+name: ESP32-S2-DevKitM-1
+slug: esp32-s2-devkitm-1
+manufacturer: Espressif Systems
+board_type:
+  - MCU
+  - SDR
+processing:
+  - part_number: ESP32-S2
+    architecture: Xtensa
+    clock: 240 MHz
+    cores: 1
+    bit_width: 32
+interfaces:
+  - name: I2C
+    type: Serial
+    count: 2
+  - name: Micro-USB Port
+    type: USB
+    count: 1
+  - name: USB to UART Bridge
+    type: Bridge
+    count: 1
+  - name: UART
+    type: UART
+    count: 1
+  - name: SPI
+    type: SPI
+wireless:
+  - protocol: WiFi
+inputs:
+  - name: Reset
+    type: button
+    description: Reset button.
+  - name: Boot
+    type: button
+    description: Download button. Holding down Boot and then pressing Reset 
+      initiates Firmware Download mode.
+outputs:
+  - name: PWR LED
+    type: led
+  - name: RGB LED
+    type: led
+    color: RGB
+onboard_components:
+  usb_uart_bridge:
+    role: USB-to-UART bridge
+    key_spec: Transfer rates up to 3 Mbps
+  pmic:
+    role: 5V-to-3.3V LDO regulator
+    key_spec: Input 5V, output 3.3V
+power:
+  vin_range: 5V
+  usb: Micro-USB 5V
+  regulators: 3.3V LDO
+thermal: {}
+physical: {}
+boot: {}
+software:
+  rtos: FreeRTOS
+  ides:
+    - PlatformIO
+    - Arduino IDE
+  libraries:
+    - ESP-IDF
+    - Arduino core
+  languages:
+    - name: C
+    - name: C++
+metadata:
+  image_url: https://dfimg.dfrobot.com/enshop/image/data/DFR0813/DFR0813_260212 
+    (1).jpg
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: medium
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://www.dfrobot.com/product-2249.html
+    - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s2/esp32-s2-devkitm-1/index.html
+    - https://github.com/platformio/platform-espressif32/issues/560
+    - https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32s2/hw-reference/esp32s2/user-guide-devkitm-1-v1.html
+  product_url: 
+    https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s2/esp32-s2-devkitm-1/index.html
+ubds_version: '1.1'

@@ -1,0 +1,102 @@
+name: Espressif ESP32-S3-BOX-3
+slug: espressif-esp32-s3-box-3
+manufacturer: Espressif Systems
+board_type:
+  - AI
+  - MCU
+  - Industrial
+processing:
+  - part_number: ESP32-S3
+    architecture: AI SoC
+    clock: 240 MHz
+    cores: 2
+    bit_width: 32
+interfaces:
+  - name: SPI
+    type: SPI
+    count: 1
+  - name: USB
+    type: USB
+    count: 1
+  - name: Digital IO
+    type: Digital IO
+    count: 48
+  - name: Analog Input
+    type: Analog Input
+    count: 20
+  - name: PWM
+    type: PWM
+    count: 25
+  - name: Interrupts
+    type: Interrupts
+    count: 46
+  - name: UART
+    type: Serial
+    count: 1
+wireless:
+  - protocol: WiFi
+  - protocol: BT
+    version: '5'
+inputs:
+  - name: MIC1
+    type: microphone
+  - name: MIC2
+    type: microphone
+  - name: TOUCHSCREEN
+    type: touchpad
+outputs:
+  - name: Speaker
+    type: speaker
+    description: built-in speaker
+  - name: Touchscreen Display
+    type: display
+    description: 2.4-inch (320 x 240) SPI touchscreen
+onboard_components: {}
+power: {}
+thermal: {}
+physical: {}
+boot: {}
+software:
+  rtos: FreeRTOS
+  languages:
+    - name: C
+    - name: C++
+    - name: CircuitPython
+  libraries:
+    - ESP-IDF
+    - ESP-SR
+    - ESP RainMaker
+    - LVGL
+    - SquareLine Studio
+    - Embedded Wizard
+    - ESP Insights
+    - ESP Matter Solution
+    - IDF Component Manager
+metadata:
+  image_url: https://www.adafruit.com/images/480x360/5835-06
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: low
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: low
+    power: low
+    thermal: low
+    physical: low
+    boot: low
+    software: medium
+    certifications: low
+  data_completeness: complete
+  sources:
+    - https://www.adafruit.com/product/5835
+    - https://github.com/espressif/esp-box/blob/master/docs/hardware_overview/esp32_s3_box_3/hardware_overview_for_box_3.md
+    - https://www.adafruit.com/product/5290
+    - https://doc.embedded-wizard.de/getting-started-esp32-s3-box-3?v=14.00
+    - https://www.espboards.dev/esp32/esp32s3box/
+  product_url: 
+    https://github.com/espressif/esp-box/blob/master/docs/hardware_overview/esp32_s3_box_3/hardware_overview_for_box_3.md
+ubds_version: '1.1'

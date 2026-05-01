@@ -73,24 +73,22 @@ that fall outside the default case:
   connector), populate `onboard_components.cameras[]`. See the
   [Integrated cameras](#integrated-cameras) section for the full shape.
 
-### When to bump `ubds_version`
+### `ubds_version` — set to the current schema version
 
-The schema version on each board file (`ubds_version: "1.x"`) is **not**
-an automatic "track the latest spec" field. Bump it only when the board
-starts using a field that was introduced in a newer minor version.
+Every board YAML must declare `ubds_version` matching the **current**
+UBDS schema version (currently `"1.2"`). The templates in `templates/`
+are pre-set; new boards inherit it automatically.
 
-- **v1.2-introduced fields** (bump to `"1.2"` if any are present):
-  `aliases`, `manufacturer_slug`, `confidence_skipped`, `fetch_warnings`,
-  `source_quality`, integrated cameras (`onboard_components.cameras[]`).
-- **Otherwise, leave it at the version the board was authored against.**
-  Schema minors are strictly additive — a v1.1 board validates cleanly
-  against the v1.2 CLI. The 22 production boards still on `"1.1"` are
-  intentional, not stale.
+When the schema bumps minor (e.g. v1.2 → v1.3), every board YAML in the
+repo gets bumped in a single mechanical sweep PR before the new schema
+version becomes the documented current. The `dbf migrate` command does
+this in-place across the tree.
 
-This back-compat decision is enforced by the CLI:
-`dbf validate` accepts any `1.x` board against any `1.x` schema. The CLI
-warns only when a board declares a NEWER minor than the CLI knows about
-(meaning the user should upgrade `dbf`). See `cli/src/dbf/version.py`
+Schema minors are strictly additive — every old board still validates
+against the new schema, so the bump is purely a label sync. The CLI
+accepts any `1.x` board against the bundled v1.2 schema; it warns only
+when a board declares a NEWER minor than the CLI knows about (meaning
+the contributor needs to upgrade `dbf`). See `cli/src/dbf/version.py`
 for the exact rule.
 
 ---

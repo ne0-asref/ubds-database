@@ -186,7 +186,7 @@ def test_validate_fix_idempotent(runner, tmp_path, monkeypatch):
 def test_legacy_pricing_block_rejected(runner, tmp_path):
     f = tmp_path / "with-pricing.ubds.yaml"
     f.write_text(
-        'ubds_version: "1.1"\n'
+        'ubds_version: "1.2"\n'
         'name: "Priced Board"\n'
         'slug: "priced-board"\n'
         'manufacturer: "Test Co"\n'
@@ -205,7 +205,7 @@ def test_legacy_pricing_block_rejected(runner, tmp_path):
 def test_missing_product_url_rejected(runner, tmp_path):
     f = tmp_path / "no-product.ubds.yaml"
     f.write_text(
-        'ubds_version: "1.1"\n'
+        'ubds_version: "1.2"\n'
         'name: "No Product Board"\n'
         'slug: "no-product-board"\n'
         'manufacturer: "Test Co"\n'
@@ -222,7 +222,7 @@ def test_missing_product_url_rejected(runner, tmp_path):
 def test_non_uri_product_url_rejected(runner, tmp_path):
     f = tmp_path / "bad-product.ubds.yaml"
     f.write_text(
-        'ubds_version: "1.1"\n'
+        'ubds_version: "1.2"\n'
         'name: "Bad Product Board"\n'
         'slug: "bad-product-board"\n'
         'manufacturer: "Test Co"\n'

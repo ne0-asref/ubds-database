@@ -1231,7 +1231,10 @@ def check_manufacturer_links(root: Path) -> List[ManufacturerLinkError]:
       case-insensitively + whitespace-collapsed via :func:`_normalize_alias`).
 
     Boards without a ``manufacturer_slug:`` field are silently ignored —
-    the field is optional during the v1.1 → v1.2 transition window.
+    the field is optional. Boards that omit it skip this validation rule
+    entirely and instead rely on the legacy free-form ``manufacturer:``
+    string. New contributions should populate ``manufacturer_slug:`` so
+    this rule runs.
     """
     out: List[ManufacturerLinkError] = []
     manufacturers_dir = root / "manufacturers"

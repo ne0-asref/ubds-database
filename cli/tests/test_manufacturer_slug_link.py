@@ -7,8 +7,8 @@ When a board declares ``manufacturer_slug:``, the validator confirms:
    ``canonical_name`` OR is in its ``aliases`` (case-insensitive +
    whitespace-collapsed).
 
-Boards without ``manufacturer_slug:`` are silently ignored — the field is
-optional during the v1.1 → v1.2 transition window.
+Boards without ``manufacturer_slug:`` are silently ignored — the field
+is optional. New contributions should populate it so this rule runs.
 """
 from __future__ import annotations
 

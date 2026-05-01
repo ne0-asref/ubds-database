@@ -5,7 +5,7 @@ Open-source directory of embedded development boards, described in the
 
 This repository holds three things:
 
-- **`spec/`** — the UBDS JSON Schema (v1.1). Start at
+- **`spec/`** — the UBDS JSON Schema (v1.2). Start at
   [`spec/ubds-v1.schema.json`](./spec/ubds-v1.schema.json).
 - **`boards/`** — one `*.ubds.yaml` file per board, validated against the
   schema by CI on every push and pull request.

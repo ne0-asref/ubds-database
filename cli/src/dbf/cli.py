@@ -22,7 +22,7 @@ from .importers.platformio import import_platformio_cmd as _import_platformio_cm
 from .info import info_cmd as _info_cmd
 from .search import search_cmd as _search_cmd
 
-SCHEMA_VERSION = "1.1"
+SCHEMA_VERSION = "1.2"
 
 
 def _print_version(ctx: click.Context, param: click.Parameter, value: bool) -> None:

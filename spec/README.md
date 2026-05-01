@@ -4,10 +4,17 @@ UBDS is a portable, human-readable standard for describing embedded development
 boards. Author boards in YAML, validate against the JSON Schema, and ingest
 into any backend.
 
-**Current version: 1.1** — commerce separation. Pricing, vendors, and
-affiliate data are **not** part of UBDS; they live in the devboardfinder
-`board_sellers` table. See [CHANGELOG.md](CHANGELOG.md) for the full migration
-note.
+**Current version: 1.2** — manufacturers, nested layout, integrated cameras.
+Schema minors are additive and back-compatible: boards stay on the version
+they were authored against and only bump `ubds_version` when they start
+using fields introduced in a newer minor. See
+[CHANGELOG.md](CHANGELOG.md) for the full migration notes and
+[CONTRIBUTING.md](../CONTRIBUTING.md#when-to-bump-ubds_version) for
+the bump policy.
+
+Commerce separation (pricing, vendors, affiliate data) remains an invariant
+across all versions — that data is **not** part of UBDS; it lives in the
+devboardfinder `board_sellers` table.
 
 ## Required meta fields
 

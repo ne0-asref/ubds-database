@@ -12,7 +12,7 @@ import json
 from importlib.resources import files
 from pathlib import Path
 
-BUNDLED_VERSION = "1.1"
+BUNDLED_VERSION = "1.2"
 
 _SCHEMA_RESOURCE = "data/ubds-v1.schema.json"
 _MANUFACTURER_SCHEMA_RESOURCE = "data/ubds-manufacturer.schema.json"

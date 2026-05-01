@@ -72,10 +72,26 @@ that fall outside the default case:
 - **If your board has an integrated camera sensor** (not just a
   connector), populate `onboard_components.cameras[]`. See the
   [Integrated cameras](#integrated-cameras) section for the full shape.
-- **If your board uses any v1.2 field** — `aliases`,
-  `confidence_skipped`, `fetch_warnings`, `source_quality`,
-  `manufacturer_slug`, or integrated cameras — bump `ubds_version`
-  to `1.2`.
+
+### When to bump `ubds_version`
+
+The schema version on each board file (`ubds_version: "1.x"`) is **not**
+an automatic "track the latest spec" field. Bump it only when the board
+starts using a field that was introduced in a newer minor version.
+
+- **v1.2-introduced fields** (bump to `"1.2"` if any are present):
+  `aliases`, `manufacturer_slug`, `confidence_skipped`, `fetch_warnings`,
+  `source_quality`, integrated cameras (`onboard_components.cameras[]`).
+- **Otherwise, leave it at the version the board was authored against.**
+  Schema minors are strictly additive — a v1.1 board validates cleanly
+  against the v1.2 CLI. The 22 production boards still on `"1.1"` are
+  intentional, not stale.
+
+This back-compat decision is enforced by the CLI:
+`dbf validate` accepts any `1.x` board against any `1.x` schema. The CLI
+warns only when a board declares a NEWER minor than the CLI knows about
+(meaning the user should upgrade `dbf`). See `cli/src/dbf/version.py`
+for the exact rule.
 
 ---
 

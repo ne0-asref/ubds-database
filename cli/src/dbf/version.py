@@ -4,10 +4,16 @@ Compares a board file's declared ``ubds_version`` against the schema version
 bundled with this CLI build. Returns a 3-state level so callers can decide
 how loud to be:
 
-* ``("ok", "")`` — exact match
-* ``("warn", msg)`` — same major, different minor (forward/backward compatible
-  but caller should surface a notice)
-* ``("error", msg)`` — different major, or unparseable version string
+* ``("ok", "")`` — exact match, OR board declares an older minor version
+  than the bundled schema. Older boards are explicitly supported per the
+  back-compat design: schema minors are additive, so a v1.1 board validates
+  cleanly against a v1.2 CLI. Boards bump their own ``ubds_version`` only
+  when they start using fields introduced in a newer minor (see
+  CONTRIBUTING.md §"When to bump ubds_version").
+* ``("warn", msg)`` — board declares a NEWER minor than the CLI knows about.
+  CLI may not validate fields the board uses; surface a notice and suggest
+  upgrading dbf.
+* ``("error", msg)`` — different major, or unparseable version string.
 """
 from __future__ import annotations
 
@@ -41,9 +47,6 @@ def check_version(board_version: str) -> tuple[str, str]:
             f"ubds_version {board_version!r} is not a valid MAJOR.MINOR string",
         )
 
-    if board == bundled:
-        return ("ok", "")
-
     if board[0] != bundled[0]:
         return (
             "error",
@@ -54,10 +57,17 @@ def check_version(board_version: str) -> tuple[str, str]:
             ),
         )
 
+    if board[1] <= bundled[1]:
+        # Same major; board's minor is at or below the CLI's. Older minor is
+        # explicitly fine — schema minors are additive and the CLI validates
+        # against its bundled (newer) schema, which is a superset.
+        return ("ok", "")
+
     return (
         "warn",
         (
-            f"ubds_version {board_version} differs from the CLI's bundled schema "
-            f"(v{BUNDLED_VERSION}); validation will use v{BUNDLED_VERSION} rules"
+            f"ubds_version {board_version} is newer than the CLI's bundled schema "
+            f"(v{BUNDLED_VERSION}); fields added after v{BUNDLED_VERSION} will not "
+            f"be validated. Upgrade dbf to silence this warning."
         ),
     )

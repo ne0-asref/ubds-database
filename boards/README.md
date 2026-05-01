@@ -1,6 +1,6 @@
-# UBDS Seed Boards (v1.1)
+# UBDS Seed Boards (v1.2)
 
-15 hand-curated UBDS v1.1 board files. Each was sourced from PlatformIO's
+15 hand-curated UBDS v1.2 board files. Each was sourced from PlatformIO's
 official platform JSON plus the manufacturer's product page. All boards
 include `meta.product_url` pointing to the manufacturer's own page and
 `meta.image_url` / `meta.pinout_image_url` pointing to stable URLs in

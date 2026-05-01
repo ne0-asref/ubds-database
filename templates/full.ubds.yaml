@@ -9,8 +9,10 @@
 # For the exhaustive reference: spec/ubds-v1.reference.ubds.yaml
 # ============================================================================
 
-# Schema version — always "1.1" for now.
-ubds_version: "1.1"
+# Schema version — current is "1.2". Bump only when the board starts using
+# fields introduced in a newer minor; see CONTRIBUTING.md §"When to bump
+# ubds_version" for the rule. The CLI accepts any v1.x board.
+ubds_version: "1.2"
 
 
 # ──────────────────────────────────────────────────────────────────────────────

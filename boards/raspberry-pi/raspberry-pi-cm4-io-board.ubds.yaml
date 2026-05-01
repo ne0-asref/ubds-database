@@ -2,6 +2,7 @@ ubds_version: "1.1"
 name: "Raspberry Pi Compute Module 4 IO Board"
 slug: raspberry-pi-cm4-io-board
 manufacturer: Raspberry Pi Foundation
+status: active
 board_type:
   - Carrier
 difficulty_level: intermediate
@@ -61,4 +62,3 @@ meta:
     tags: medium
   image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/raspberry-pi-cm4-io-board/top-view.png"
   pinout_image_url: "https://raw.githubusercontent.com/ne0-asref/ubds-database/main/images/raspberry-pi-cm4-io-board/pinout.png"
-  status: active

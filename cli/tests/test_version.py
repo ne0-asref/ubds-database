@@ -21,10 +21,18 @@ def test_version_prints_schema_version(runner):
 
 
 def test_validate_warns_on_ubds_version_mismatch():
-    """VR3: same-major different-minor → warn."""
+    """VR3: same-major NEWER-minor → warn (CLI doesn't know newer fields)."""
     level, msg = check_version("1.5")
     assert level == "warn"
     assert msg
+
+
+def test_validate_ok_on_older_minor():
+    """VR3b: same-major OLDER-minor → ok (schema minors are additive,
+    older boards are explicitly supported per the back-compat design)."""
+    level, msg = check_version("1.0")
+    assert level == "ok"
+    assert msg == ""
 
 
 def test_validate_errors_on_major_version_mismatch():

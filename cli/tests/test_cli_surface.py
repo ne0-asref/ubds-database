@@ -14,7 +14,7 @@ def test_version_prints_cli_and_schema(runner):
     result = runner.invoke(main, ["--version"])
     assert result.exit_code == 0
     assert "dbf 0.1.0" in result.output
-    assert "UBDS schema v1.1" in result.output
+    assert "UBDS schema v1.2" in result.output
 
 
 # C2 — validate surface

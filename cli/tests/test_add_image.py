@@ -66,7 +66,7 @@ def fake_repo(tmp_path, make_png):
     (tmp_path / "boards" / "rp2040-pico.ubds.yaml").write_text(
         textwrap.dedent(
             """\
-            ubds_version: "1.1"
+            ubds_version: "1.2"
             name: "Raspberry Pi Pico"
             slug: "rp2040-pico"
             manufacturer: "Raspberry Pi"

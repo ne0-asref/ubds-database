@@ -1,9 +1,14 @@
-"""C22 U1 — additive iron-rule check.
+"""Additive iron-rule check (originally C22 U1).
 
-Every existing v1.1 board under ``boards/`` must still validate under
-the v1.2 schema. If this test goes red, U1 has broken the additive-only
-promise (D22.3) and the schema additions need to be loosened or the
-offending board promoted to a documented edge case in CHANGELOG.md.
+Every board YAML under ``boards/`` must validate against the current
+schema. If this test goes red, the schema has either broken the
+additive-only promise (D22.3) or a board needs migration. Schema
+additions must be loosened or the offending board promoted to a
+documented edge case in CHANGELOG.md.
+
+Originally written to cover the v1.1 → v1.2 transition. Now that all
+boards declare 1.2, this is the standing regression check for any
+future schema bump (v1.2 → v1.3, etc.).
 """
 from __future__ import annotations
 
@@ -35,7 +40,7 @@ def test_boards_directory_is_non_empty():
 
 @pytest.mark.parametrize("board_path", _all_board_paths(), ids=lambda p: p.name)
 def test_existing_board_validates_under_v12_schema(board_path: Path):
-    """Every v1.1 board re-validates against the v1.2 schema (additive only)."""
+    """Every board on disk validates against the current (v1.2) schema."""
     schema = _load_schema()
     data = yaml.safe_load(board_path.read_text(encoding="utf-8"))
     jsonschema.validate(data, schema)

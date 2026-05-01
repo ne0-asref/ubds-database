@@ -12,7 +12,7 @@
 #   omit the `processing` section entirely.
 # - File extension: .ubds.yaml
 # ============================================================================
-ubds_version: "1.1"
+ubds_version: "1.2"
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -948,10 +948,11 @@ metadata:
 # ──────────────────────────────────────────────────────────────────────────────
 # META (provenance, confidence, verification status)
 # ──────────────────────────────────────────────────────────────────────────────
-# UBDS v1.1 note: pricing/vendor/affiliate data is intentionally NOT part of
-# this standard. UBDS describes the board; commerce data lives separately in
-# the devboardfinder `board_sellers` table. Contributors: do not add a
-# top-level `pricing:` block — it will be rejected by schema validation.
+# Commerce-separation invariant (across all UBDS versions): pricing, vendor,
+# and affiliate data are intentionally NOT part of this standard. UBDS
+# describes the board; commerce data lives separately in the devboardfinder
+# `board_sellers` table. Contributors: do not add a top-level `pricing:`
+# block — it will be rejected by schema validation.
 
 meta:
   sources:                                                # [REQUIRED] at least one verifiable URL

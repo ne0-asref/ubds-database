@@ -234,9 +234,9 @@ def migrate_file(path: Path, *, in_place: bool = False) -> MigrateReport:
 
     pre = _validate.validate_file(path)
     # Aborted iff the original file fails validation OUTRIGHT (errors or
-    # parse failure or major-version error). A version-warn (e.g. file is
-    # already v1.2 vs CLI's bundled v1.1) is fine — we still want migrate
-    # to be a no-op on a clean v1.2 file.
+    # parse failure or major-version error). A version-warn (e.g. file
+    # declares a newer minor than the CLI's bundled schema) is fine —
+    # migrate is a no-op on already-current files.
     if pre.parse_error is not None or pre.errors or pre.version_level == "error":
         report = MigrateReport(file=path, aborted=True)
         return report

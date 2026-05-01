@@ -86,6 +86,10 @@ meta:
     - https://docs.arduino.cc/hardware/uno-r4-wifi
     - https://store-usa.arduino.cc/products/uno-r4-wifi
   product_url: https://store.arduino.cc/products/uno-r4-wifi
+  description: |
+    Classic Uno form factor with a Renesas RA4M1 Cortex-M4 at 48 MHz plus an
+    ESP32-S3 wireless co-processor for Wi-Fi and Bluetooth LE. Backwards-
+    compatible with Uno shields and the standard Arduino IDE workflow.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Co-processor modeled per spec.md §Step 2a precedent — ESP32-S3 (Xtensa LX7, dual-core @ 240 MHz) acts as the WiFi/BLE radio."

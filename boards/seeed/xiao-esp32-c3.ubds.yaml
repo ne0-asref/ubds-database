@@ -48,6 +48,10 @@ meta:
     - https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/
     - https://www.seeedstudio.com/seeed-xiao-esp32c3-p-5431.html
   product_url: https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html
+  description: |
+    Thumb-sized RISC-V dev board: ESP32-C3 at 160 MHz with Wi-Fi 4 and BLE 5
+    in a 21 × 17.5 mm castellated module. USB-C, 320 KB RAM, 4 MB flash —
+    the smallest ESP32 footprint in the XIAO line, ideal for wearables and IoT nodes.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Pricing not extracted from fetched manufacturer/store pages; omitted per spec (no LLM-recall fallback)."

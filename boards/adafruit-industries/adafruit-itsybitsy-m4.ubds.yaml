@@ -45,6 +45,10 @@ meta:
     - https://www.adafruit.com/product/3800
     - https://learn.adafruit.com/introducing-adafruit-itsybitsy-m4
   product_url: https://www.adafruit.com/product/3800
+  description: |
+    Postage-stamp Cortex-M4F with USB-direct flashing and CircuitPython baked in.
+    ATSAMD51 at 120 MHz, 192 KB RAM, 512 KB flash — small enough to drop into
+    wearables and dense breadboard layouts without giving up performance.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

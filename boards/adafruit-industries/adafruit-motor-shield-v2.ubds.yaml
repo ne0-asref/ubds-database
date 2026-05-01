@@ -41,6 +41,10 @@ meta:
     - https://www.adafruit.com/product/1438
     - https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino
   product_url: https://www.adafruit.com/product/1438
+  description: |
+    I²C-controlled motor and servo shield for Arduino-form-factor hosts: 4× DC
+    motors or 2× steppers plus 16× servo channels. Stackable up to 32 shields
+    on one bus, freeing the host's PWM pins for other work.
   last_verified: "2026-04-13"
   data_completeness: partial
   top_view: false

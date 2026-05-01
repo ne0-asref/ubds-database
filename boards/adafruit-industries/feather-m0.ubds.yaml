@@ -42,6 +42,10 @@ meta:
     - https://www.adafruit.com/product/2772
     - https://learn.adafruit.com/adafruit-feather-m0-basic-proto/
   product_url: https://www.adafruit.com/product/2772
+  description: |
+    Original-recipe Feather: ATSAMD21 Cortex-M0+ at 48 MHz with onboard LiPo
+    charging and USB-direct flashing. 32 KB RAM, 256 KB flash — a small,
+    budget-friendly platform for prototyping, wearables, and FeatherWing experiments.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

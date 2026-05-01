@@ -45,6 +45,10 @@ meta:
     - https://www.adafruit.com/product/4516
     - https://learn.adafruit.com/adafruit-feather-sense
   product_url: https://www.adafruit.com/product/4516
+  description: |
+    Sensor-rich Feather built around the Nordic nRF52840 — Bluetooth LE 5,
+    a 9-DoF IMU, microphone, humidity, and gesture sensors on a single board.
+    256 KB RAM, 1 MB flash, LiPo charging, and CircuitPython out of the box.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

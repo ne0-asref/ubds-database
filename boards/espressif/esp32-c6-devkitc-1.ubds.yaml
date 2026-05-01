@@ -93,6 +93,10 @@ meta:
     - https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html
     - https://www.espressif.com/en/products/socs/esp32-c6
   product_url: https://www.espressif.com/en/products/devkits/esp32-c6-devkitc-1
+  description: |
+    Espressif's first RISC-V SoC with Wi-Fi 6, Bluetooth LE 5, and 802.15.4
+    (Thread, Zigbee, Matter) on a single chip. ESP32-C6 at 160 MHz, 512 KB RAM,
+    4 MB flash — a low-cost path into modern mesh IoT.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

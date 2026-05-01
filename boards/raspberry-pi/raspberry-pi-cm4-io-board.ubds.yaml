@@ -48,6 +48,10 @@ meta:
     - https://www.raspberrypi.com/products/compute-module-4-io-board/
     - https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
   product_url: https://www.raspberrypi.com/products/compute-module-4-io-board/
+  description: |
+    Reference IO carrier for the Raspberry Pi Compute Module 4. Exposes PCIe
+    Gen 2 ×1, dual HDMI, dual MIPI-CSI/DSI, and gigabit Ethernet — the
+    development platform for any CM4-based industrial product.
   last_verified: "2026-04-13"
   data_completeness: partial
   top_view: false

@@ -72,6 +72,10 @@ meta:
     - https://www.pjrc.com/store/teensy41.html
     - https://www.pjrc.com/teensy/techspecs.html
   product_url: https://www.pjrc.com/store/teensy41.html
+  description: |
+    PJRC's flagship: i.MX RT1062 Cortex-M7 at 600 MHz with 1 MB RAM, 8 MB flash,
+    100 Mbit Ethernet, USB host, native SDIO, and rich audio peripherals.
+    Programmed via the Arduino-compatible Teensyduino toolchain.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

@@ -1,0 +1,73 @@
+name: Raspberry Pi Pico
+slug: raspberry-pi-pico
+manufacturer: Raspberry Pi
+board_type:
+  - MCU
+interfaces:
+  - name: Micro-USB B port
+    type: USB
+    count: 1
+  - name: ARM Serial Wire Debug port
+    type: SWD
+    count: 1
+pin_headers:
+  - name: ARM Serial Wire Debug (SWD) port
+    pins: 3
+    description: standard Serial Wire Debug (SWD) port can reset the system and 
+      load and run code without any button presses.
+wireless:
+  - protocol: WiFi
+    version: 802.11n
+  - protocol: BLE
+    version: '5.2'
+inputs:
+  - name: BOOTSEL
+    type: button
+outputs:
+  - name: user LED
+    type: led
+onboard_components: {}
+power: {}
+software:
+  frameworks:
+    - name: Arduino
+      support_url: 
+        https://github.com/platformio/platform-raspberrypi/blob/master/boards/pico.json
+      homepage: https://www.arduino.cc/
+  languages:
+    - name: CircuitPython
+      support_url: https://circuitpython.org/board/raspberry_pi_pico/
+      homepage: https://circuitpython.org/
+meta:
+  confidence:
+    top_level: medium
+    processing: medium
+    interfaces: medium
+    pin_headers: medium
+    wireless: medium
+    inputs: medium
+    outputs: low
+    onboard_components: medium
+    power: low
+    software: high
+    certifications: low
+  data_completeness: complete
+  confidence_skipped:
+    - boot
+  product_url: https://www.raspberrypi.com/products/raspberry-pi-pico/
+  sources:
+    - https://www.raspberrypi.org/products/raspberry-pi-pico/
+    - https://pip.raspberrypi.com/documents/RP-008307-DS-pico-datasheet.pdf
+ubds_version: '1.2'
+processing:
+  - part_number: RP2040
+    architecture: ARM Cortex-M0+
+    cores: 2
+    bit_width: 32
+    clock: 133 MHz
+    memory:
+      ram_kb: 264
+      flash_kb: 2048
+metadata:
+  usb_vid: '0x2E8A'
+  usb_pid: '0x00C0'

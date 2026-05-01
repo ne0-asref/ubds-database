@@ -42,6 +42,10 @@ meta:
     - https://www.adafruit.com/product/3857
     - https://learn.adafruit.com/adafruit-feather-m4-express-atsamd51
   product_url: https://www.adafruit.com/product/3857
+  description: |
+    Faster Feather built on the ATSAMD51 Cortex-M4F at 120 MHz, with 192 KB RAM,
+    512 KB flash, and onboard LiPo charging. Drop-in for any FeatherWing while
+    keeping CircuitPython and the Arduino IDE both in play.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

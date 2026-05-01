@@ -46,6 +46,10 @@ meta:
     - https://os.mbed.com/platforms/Nordic-nRF52840-DK/
     - https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
   product_url: https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
+  description: |
+    Nordic's reference design for the nRF52840: Bluetooth LE 5, Thread, and
+    Zigbee on a Cortex-M4F at 64 MHz. Arduino-Uno headers, four buttons and LEDs,
+    and full Zephyr support out of the box.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Pricing not listed on the fetched manufacturer page; omitted per spec."

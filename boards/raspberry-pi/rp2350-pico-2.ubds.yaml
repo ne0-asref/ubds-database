@@ -86,6 +86,10 @@ meta:
     - https://www.raspberrypi.com/products/raspberry-pi-pico-2/
     - https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf
   product_url: https://www.raspberrypi.com/products/raspberry-pi-pico-2/
+  description: |
+    Second-gen Pico with the dual-architecture RP2350: pick between two ARM
+    Cortex-M33 cores or two RISC-V Hazard3 cores at 150 MHz. 520 KB SRAM,
+    4 MB flash, USB-C, and the same programmable IO state machines as the original.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

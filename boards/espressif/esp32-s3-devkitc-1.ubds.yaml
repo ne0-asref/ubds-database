@@ -81,6 +81,10 @@ meta:
     - https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
     - https://www.adafruit.com/product/5312
   product_url: https://www.espressif.com/en/products/devkits/esp32-s3-devkitc-1/overview
+  description: |
+    Dual-core Xtensa LX7 at 240 MHz with native USB, Wi-Fi 4, and Bluetooth LE 5.
+    ESP-IDF, Arduino-core, and a deep community make this the workhorse Espressif
+    dev kit for production-grade prototypes.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

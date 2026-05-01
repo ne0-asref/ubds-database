@@ -47,6 +47,10 @@ meta:
     - https://www.seeedstudio.com/Wio-Terminal-p-4509.html
     - https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/
   product_url: https://www.seeedstudio.com/Wio-Terminal-p-4509.html
+  description: |
+    All-in-one ATSAMD51 dev board with a 2.4" LCD, 5-way switch, three buttons,
+    IMU, microphone, and Realtek RTL8720DN Wi-Fi/BLE. Grove connectors and a
+    40-pin Raspberry Pi-compatible header make sensor experiments quick to wire up.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Seeed product page CSS-only on fetch; pricing not extractable via single-fetch. Wireless (WiFi + BLE) sourced from RTL8720DN module mentioned on the page (page text lists Realtek RTL8720DN BLE 5.0 & Wi-Fi)."

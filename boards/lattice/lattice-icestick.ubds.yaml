@@ -65,9 +65,9 @@ meta:
     - https://www.latticesemi.com/products/developmentboardsandkits/icestick
   product_url: https://www.latticesemi.com/icestick
   description: |
-    Tiny iCE40 FPGA stick (1280 LUTs) flashable over plain USB, no external
-    programmer needed. Fully open-source toolchain via Yosys + nextpnr — the
-    cheapest way to learn HDL on real hardware without vendor lock-in.
+    Tiny iCE40HX1K FPGA stick with 1280 logic cells and 8 KB on-chip RAM in
+    a USB-stick form factor. Fully open-source toolchain via Yosys, nextpnr,
+    and Project IceStorm — a low-cost way to learn HDL on real silicon.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

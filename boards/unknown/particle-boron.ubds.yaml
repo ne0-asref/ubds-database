@@ -45,9 +45,9 @@ meta:
     - https://docs.particle.io/reference/datasheets/b-series/boron-datasheet/
   product_url: https://www.particle.io/boron/
   description: |
-    Cellular IoT dev kit in Adafruit Feather form factor: nRF52840 Cortex-M4F at
-    64 MHz with onboard LTE Cat-M1 (u-blox SARA-R410M-02B) and Bluetooth LE 5.
-    Particle Cloud, OTA updates, and a SIM included — fleet IoT without the wiring.
+    Cellular IoT dev kit in Adafruit Feather form factor: nRF52840 Cortex-M4F
+    at 64 MHz with onboard LTE Cat-M1 and Bluetooth LE 5. 256 KB RAM, 1 MB
+    flash, with the Particle Cloud workflow for fleet IoT.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "u-blox SARA-R410M cellular modem modeled as wireless protocol 'cellular' (peripheral modem, not a processing entry per spec.md §Step 2a). Pricing not on docs page; omitted per spec."

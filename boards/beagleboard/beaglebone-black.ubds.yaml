@@ -73,8 +73,8 @@ meta:
   product_url: https://beagleboard.org/black
   description: |
     Industrial single-board Linux on a TI AM3358 Cortex-A8 at 1 GHz, with
-    512 MB DDR3 and 4 GB onboard eMMC. Two real-time PRU subsystems make it a
-    long-time favorite for motion control, protocol bridges, and bit-banged I/O.
+    512 MB RAM and 4 GB onboard eMMC. Real-time PRU subsystems plus HDMI and
+    Ethernet — a long-time favorite for industrial automation and embedded Linux.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

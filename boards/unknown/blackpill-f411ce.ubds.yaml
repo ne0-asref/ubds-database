@@ -48,9 +48,9 @@ meta:
     - https://github.com/WeActStudio/MiniSTM32F4x1
   product_url: https://stm32-base.org/boards/STM32F411CEU6-WeAct-Black-Pill-V2.0
   description: |
-    Low-cost STM32 dev board in the popular Black Pill form factor: STM32F411CE
-    Cortex-M4F at 100 MHz, 128 KB RAM, 512 KB flash, USB-C, and DFU bootloader.
-    Breadboard-friendly and widely cloned — a go-to for hobbyist STM32 projects.
+    Low-cost STM32 dev board in the Black Pill form factor: STM32F411CE
+    Cortex-M4F at 100 MHz, 128 KB RAM, 512 KB flash, USB-C, and a DFU bootloader.
+    Breadboard-friendly with broad framework support — Arduino, STM32Cube, Zephyr.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Sold via TaoBao/AliExpress only; no manufacturer USD MSRP. Pricing omitted per spec."

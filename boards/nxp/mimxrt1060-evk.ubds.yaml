@@ -43,8 +43,8 @@ meta:
   product_url: https://www.nxp.com/design/design-center/development-boards-and-designs/i-mx-evaluation-and-development-boards/mimxrt1060-evk-i-mx-rt1060-evaluation-kit:MIMXRT1060-EVK
   description: |
     NXP's crossover MCU evaluation kit: i.MX RT1060 Cortex-M7 at 600 MHz with
-    32 MB SDRAM and 8 MB QSPI flash. Bridges the gap between MCU determinism and
-    MPU-class performance — popular for industrial control and audio.
+    32 MB RAM and 8 MB flash. Bridges MCU determinism and MPU-class performance
+    over Ethernet — a popular pick for industrial, motor-control, and audio work.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "NXP product page returned 404 on direct fetch; pricing omitted per spec (no LLM fallback)."

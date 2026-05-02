@@ -82,9 +82,9 @@ meta:
     - https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
   product_url: https://www.raspberrypi.com/products/raspberry-pi-pico/
   description: |
-    Raspberry Pi's first in-house silicon: dual Cortex-M0+ at 133 MHz with
-    264 KB SRAM and 2 MB QSPI flash. Programmable IO state machines for custom
-    interfaces, breadboard-friendly castellated edges, and excellent documentation.
+    Raspberry Pi Pico: dual Cortex-M0+ at 133 MHz with 264 KB SRAM and 2 MB
+    flash. Breadboard-friendly with castellated edges, micro-USB, and
+    first-class C/C++ and MicroPython support via the official Pico SDK.
   last_verified: "2026-04-07"
   data_completeness: partial
   confidence:

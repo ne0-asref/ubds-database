@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "ST Nucleo F446RE"
 slug: nucleo-f446re
 manufacturer: STMicroelectronics
+manufacturer_slug: st
 board_type:
   - MCU
 difficulty_level: intermediate

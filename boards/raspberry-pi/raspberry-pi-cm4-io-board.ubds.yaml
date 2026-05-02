@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "Raspberry Pi Compute Module 4 IO Board"
 slug: raspberry-pi-cm4-io-board
 manufacturer: Raspberry Pi Foundation
+manufacturer_slug: raspberry-pi
 status: active
 board_type:
   - Carrier

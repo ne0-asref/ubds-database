@@ -22,6 +22,7 @@ ubds_version: "1.2"
 name: "NVIDIA Jetson Orin Nano Developer Kit"        # [REQUIRED] Display name
 slug: "jetson-orin-nano-dev-kit"                      # [REQUIRED] URL-safe unique ID
 manufacturer: "NVIDIA"                                # [REQUIRED]
+manufacturer_slug: nvidia
 series: "Jetson"                                      # Board family / product line
 parent_board: null                                    # slug of parent if this is a variant
 hardware_version: "Rev A02"

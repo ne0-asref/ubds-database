@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "Adafruit Feather M4 Express"
 slug: feather-m4-express
 manufacturer: Adafruit Industries
+manufacturer_slug: adafruit-industries
 board_type:
   - MCU
 difficulty_level: beginner

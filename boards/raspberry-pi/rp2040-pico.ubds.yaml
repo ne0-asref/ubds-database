@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "Raspberry Pi Pico"
 slug: rp2040-pico
 manufacturer: Raspberry Pi Ltd
+manufacturer_slug: raspberry-pi
 board_type:
   - MCU
 difficulty_level: beginner

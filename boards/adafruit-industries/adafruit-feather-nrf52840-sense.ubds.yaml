@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "Adafruit Feather Bluefruit Sense"
 slug: adafruit-feather-nrf52840-sense
 manufacturer: Adafruit Industries
+manufacturer_slug: adafruit-industries
 board_type:
   - MCU
 difficulty_level: intermediate

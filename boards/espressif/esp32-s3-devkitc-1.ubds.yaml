@@ -2,6 +2,7 @@ ubds_version: "1.2"
 name: "Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)"
 slug: esp32-s3-devkitc-1
 manufacturer: Espressif Systems
+manufacturer_slug: espressif
 board_type:
   - MCU
 difficulty_level: intermediate

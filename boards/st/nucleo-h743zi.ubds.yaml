@@ -50,9 +50,9 @@ meta:
     - https://os.mbed.com/platforms/ST-Nucleo-H743ZI/
   product_url: https://www.st.com/en/evaluation-tools/nucleo-h743zi.html
   description: |
-    High-performance Nucleo-144: STM32H743ZI Cortex-M7 at 480 MHz with
-    512 KB RAM, 2 MB flash, and onboard Ethernet. Arduino-Uno and ST Morpho
-    headers plus CAN — a strong pick for industrial and motor-control work.
+    High-performance Nucleo: STM32H743ZI Cortex-M7 at 480 MHz with 512 KB RAM,
+    2 MB flash, and onboard Ethernet. Arduino-Uno and ST Morpho headers plus
+    CAN — a strong pick for industrial and motor-control work.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "ST product page timed out during fetch; pricing omitted per spec (no LLM fallback)."

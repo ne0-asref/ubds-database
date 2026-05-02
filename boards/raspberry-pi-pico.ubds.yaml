@@ -1,0 +1,129 @@
+name: Raspberry Pi Pico
+slug: raspberry-pi-pico
+manufacturer: Raspberry Pi
+board_type:
+  - MCU
+processing:
+  - part_number: RP2040
+    architecture: ARM Cortex-M0+
+    clock: 133 MHz
+    cores: 2
+    bit_width: 32
+    memory:
+      ram_kb: 264
+      flash_kb: 2048
+interfaces:
+  - name: USB
+    type: USB
+    count: 1
+  - name: SWD
+    type: SWD
+    count: 1
+  - name: UART
+    type: UART
+    count: 2
+    availability: matrix-routable
+    notes: Routable to specific GPIO sets via PIO; not all-pin routable.
+  - name: SPI
+    type: SPI
+    count: 2
+    availability: matrix-routable
+    notes: Limited GPIO subsets per instance.
+  - name: I2C
+    type: I2C
+    count: 2
+    availability: matrix-routable
+  - name: PIO
+    type: PIO
+    count: 2
+    availability: matrix-routable
+    notes: Programmable I/O blocks — implement custom protocols on any GPIO.
+  - name: PWM
+    type: PWM
+    count: 8
+    availability: matrix-routable
+    notes: 8 PWM slices × 2 channels each.
+  - name: ADC
+    type: ADC
+    count: 1
+    availability: chip-specific
+    notes: 4 channels GPIO26-29 + internal temp sensor, 12-bit.
+pin_headers:
+  - name: Main 40-pin header
+    pins: 40
+    pitch: 2.54mm
+    voltage: 3.3V
+  - name: ARM Serial Wire Debug (SWD) port
+    pins: 3
+wireless:
+  - protocol: WiFi
+    version: 802.11n
+  - protocol: BT
+    version: '5.2'
+  - protocol: BLE
+    version: '5.2'
+inputs:
+  - name: BOOTSEL
+    type: button
+outputs:
+  - name: User LED
+    type: led
+onboard_components: {}
+power: {}
+software:
+  frameworks:
+    - name: Arduino
+      support_url: 
+        https://github.com/platformio/platform-raspberrypi/blob/master/boards/pico.json
+      homepage: https://www.arduino.cc/
+    - name: TensorFlow Lite Micro
+      homepage: https://github.com/tensorflow/tflite-micro
+      support_url: 
+        https://github.com/tensorflow/tflite-micro/blob/main/tensorflow/lite/micro/docs/new_platform_support.md
+    - name: Edge Impulse
+      homepage: https://www.edgeimpulse.com/
+      support_url: 
+        https://docs.edgeimpulse.com/docs/edge-ai-hardware/mcu/raspberry-pi-pico
+  languages:
+    - name: CircuitPython
+      support_url: https://circuitpython.org/board/raspberry_pi_pico/
+      homepage: https://circuitpython.org/
+    - name: MicroPython
+      homepage: https://micropython.org/
+      support_url: https://docs.micropython.org/en/latest/rp2/quickref.html
+    - name: TinyGo
+      homepage: https://tinygo.org/
+      support_url: https://tinygo.org/docs/reference/microcontrollers/
+    - name: Rust
+      homepage: https://github.com/rust-embedded
+      support_url: https://github.com/rp-rs/rp-hal
+    - name: Zig
+      homepage: https://ziglang.org/
+      support_url: 
+        https://github.com/ZigEmbeddedGroup/microzig/tree/main/port/raspberrypi
+    - name: Embedded Swift
+      homepage: 
+        https://www.swift.org/documentation/articles/embedded-swift-examples.html
+      support_url: https://github.com/swiftlang/swift-embedded-examples
+meta:
+  confidence:
+    top_level: medium
+    processing: high
+    interfaces: medium
+    pin_headers: medium
+    wireless: medium
+    inputs: medium
+    outputs: medium
+    onboard_components: medium
+    power: low
+    physical: medium
+    software: high
+    certifications: low
+  data_completeness: complete
+  confidence_skipped:
+    - boot
+  product_url: https://www.raspberrypi.com/products/raspberry-pi-pico/
+  sources:
+    - https://www.raspberrypi.org/products/raspberry-pi-pico/
+    - https://pip.raspberrypi.com/documents/RP-008307-DS-pico-datasheet.pdf
+ubds_version: '1.2'

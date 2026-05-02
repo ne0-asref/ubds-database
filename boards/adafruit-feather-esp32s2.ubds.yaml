@@ -1,0 +1,117 @@
+ubds_version: '1.2'
+name: Adafruit Feather ESP32-S2
+slug: adafruit-feather-esp32s2
+manufacturer: Adafruit
+board_type:
+  - MCU
+processing:
+  - part_number: ESP32-S2
+    architecture: Xtensa LX7
+    cores: 1
+    bit_width: 32
+    clock: 240 MHz
+    memory:
+      ram_kb: 320
+      flash_kb: 4096
+interfaces:
+  - name: UART
+    type: UART
+    count: 2
+    availability: matrix-routable
+  - name: SPI
+    type: SPI
+    count: 4
+    availability: matrix-routable
+    notes: SPI0/SPI1 internal; SPI2/SPI3 free.
+  - name: I2C
+    type: I2C
+    count: 2
+    availability: matrix-routable
+  - name: I2S
+    type: I2S
+    count: 1
+    availability: matrix-routable
+  - name: LEDC
+    type: PWM
+    count: 8
+    availability: matrix-routable
+  - name: MCPWM
+    type: PWM
+    count: 1
+    availability: matrix-routable
+  - name: TWAI (CAN)
+    type: TWAI
+    count: 1
+    availability: matrix-routable
+  - name: SDMMC Host
+    type: SDMMC
+    count: 1
+    availability: matrix-routable
+  - name: ADC
+    type: ADC
+    count: 2
+    availability: chip-specific
+    notes: 20 channels total, 13-bit.
+  - name: DAC
+    type: DAC
+    count: 2
+    availability: chip-specific
+    notes: 8-bit, fixed pins GPIO17/18.
+  - name: Touch sensor
+    type: Touch
+    count: 14
+    availability: chip-specific
+  - name: USB OTG
+    type: USB OTG
+    count: 1
+    availability: chip-specific
+    notes: Full-speed USB 1.1 OTG, fixed pins GPIO19/20.
+wireless:
+  - protocol: WiFi
+software:
+  frameworks:
+    - name: Arduino
+      support_url: 
+        https://github.com/platformio/platform-espressif32/blob/master/boards/adafruit_feather_esp32s2.json
+      homepage: https://www.arduino.cc/
+    - name: ESP-IDF
+      support_url: 
+        https://github.com/platformio/platform-espressif32/blob/master/boards/adafruit_feather_esp32s2.json
+      homepage: https://docs.espressif.com/projects/esp-idf/
+    - name: TensorFlow Lite Micro
+      homepage: https://github.com/tensorflow/tflite-micro
+      support_url: 
+        https://github.com/tensorflow/tflite-micro/blob/main/tensorflow/lite/micro/docs/new_platform_support.md
+    - name: Edge Impulse
+      homepage: https://www.edgeimpulse.com/
+      support_url: 
+        https://docs.edgeimpulse.com/docs/edge-ai-hardware/mcu/espressif-esp32
+  languages:
+    - name: CircuitPython
+      support_url: https://circuitpython.org/board/adafruit_feather_esp32s2/
+      homepage: https://circuitpython.org/
+    - name: MicroPython
+      homepage: https://micropython.org/
+      support_url: https://docs.micropython.org/en/latest/esp32/quickref.html
+    - name: TinyGo
+      homepage: https://tinygo.org/
+      support_url: https://tinygo.org/docs/reference/microcontrollers/
+    - name: Rust
+      homepage: https://github.com/rust-embedded
+      support_url: https://github.com/esp-rs/esp-hal#supported-devices
+    - name: Zig
+      homepage: https://ziglang.org/
+      support_url: 
+        https://github.com/ZigEmbeddedGroup/microzig/tree/main/port/espressif
+meta:
+  product_url: https://www.adafruit.com/product/5000
+  sources:
+    - https://www.adafruit.com/product/5000
+  data_completeness: complete
+  confidence:
+    top_level: high
+    processing: high
+    interfaces: high
+    wireless: high
+    software: high
+  last_verified: '2026-05-02'

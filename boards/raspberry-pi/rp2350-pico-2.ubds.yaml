@@ -89,7 +89,7 @@ meta:
   description: |
     Second-gen Pico with the dual-architecture RP2350: pick between two ARM
     Cortex-M33 cores or two RISC-V Hazard3 cores at 150 MHz. 520 KB SRAM,
-    4 MB flash, USB-C, and the same programmable IO state machines as the original.
+    4 MB flash, USB-C, and breadboard-friendly castellated edges.
   last_verified: "2026-04-13"
   data_completeness: partial
   confidence:

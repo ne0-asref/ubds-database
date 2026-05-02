@@ -47,9 +47,9 @@ meta:
     - https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
   product_url: https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK
   description: |
-    Nordic's reference design for the nRF52840: Bluetooth LE 5, Thread, and
-    Zigbee on a Cortex-M4F at 64 MHz. Arduino-Uno headers, four buttons and LEDs,
-    and full Zephyr support out of the box.
+    Nordic's reference dev kit for the nRF52840: Cortex-M4F at 64 MHz with
+    256 KB RAM, 1 MB flash, and Bluetooth LE 5. Arduino-Uno headers and full
+    Zephyr support — a strong baseline for BLE prototyping.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "Pricing not listed on the fetched manufacturer page; omitted per spec."

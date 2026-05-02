@@ -50,8 +50,8 @@ meta:
   product_url: https://www.st.com/en/evaluation-tools/nucleo-f446re.html
   description: |
     ST's mid-range Nucleo: STM32F446RE Cortex-M4F at 180 MHz with 128 KB RAM
-    and 512 KB flash. Arduino-Uno and ST Morpho headers plus an integrated
-    ST-Link/V2-1 — drag-and-drop flashing and SWD debugging without extra hardware.
+    and 512 KB flash. Arduino-Uno and ST Morpho headers, integrated ST-Link,
+    CAN, and broad framework support — Mbed, STM32Cube, libopencm3, Zephyr.
   last_verified: "2026-04-07"
   data_completeness: partial
   notes: "ST product page repeatedly timed out during fetch; pricing omitted per spec (no LLM fallback)."

@@ -1,0 +1,50 @@
+manufacturer:
+  value: Nordic
+  citation:
+    artifact_hash: 94cb60917f4ed3677ed79c5168587ee21c43fa84530eaa48cecb86249bf66c88
+    source_url: https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Nordic
+    fetched_at: '2026-05-06T07:59:38.246311+00:00'
+meta.product_url:
+  value: https://os.mbed.com/platforms/Nordic-nRF52840-DK/
+  citation:
+    artifact_hash: 94cb60917f4ed3677ed79c5168587ee21c43fa84530eaa48cecb86249bf66c88
+    source_url: https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://os.mbed.com/platforms/Nordic-nRF52840-DK/
+    fetched_at: '2026-05-06T07:59:38.246311+00:00'
+name:
+  value: Nordic nRF52840-DK
+  citation:
+    artifact_hash: 94cb60917f4ed3677ed79c5168587ee21c43fa84530eaa48cecb86249bf66c88
+    source_url: https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Nordic nRF52840-DK
+    fetched_at: '2026-05-06T07:59:38.246311+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 64
+  citation:
+    artifact_hash: 94cb60917f4ed3677ed79c5168587ee21c43fa84530eaa48cecb86249bf66c88
+    source_url: https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 64000000L
+    fetched_at: '2026-05-06T07:59:38.246311+00:00'
+processing[0].part_number:
+  value: nRF52840
+  citation:
+    artifact_hash: 94cb60917f4ed3677ed79c5168587ee21c43fa84530eaa48cecb86249bf66c88
+    source_url: https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: nrf52840
+    fetched_at: '2026-05-06T07:59:38.246311+00:00'

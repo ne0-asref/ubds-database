@@ -1,0 +1,20 @@
+ubds_version: '1.2'
+slug: pico
+meta:
+  sources:
+  - https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+  - https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+  verified: false
+  product_url: https://www.raspberrypi.org/products/raspberry-pi-pico/
+manufacturer: Raspberry Pi
+name: Raspberry Pi Pico
+power:
+  supply_voltage_max_v: 5.5
+  supply_voltage_min_v: 1.8
+processing:
+- cpu_cores:
+  - clock_mhz: 133
+  part_number: RP2040
+thermal:
+  operating_temp_max_c: '85'
+  operating_temp_min_c: '-20'

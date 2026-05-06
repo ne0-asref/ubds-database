@@ -1,0 +1,125 @@
+manufacturer:
+  value: Espressif
+  citation:
+    artifact_hash: f6fb1e46c45c4c1b79471fe4cff799e548bc4ef95f0bf00a8335a7d5ac477767
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s3-devkitc-1.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Espressif
+    fetched_at: '2026-05-06T07:59:37.739772+00:00'
+meta.product_url:
+  value: https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
+  citation:
+    artifact_hash: f6fb1e46c45c4c1b79471fe4cff799e548bc4ef95f0bf00a8335a7d5ac477767
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s3-devkitc-1.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
+    fetched_at: '2026-05-06T07:59:37.739772+00:00'
+name:
+  value: Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+  citation:
+    artifact_hash: f6fb1e46c45c4c1b79471fe4cff799e548bc4ef95f0bf00a8335a7d5ac477767
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s3-devkitc-1.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+    fetched_at: '2026-05-06T07:59:37.739772+00:00'
+power.supply_voltage_max_v:
+  value: 3.6
+  citation:
+    artifact_hash: 2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 64
+      bbox:
+      - 430.258
+      - 358.504
+      - 444.056
+      - 371.436
+    raw_substring: '3.6'
+    fetched_at: '2026-05-06T08:07:42.848154+00:00'
+power.supply_voltage_min_v:
+  value: 3.0
+  citation:
+    artifact_hash: 2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 64
+      bbox:
+      - 359.857
+      - 358.504
+      - 374.004
+      - 371.436
+    raw_substring: '3.0'
+    fetched_at: '2026-05-06T08:07:42.848154+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 240
+  citation:
+    artifact_hash: f6fb1e46c45c4c1b79471fe4cff799e548bc4ef95f0bf00a8335a7d5ac477767
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s3-devkitc-1.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 240000000L
+    fetched_at: '2026-05-06T07:59:37.739772+00:00'
+processing[0].package:
+  value: QFN56
+  citation:
+    artifact_hash: 2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 77
+      bbox:
+      - 214.611
+      - 209.811
+      - 380.668
+      - 223.052
+    raw_substring: Figure 7-1. QFN56 (7×7 mm) Package
+    fetched_at: '2026-05-06T08:07:42.848154+00:00'
+processing[0].part_number:
+  value: ESP32-S3
+  citation:
+    artifact_hash: f6fb1e46c45c4c1b79471fe4cff799e548bc4ef95f0bf00a8335a7d5ac477767
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s3-devkitc-1.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: esp32s3
+    fetched_at: '2026-05-06T07:59:37.739772+00:00'
+thermal.operating_temp_max_c:
+  value: '105'
+  citation:
+    artifact_hash: 2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 13
+      bbox:
+      - 334.938
+      - 347.783
+      - 387.66
+      - 365.321
+    raw_substring: –40 ∼ 105 °C
+    fetched_at: '2026-05-06T08:07:42.848154+00:00'
+thermal.operating_temp_min_c:
+  value: '-40'
+  citation:
+    artifact_hash: 2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 13
+      bbox:
+      - 334.938
+      - 347.783
+      - 387.66
+      - 365.321
+    raw_substring: –40 ∼ 105 °C
+    fetched_at: '2026-05-06T08:07:42.848154+00:00'

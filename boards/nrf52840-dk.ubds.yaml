@@ -1,0 +1,13 @@
+ubds_version: '1.2'
+slug: nrf52840-dk
+meta:
+  sources:
+  - https://raw.githubusercontent.com/platformio/platform-nordicnrf52/master/boards/nrf52840_dk.json
+  verified: false
+  product_url: https://os.mbed.com/platforms/Nordic-nRF52840-DK/
+manufacturer: Nordic
+name: Nordic nRF52840-DK
+processing:
+- cpu_cores:
+  - clock_mhz: 64
+  part_number: nRF52840

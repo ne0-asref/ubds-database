@@ -1,0 +1,110 @@
+manufacturer:
+  value: Raspberry Pi
+  citation:
+    artifact_hash: bbb7a05d46cdfc47521f94cbce5ea3bc9e350b389d07677ffa7636c4ac9e8ba4
+    source_url: https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Raspberry Pi
+    fetched_at: '2026-05-06T07:59:37.986039+00:00'
+meta.product_url:
+  value: https://www.raspberrypi.org/products/raspberry-pi-pico/
+  citation:
+    artifact_hash: bbb7a05d46cdfc47521f94cbce5ea3bc9e350b389d07677ffa7636c4ac9e8ba4
+    source_url: https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://www.raspberrypi.org/products/raspberry-pi-pico/
+    fetched_at: '2026-05-06T07:59:37.986039+00:00'
+name:
+  value: Raspberry Pi Pico
+  citation:
+    artifact_hash: bbb7a05d46cdfc47521f94cbce5ea3bc9e350b389d07677ffa7636c4ac9e8ba4
+    source_url: https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Raspberry Pi Pico
+    fetched_at: '2026-05-06T07:59:37.986039+00:00'
+power.supply_voltage_max_v:
+  value: 5.5
+  citation:
+    artifact_hash: c3fb01e1cc2ea9d40e85a8abf0eb4c805e46cb70bd28195b846ca135765ad79c
+    source_url: https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 125.0
+      - 617.409
+      - 320.912
+      - 700.352
+    raw_substring: VSYS Max 5.5V
+    fetched_at: '2026-05-06T08:07:03.559113+00:00'
+power.supply_voltage_min_v:
+  value: 1.8
+  citation:
+    artifact_hash: c3fb01e1cc2ea9d40e85a8abf0eb4c805e46cb70bd28195b846ca135765ad79c
+    source_url: https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 125.0
+      - 617.409
+      - 320.912
+      - 700.352
+    raw_substring: VSYS Min 1.8V
+    fetched_at: '2026-05-06T08:07:03.559113+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 133
+  citation:
+    artifact_hash: bbb7a05d46cdfc47521f94cbce5ea3bc9e350b389d07677ffa7636c4ac9e8ba4
+    source_url: https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 133000000L
+    fetched_at: '2026-05-06T07:59:37.986039+00:00'
+processing[0].part_number:
+  value: RP2040
+  citation:
+    artifact_hash: bbb7a05d46cdfc47521f94cbce5ea3bc9e350b389d07677ffa7636c4ac9e8ba4
+    source_url: https://raw.githubusercontent.com/platformio/platform-raspberrypi/develop/boards/pico.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: rp2040
+    fetched_at: '2026-05-06T07:59:37.986039+00:00'
+thermal.operating_temp_max_c:
+  value: '85'
+  citation:
+    artifact_hash: c3fb01e1cc2ea9d40e85a8abf0eb4c805e46cb70bd28195b846ca135765ad79c
+    source_url: https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 125.0
+      - 617.409
+      - 320.912
+      - 700.352
+    raw_substring: Operating Temp Max 85°C (including self-heating)
+    fetched_at: '2026-05-06T08:07:03.559113+00:00'
+thermal.operating_temp_min_c:
+  value: '-20'
+  citation:
+    artifact_hash: c3fb01e1cc2ea9d40e85a8abf0eb4c805e46cb70bd28195b846ca135765ad79c
+    source_url: https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 125.0
+      - 617.409
+      - 320.912
+      - 700.352
+    raw_substring: Operating Temp Min -20°C
+    fetched_at: '2026-05-06T08:07:03.559113+00:00'

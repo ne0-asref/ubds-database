@@ -1,0 +1,110 @@
+manufacturer:
+  value: Espressif
+  citation:
+    artifact_hash: 2fdfbac4eeed19b035b5b7fee09af8d60672ba46eff64805a0bb740a9b52d5ab
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s2-saola-1.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Espressif
+    fetched_at: '2026-05-06T08:44:10.979137+00:00'
+meta.product_url:
+  value: https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-saola-1-v1.2.html
+  citation:
+    artifact_hash: 2fdfbac4eeed19b035b5b7fee09af8d60672ba46eff64805a0bb740a9b52d5ab
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s2-saola-1.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-saola-1-v1.2.html
+    fetched_at: '2026-05-06T08:44:10.979137+00:00'
+name:
+  value: Espressif ESP32-S2-Saola-1
+  citation:
+    artifact_hash: 2fdfbac4eeed19b035b5b7fee09af8d60672ba46eff64805a0bb740a9b52d5ab
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s2-saola-1.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Espressif ESP32-S2-Saola-1
+    fetched_at: '2026-05-06T08:44:10.979137+00:00'
+power.supply_voltage_max_v:
+  value: 3.6
+  citation:
+    artifact_hash: d5732348e1ac98eaa0a89b6d11e86a3497651810914a9927b04e84bdcebc0945
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s2_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 48
+      bbox:
+      - 445.999
+      - 358.504
+      - 459.797
+      - 371.436
+    raw_substring: '3.6'
+    fetched_at: '2026-05-06T08:46:29.842172+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 240
+  citation:
+    artifact_hash: 2fdfbac4eeed19b035b5b7fee09af8d60672ba46eff64805a0bb740a9b52d5ab
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s2-saola-1.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 240000000L
+    fetched_at: '2026-05-06T08:44:10.979137+00:00'
+processing[0].package:
+  value: QFN56 (7×7 mm)
+  citation:
+    artifact_hash: d5732348e1ac98eaa0a89b6d11e86a3497651810914a9927b04e84bdcebc0945
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s2_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 57
+      bbox:
+      - 125.092
+      - 197.915
+      - 470.187
+      - 211.156
+    raw_substring: Figure 7-1. QFN56 (7×7 mm) Package, for Variants Excluding ESP32-S2FN4R2
+    fetched_at: '2026-05-06T08:46:29.842172+00:00'
+processing[0].part_number:
+  value: ESP32-S2
+  citation:
+    artifact_hash: 2fdfbac4eeed19b035b5b7fee09af8d60672ba46eff64805a0bb740a9b52d5ab
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-s2-saola-1.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: esp32s2
+    fetched_at: '2026-05-06T08:44:10.979137+00:00'
+thermal.operating_temp_max_c:
+  value: '105'
+  citation:
+    artifact_hash: d5732348e1ac98eaa0a89b6d11e86a3497651810914a9927b04e84bdcebc0945
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s2_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 11
+      bbox:
+      - 355.183
+      - 308.246
+      - 421.985
+      - 331.369
+    raw_substring: –40 ∼ 105 °C
+    fetched_at: '2026-05-06T08:46:29.842172+00:00'
+thermal.operating_temp_min_c:
+  value: '-40'
+  citation:
+    artifact_hash: d5732348e1ac98eaa0a89b6d11e86a3497651810914a9927b04e84bdcebc0945
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-s2_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 11
+      bbox:
+      - 355.183
+      - 308.246
+      - 421.985
+      - 331.369
+    raw_substring: –40 ∼ 105 °C
+    fetched_at: '2026-05-06T08:46:29.842172+00:00'

@@ -1,0 +1,24 @@
+ubds_version: '1.2'
+slug: esp32dev
+manufacturer_slug: espressif
+status: active
+board_type:
+- MCU
+meta:
+  sources:
+  - https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+  - https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+  verified: false
+  product_url: https://en.wikipedia.org/wiki/ESP32
+manufacturer: Espressif
+name: Espressif ESP32 Dev Module
+power:
+  supply_voltage_max_v: 3.6
+  supply_voltage_min_v: 1.8
+processing:
+- cpu_cores:
+  - clock_mhz: 240
+  package: QFN 5*5
+  part_number: ESP32
+thermal:
+  operating_temp_min_c: '-40'

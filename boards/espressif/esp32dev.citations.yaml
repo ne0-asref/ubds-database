@@ -1,0 +1,110 @@
+manufacturer:
+  value: Espressif
+  citation:
+    artifact_hash: af059ec23523785cd984205bd6f4e3deb0975fd2067faf8539b1d709ad9bf85b
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Espressif
+    fetched_at: '2026-05-06T08:44:10.981882+00:00'
+meta.product_url:
+  value: https://en.wikipedia.org/wiki/ESP32
+  citation:
+    artifact_hash: af059ec23523785cd984205bd6f4e3deb0975fd2067faf8539b1d709ad9bf85b
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://en.wikipedia.org/wiki/ESP32
+    fetched_at: '2026-05-06T08:44:10.981882+00:00'
+name:
+  value: Espressif ESP32 Dev Module
+  citation:
+    artifact_hash: af059ec23523785cd984205bd6f4e3deb0975fd2067faf8539b1d709ad9bf85b
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Espressif ESP32 Dev Module
+    fetched_at: '2026-05-06T08:44:10.981882+00:00'
+power.supply_voltage_max_v:
+  value: 3.6
+  citation:
+    artifact_hash: 6fdff42cce00775643335e0ccb1dc1024070bb86208a2c734e9c09675ca3894a
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 52
+      bbox:
+      - 500.375
+      - 383.455
+      - 514.183
+      - 396.387
+    raw_substring: '3.6'
+    fetched_at: '2026-05-06T08:45:41.697436+00:00'
+power.supply_voltage_min_v:
+  value: 1.8
+  citation:
+    artifact_hash: 6fdff42cce00775643335e0ccb1dc1024070bb86208a2c734e9c09675ca3894a
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 52
+      bbox:
+      - 443.997
+      - 359.743
+      - 455.464
+      - 372.675
+    raw_substring: '1.8'
+    fetched_at: '2026-05-06T08:45:41.697436+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 240
+  citation:
+    artifact_hash: af059ec23523785cd984205bd6f4e3deb0975fd2067faf8539b1d709ad9bf85b
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 240000000L
+    fetched_at: '2026-05-06T08:44:10.981882+00:00'
+processing[0].package:
+  value: QFN 5*5
+  citation:
+    artifact_hash: 6fdff42cce00775643335e0ccb1dc1024070bb86208a2c734e9c09675ca3894a
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 11
+      bbox:
+      - 476.613
+      - 340.154
+      - 514.272
+      - 353.086
+    raw_substring: QFN 5*5
+    fetched_at: '2026-05-06T08:45:41.697436+00:00'
+processing[0].part_number:
+  value: ESP32
+  citation:
+    artifact_hash: af059ec23523785cd984205bd6f4e3deb0975fd2067faf8539b1d709ad9bf85b
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32dev.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: esp32
+    fetched_at: '2026-05-06T08:44:10.981882+00:00'
+thermal.operating_temp_min_c:
+  value: '-40'
+  citation:
+    artifact_hash: 6fdff42cce00775643335e0ccb1dc1024070bb86208a2c734e9c09675ca3894a
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 52
+      bbox:
+      - 439.05
+      - 312.321
+      - 455.464
+      - 325.253
+    raw_substring: –40
+    fetched_at: '2026-05-06T08:45:41.697436+00:00'

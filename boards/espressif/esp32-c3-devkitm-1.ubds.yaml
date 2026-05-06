@@ -1,0 +1,25 @@
+ubds_version: '1.2'
+slug: esp32-c3-devkitm-1
+manufacturer_slug: espressif
+status: active
+board_type:
+- MCU
+meta:
+  sources:
+  - https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+  - https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+  verified: false
+  product_url: https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+manufacturer: Espressif
+name: Espressif ESP32-C3-DevKitM-1
+power:
+  supply_voltage_max_v: 3.6
+  supply_voltage_min_v: 3.0
+processing:
+- cpu_cores:
+  - clock_mhz: 160
+  package: QFN32 (5*5)
+  part_number: ESP32-C3
+thermal:
+  operating_temp_max_c: '105'
+  operating_temp_min_c: '-40'

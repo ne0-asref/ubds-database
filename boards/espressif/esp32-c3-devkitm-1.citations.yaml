@@ -1,0 +1,125 @@
+manufacturer:
+  value: Espressif
+  citation:
+    artifact_hash: d268b6a8e6531d41d42648329066da0bce9c082728346f65b949c8ff8ec9b2ec
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+    locator:
+      kind: json
+      path: $.vendor
+    raw_substring: Espressif
+    fetched_at: '2026-05-06T08:44:10.976001+00:00'
+meta.product_url:
+  value: https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+  citation:
+    artifact_hash: d268b6a8e6531d41d42648329066da0bce9c082728346f65b949c8ff8ec9b2ec
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+    locator:
+      kind: json
+      path: $.url
+    raw_substring: https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+    fetched_at: '2026-05-06T08:44:10.976001+00:00'
+name:
+  value: Espressif ESP32-C3-DevKitM-1
+  citation:
+    artifact_hash: d268b6a8e6531d41d42648329066da0bce9c082728346f65b949c8ff8ec9b2ec
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+    locator:
+      kind: json
+      path: $.name
+    raw_substring: Espressif ESP32-C3-DevKitM-1
+    fetched_at: '2026-05-06T08:44:10.976001+00:00'
+power.supply_voltage_max_v:
+  value: 3.6
+  citation:
+    artifact_hash: 894f9891d8adf5de1cfb2055826bc74fae0e7920a5dcded0dd071960b01e09e6
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 54
+      bbox:
+      - 454.965
+      - 358.504
+      - 468.773
+      - 371.436
+    raw_substring: '3.6'
+    fetched_at: '2026-05-06T08:48:01.662434+00:00'
+power.supply_voltage_min_v:
+  value: 3.0
+  citation:
+    artifact_hash: 894f9891d8adf5de1cfb2055826bc74fae0e7920a5dcded0dd071960b01e09e6
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 54
+      bbox:
+      - 384.565
+      - 358.504
+      - 398.702
+      - 371.436
+    raw_substring: '3.0'
+    fetched_at: '2026-05-06T08:48:01.662434+00:00'
+processing[0].cpu_cores[0].clock_mhz:
+  value: 160
+  citation:
+    artifact_hash: d268b6a8e6531d41d42648329066da0bce9c082728346f65b949c8ff8ec9b2ec
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+    locator:
+      kind: json
+      path: $.build.f_cpu
+    raw_substring: 160000000L
+    fetched_at: '2026-05-06T08:44:10.976001+00:00'
+processing[0].package:
+  value: QFN32 (5*5)
+  citation:
+    artifact_hash: 894f9891d8adf5de1cfb2055826bc74fae0e7920a5dcded0dd071960b01e09e6
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 345.847
+      - 225.607
+      - 402.435
+      - 238.539
+    raw_substring: QFN32 (5*5)
+    fetched_at: '2026-05-06T08:48:01.662434+00:00'
+processing[0].part_number:
+  value: ESP32-C3
+  citation:
+    artifact_hash: d268b6a8e6531d41d42648329066da0bce9c082728346f65b949c8ff8ec9b2ec
+    source_url: https://raw.githubusercontent.com/platformio/platform-espressif32/master/boards/esp32-c3-devkitm-1.json
+    locator:
+      kind: json
+      path: $.build.mcu
+    raw_substring: esp32c3
+    fetched_at: '2026-05-06T08:44:10.976001+00:00'
+thermal.operating_temp_max_c:
+  value: '105'
+  citation:
+    artifact_hash: 894f9891d8adf5de1cfb2055826bc74fae0e7920a5dcded0dd071960b01e09e6
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 260.51
+      - 219.032
+      - 305.375
+      - 238.539
+    raw_substring: –40 ∼ 105
+    fetched_at: '2026-05-06T08:48:01.662434+00:00'
+thermal.operating_temp_min_c:
+  value: '-40'
+  citation:
+    artifact_hash: 894f9891d8adf5de1cfb2055826bc74fae0e7920a5dcded0dd071960b01e09e6
+    source_url: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
+    locator:
+      kind: pdf
+      page: 12
+      bbox:
+      - 260.51
+      - 219.032
+      - 305.375
+      - 238.539
+    raw_substring: –40 ∼ 105
+    fetched_at: '2026-05-06T08:48:01.662434+00:00'
